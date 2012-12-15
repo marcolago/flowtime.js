@@ -1,0 +1,482 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"default",
+				"defaultProgress"
+			],
+			[
+				"append",
+				"appendChild"
+			],
+			[
+				"get",
+				"_getPageByIndex(i)	flowtime.js"
+			],
+			[
+				"quer",
+				"querySelector"
+			],
+			[
+				"que",
+				"querySelector"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"getPa",
+				"getPageIndex(d)	ug-css-nav x.js"
+			],
+			[
+				"hilite",
+				"hiliteOrNavigate"
+			],
+			[
+				"_show",
+				"_showFragments()	ug-css-nav.js"
+			],
+			[
+				"fragments",
+				"_fragmentsOnSide"
+			],
+			[
+				"curren",
+				"currentDest"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"_update",
+				"_updateFragments"
+			],
+			[
+				"add",
+				"addClass"
+			],
+			[
+				"querySele",
+				"querySelectorAll"
+			],
+			[
+				"_upda",
+				"_updateFragments"
+			],
+			[
+				"update",
+				"_updateFragments"
+			],
+			[
+				"leng",
+				"length"
+			],
+			[
+				"brav1T",
+				"brav1ToolBox"
+			],
+			[
+				"fr",
+				"fr"
+			],
+			[
+				"fragment",
+				"fragmentsArray"
+			],
+			[
+				"zoom",
+				"zoomIn"
+			],
+			[
+				"is",
+				"isOverview"
+			],
+			[
+				"scale",
+				"scaleX"
+			],
+			[
+				"page",
+				"_pagesLength"
+			],
+			[
+				"pages",
+				"pagesArray"
+			],
+			[
+				"banner",
+				"banner3"
+			],
+			[
+				"marcolago",
+				"method"
+			],
+			[
+				"subPa",
+				"subPagesArray"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 334.0,
+		"selected_items":
+		[
+			[
+				"Snippet: ",
+				"Snippet: Object Value JS"
+			],
+			[
+				"encode",
+				"HTML: Encode Special Characters"
+			],
+			[
+				"html ",
+				"HTML: Encode Special Characters"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"installa",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"zen",
+				"Zen Coding: Zen as you type"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"install pa",
+				"Package Control: Install Package"
+			],
+			[
+				"install pac",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 416.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/marcolago/Dropbox/Public/flowtime/demo-skyline/index.html",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/demo-candy/index.html",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/css/typography.css",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/demo/index.html",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/js/brav1toolbox.js",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/js/flowtime.js",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/css/screen.css",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/css/Chunkfive-webfont.svg",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/LICENSE.txt",
+		"/C/Program Files/Sublime Text 2/Data/Packages/Emmet/Emmet.sublime-settings",
+		"/C/Program Files/Sublime Text 2/Data/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/marcolago/Dropbox/Public/flowtime/css/eye-candy.css",
+		"/C/Users/marcolago/Dropbox/Public/_ slides post variant/js/ug-css-nav.js",
+		"/C/Users/marcolago/Dropbox/Public/_ slides post variant/css/screen.css",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/css/screen.css",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/js/ug-css-nav.js",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/demo/index.html",
+		"/C/Users/marcolago/Dropbox/Public/slides/js/ug-css-nav.js",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/js/brav1toolbox.js",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/js/toolbox.js",
+		"/C/Program Files/Sublime Text 2/Data/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/css/demo.html",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/demo2/index.html",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/js/ug-css-nav-min.js",
+		"/C/Users/marcolago/Dropbox/Public/grid-layout/unlimited-grid-layout/js/controls.js",
+		"/C/Program Files/Sublime Text 2/Data/Packages/ASCII Decorator/ASCII Decorator.sublime-settings",
+		"/C/Program Files/Sublime Text 2/Data/Packages/ASCII Decorator/Default (Windows).sublime-keymap",
+		"/C/Users/marcolago/Desktop/test.js",
+		"/C/Users/marcolago/Desktop/test zen.html",
+		"/C/Program Files/Sublime Text 2/Data/Packages/ZenCoding/Default (Windows).sublime-keymap",
+		"/C/Users/marcolago/Dropbox/html5annivissutipericolosamente/test.html"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"link",
+			".sub-page-thumb",
+			".sub-page-actual",
+			"full",
+			" 		 }",
+			"box-sizing",
+			"sub-page-thumb:hover",
+			"border-box",
+			"_gotoPage",
+			"js-",
+			".js",
+			".js-",
+			".js",
+			".js-",
+			".js-overview",
+			"pointer-events",
+			"getPageIndex",
+			"getCurrentPage",
+			"start",
+			"_gotoPage",
+			"getPageIndex",
+			"updateProgress",
+			".getCurrentPage",
+			"return p",
+			"_getProgress",
+			"_getCurrentPage",
+			":hover",
+			");\n",
+			"safeAttr",
+			"safe",
+			"safeAttr",
+			"_getSubPage",
+			"buildProgressIndicator",
+			"progressBar",
+			"buildProgressIndicator",
+			"avigationMatri",
+			"hideProgressBar",
+			"buildProgressBar",
+			"if (isOver",
+			"zoomOut",
+			"variant",
+			"page",
+			".index",
+			"_getSubPagesLength",
+			"doc.",
+			"());\n",
+			"_getPageIndex",
+			"setTitle",
+			"getSubPagesLength",
+			"pagesLength",
+			"total",
+			"win.",
+			"doc.",
+			"doc",
+			"_updateFragments",
+			"zoomIn",
+			"_styleObject",
+			"win.get",
+			"getC",
+			"getComputedStyle",
+			"zoomOut();",
+			"getPageId",
+			"1159",
+			"getPageIndex",
+			"setTitle",
+			"getHash",
+			"_getHash",
+			"_getPageIndex",
+			".index",
+			"toggleOverview",
+			"tab",
+			"ugl",
+			"uglftft",
+			"uglFlowtime",
+			"ugl",
+			"Slides",
+			"/ Page",
+			">Section",
+			"slides",
+			"_nextSubPage",
+			"_getPageIndex",
+			"backface-visibility: hidden",
+			"hidden",
+			"page-container",
+			"page.container",
+			" full-size\" data-id",
+			"div",
+			"translateZ",
+			"SubPagesLength",
+			"subPagesLength",
+			"getSubPagesLength",
+			"perspective: 1000",
+			"perspective",
+			"diff",
+			"perspective: 1000",
+			"translate3d(0, 0, 0)",
+			"1000;;",
+			"perspective: 0",
+			"perspective: 1000;",
+			"switch",
+			"hiliteOrNavigate",
+			"hiliteO",
+			"switchActiveSubPage",
+			"_switchActiveSubPage",
+			"switchActiveSubPage",
+			"_switchActiveSubPage",
+			"actual",
+			"getCurrentPage",
+			"_getCurrentPage",
+			"getCurrentPage",
+			"getElementByHash",
+			"setPage",
+			"linked",
+			"console.log",
+			"_switchActiveSubPage",
+			"console",
+			"_switchActiveSubPage",
+			"NavigationMatrix",
+			"getCurrentHilited",
+			"hiliteOr",
+			"getPrevSubPage",
+			"_getPrevSubPage",
+			"isOverview",
+			"hiliteOrNavigate",
+			"getNextPage",
+			"_prevPage",
+			"switchActiveSubPage",
+			"switchA"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			" }",
+			".ft-",
+			".ft-overview",
+			"window.",
+			"document.",
+			"/ Sub Page",
+			">Page",
+			"backface-visibility: visible",
+			"\" data-id",
+			"perspective: 10000px",
+			"perspective: 1000px",
+			"translateZ(0)",
+			"1000;",
+			"perspective: 1000;",
+			"perspective: 0;",
+			"Brav1Toolbox",
+			"doc.",
+			" ",
+			"a"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.jslint_result_view":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 177.0,
+	"status_bar_visible": true
+}

@@ -1,0 +1,398 @@
+ /* mini reset - remove if you use a reset or normilize CSS */
+* {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+}
+
+/* STRUCTURE */
+
+	html, body {
+		width: 100%;
+		height: 100%;
+	}
+
+	body { 
+		white-space: nowrap; 	/* disable the wrapping of the space between articles */
+	}
+
+	.page-container {
+		font-size: 0; 			/* remove the white spaces between inline-block elements */
+		width: 100%;
+		height: 100%;
+		     -o-transform-origin: 0 0;
+		    -ms-transform-origin: 0 0;
+		   -moz-transform-origin: 0 0;
+		-webkit-transform-origin: 0 0;
+				transform-origin: 0 0;
+		     -o-transform: translateZ(0);
+		    -ms-transform: translateZ(0);
+		   -moz-transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+				transform: translateZ(0);
+		     -o-backface-visibility: hidden;
+		    -ms-backface-visibility: hidden;
+		   -moz-backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+				backface-visibility: hidden;
+		     -o-transition:      -o-transform 0.5s cubic-bezier(.77, .10, .22, 1);
+		    -ms-transition:     -ms-transform 0.5s cubic-bezier(.77, .10, .22, 1);
+		   -moz-transition:    -moz-transform 0.5s cubic-bezier(.77, .10, .22, 1);
+		-webkit-transition: -webkit-transform 0.5s cubic-bezier(.77, .10, .22, 1);
+				transition:         transform 0.5s cubic-bezier(.77, .10, .22, 1);
+	}
+
+/* PAGES (COLUMNS) */
+
+	/* base page */
+	.page {
+		width: 100%;
+		height: 100%;
+
+		position: relative;
+		     -o-transform: translateZ(0);
+		    -ms-transform: translateZ(0);
+		   -moz-transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+				transform: translateZ(0);
+	}
+
+	/* page and page thumb aignment */
+	.page, .page-thumb {
+		font-size: 16px; 		/* reset the regular font size, in the old way… */
+		font-size: 1rem; 		/* and in the modern way */
+		display: inline-block;	/* let the block elements stay on the same line */
+								/* used together the white-space: nowrap; declaration */
+								/* the elements doesn't break the line */
+		vertical-align: top; 	/* fix the default alignement for the inline-block elements (default: baseline) */
+								/* if different from "top" set Flowtime.slideWithPx(true) */
+	}
+
+/* SUB PAGES */
+
+	/* base sub page */
+	.sub-page {
+		   -moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		        box-sizing: border-box;
+		width: 100%;
+		height: 100%;
+		padding: 2em;
+		position: relative;
+		     -o-transform: translateZ(0);
+		    -ms-transform: translateZ(0);
+		   -moz-transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+				transform: translateZ(0);
+	}
+
+	/* sub page thumb */
+	.sub-page-thumb {
+		   -moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		        box-sizing: border-box;
+		width: 1rem;
+		height: 0.7rem;
+		margin-right: 1px;
+		margin-bottom: 1px;
+		background-color: rgba(0,0,0,0.7);
+		cursor: pointer;
+		     -o-transition: background-color 0.5s;
+		    -ms-transition: background-color 0.5s;
+		   -moz-transition: background-color 0.5s;
+		-webkit-transition: background-color 0.5s;
+		        transition: background-color 0.5s;
+	}
+
+	.sub-page-thumb:hover {
+		background-color: rgba(255,255,255,0.7);
+	}
+
+	.sub-page-thumb.actual {
+		background-color: rgba(255,255,255,0.5);
+		border: 1px solid #ffffff;	
+	}
+
+	/* sub pages in overview mode */
+	.ft-overview .sub-page {
+		opacity: 0.7;
+		cursor: pointer;
+		     -o-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		    -ms-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		   -moz-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		-webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+				transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		     -o-transform: scale(0.95);
+		    -ms-transform: scale(0.95);
+		   -moz-transform: scale(0.95);
+		-webkit-transform: scale(0.95);
+				transform: scale(0.95);
+		     -o-transform-origin: 50% 50%;
+		    -ms-transform-origin: 50% 50%;
+		   -moz-transform-origin: 50% 50%;
+		-webkit-transform-origin: 50% 50%;
+				transform-origin: 50% 50%;
+	}
+
+	.ft-overview .sub-page.actual {
+		opacity: 0.3;
+	}
+
+	.ft-overview .sub-page.hilite {
+		opacity: 1;
+	}
+
+	.ft-overview .sub-page:hover {
+		opacity: 1;
+	}
+
+	.ft-overview .sub-page * {
+		pointer-events: none;
+	}
+
+/* DEFAULT PROGRESS */
+
+	.ft-default-progress {
+		position: fixed;
+		bottom: 10px;
+		left: 10px;
+		z-index: 1000;
+		opacity: 0.3;
+		     -o-transition: opacity 0.5s;
+		    -ms-transition: opacity 0.5s;
+		   -moz-transition: opacity 0.5s;
+		-webkit-transition: opacity 0.5s;
+		        transition: opacity 0.5s;
+	}
+
+	.ft-default-progress:hover {
+		opacity: 1;
+	}
+
+	/* default progress disappears when in overview mode */
+	.ft-overview .ft-default-progress {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+/* FRAGMENTS */
+	.fragmentsList {
+
+	}
+
+	.fragment {
+		opacity: 0;
+		     -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+		    -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+		   -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+		-webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+				transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+	}
+
+	.fragment.revealed, .fragment.revealed-temp {
+		opacity: 1;
+	}
+
+/* JAVASCRIPT NAVIGATION HOOKS */
+
+	.ft-absolute-nav {
+		overflow: hidden;
+	}
+
+/**
+ * EYE CANDY
+ * edit or remove and put your beauty CSS here
+ */
+
+html {
+	background-color: #222222;
+}
+
+body {
+	font-family: "ChunkFiveRegular", serif;
+	color: #ffffff;
+	text-shadow: 1px 1px 7px rgba(0,0,0,0.9);
+	background-image: url(../img/irongrip.png); /* from subtlepatterns.com */
+}
+
+.main-title {
+	font-size: 32px;
+	font-size: 2rem;
+	padding: 2% 1em;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 100;
+}
+
+.sub-page {
+	background-color: #999999;
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+.page1 .sub-page1 { background-color: rgba(220,0,0,1.0); 		 }
+.page1 .sub-page2 { background-color: rgba(220,0,0,0.9); 		 }
+.page1 .sub-page3 { background-color: rgba(220,0,0,0.8); 		 }
+.page1 .sub-page4 { background-color: rgba(220,0,0,0.7); 		 }
+.page1 .sub-page5 { background-color: rgba(220,0,0,0.6); 		 }
+.page1 .sub-page6 { background-color: rgba(220,0,0,0.5); 		 }
+.page1 .sub-page7 { background-color: rgba(220,0,0,0.4); 		 }
+.page1 .sub-page8 { background-color: rgba(220,0,0,0.3); 		 }
+.page1 .sub-page9 { background-color: rgba(220,0,0,0.2); 		 }
+																	
+.page2 .sub-page1 { background-color: rgba(190,0,150,1.0); 		 }
+.page2 .sub-page2 { background-color: rgba(190,0,150,0.9); 		 }
+.page2 .sub-page3 { background-color: rgba(190,0,150,0.8); 		 }
+.page2 .sub-page4 { background-color: rgba(190,0,150,0.7); 		 }
+.page2 .sub-page5 { background-color: rgba(190,0,150,0.6); 		 }
+.page2 .sub-page6 { background-color: rgba(190,0,150,0.5); 		 }
+.page2 .sub-page7 { background-color: rgba(190,0,150,0.4); 		 }
+.page2 .sub-page8 { background-color: rgba(190,0,150,0.3); 		 }
+.page2 .sub-page9 { background-color: rgba(190,0,150,0.2); 		 }
+																	
+.page3 .sub-page1 { background-color: rgba(120,0,200,1.0); 		 }
+.page3 .sub-page2 { background-color: rgba(120,0,200,0.9); 		 }
+.page3 .sub-page3 { background-color: rgba(120,0,200,0.8); 		 }
+.page3 .sub-page4 { background-color: rgba(120,0,200,0.7); 		 }
+.page3 .sub-page5 { background-color: rgba(120,0,200,0.6); 		 }
+.page3 .sub-page6 { background-color: rgba(120,0,200,0.5); 		 }
+.page3 .sub-page7 { background-color: rgba(120,0,200,0.4); 		 }
+.page3 .sub-page8 { background-color: rgba(120,0,200,0.3); 		 }
+.page3 .sub-page9 { background-color: rgba(120,0,200,0.2); 		 }
+																	
+.page4 .sub-page1 { background-color: rgba(0,0,180,1.0); 		 }
+.page4 .sub-page2 { background-color: rgba(0,0,180,0.9); 		 }
+.page4 .sub-page3 { background-color: rgba(0,0,180,0.8); 		 }
+.page4 .sub-page4 { background-color: rgba(0,0,180,0.7); 		 }
+.page4 .sub-page5 { background-color: rgba(0,0,180,0.6); 		 }
+.page4 .sub-page6 { background-color: rgba(0,0,180,0.5); 		 }
+.page4 .sub-page7 { background-color: rgba(0,0,180,0.4); 		 }
+.page4 .sub-page8 { background-color: rgba(0,0,180,0.3); 		 }
+.page4 .sub-page9 { background-color: rgba(0,0,180,0.2); 		 }
+																	
+.page5 .sub-page1 { background-color: rgba(0,150,190,1.0); 		 }
+.page5 .sub-page2 { background-color: rgba(0,150,190,0.9); 		 }
+.page5 .sub-page3 { background-color: rgba(0,150,190,0.8); 		 }
+.page5 .sub-page4 { background-color: rgba(0,150,190,0.7); 		 }
+.page5 .sub-page5 { background-color: rgba(0,150,190,0.6); 		 }
+.page5 .sub-page6 { background-color: rgba(0,150,190,0.5); 		 }
+.page5 .sub-page7 { background-color: rgba(0,150,190,0.4); 		 }
+.page5 .sub-page8 { background-color: rgba(0,150,190,0.3); 		 }
+.page5 .sub-page9 { background-color: rgba(0,150,190,0.2); 		 }
+																	
+.page6 .sub-page1 { background-color: rgba(0,190,130,1.0); 		 }
+.page6 .sub-page2 { background-color: rgba(0,190,130,0.9); 		 }
+.page6 .sub-page3 { background-color: rgba(0,190,130,0.8); 		 }
+.page6 .sub-page4 { background-color: rgba(0,190,130,0.7); 		 }
+.page6 .sub-page5 { background-color: rgba(0,190,130,0.6); 		 }
+.page6 .sub-page6 { background-color: rgba(0,190,130,0.5); 		 }
+.page6 .sub-page7 { background-color: rgba(0,190,130,0.4); 		 }
+.page6 .sub-page8 { background-color: rgba(0,190,130,0.3); 		 }
+.page6 .sub-page9 { background-color: rgba(0,190,130,0.2); 		 }
+																	
+.page7 .sub-page1 { background-color: rgba(0,190,0,1.0); 		 }
+.page7 .sub-page2 { background-color: rgba(0,190,0,0.9); 		 }
+.page7 .sub-page3 { background-color: rgba(0,190,0,0.8); 		 }
+.page7 .sub-page4 { background-color: rgba(0,190,0,0.7); 		 }
+.page7 .sub-page5 { background-color: rgba(0,190,0,0.6); 		 }
+.page7 .sub-page6 { background-color: rgba(0,190,0,0.5); 		 }
+.page7 .sub-page7 { background-color: rgba(0,190,0,0.4); 		 }
+.page7 .sub-page8 { background-color: rgba(0,190,0,0.3); 		 }
+.page7 .sub-page9 { background-color: rgba(0,190,0,0.2); 		 }
+																	
+.page8 .sub-page1 { background-color: rgba(180,220,0,1.0); 		 }
+.page8 .sub-page2 { background-color: rgba(180,220,0,0.9); 		 }
+.page8 .sub-page3 { background-color: rgba(180,220,0,0.8); 		 }
+.page8 .sub-page4 { background-color: rgba(180,220,0,0.7); 		 }
+.page8 .sub-page5 { background-color: rgba(180,220,0,0.6); 		 }
+.page8 .sub-page6 { background-color: rgba(180,220,0,0.5); 		 }
+.page8 .sub-page7 { background-color: rgba(180,220,0,0.4); 		 }
+.page8 .sub-page8 { background-color: rgba(180,220,0,0.3); 		 }
+.page8 .sub-page9 { background-color: rgba(180,220,0,0.2); 		 }
+																	
+.page9 .sub-page1 { background-color: rgba(255,160,0,1.0); 		 }
+.page9 .sub-page2 { background-color: rgba(255,160,0,0.9); 		 }
+.page9 .sub-page3 { background-color: rgba(255,160,0,0.8); 		 }
+.page9 .sub-page4 { background-color: rgba(255,160,0,0.7); 		 }
+.page9 .sub-page5 { background-color: rgba(255,160,0,0.6); 		 }
+.page9 .sub-page6 { background-color: rgba(255,160,0,0.5); 		 }
+.page9 .sub-page7 { background-color: rgba(255,160,0,0.4); 		 }
+.page9 .sub-page8 { background-color: rgba(255,160,0,0.3); 		 }
+.page9 .sub-page9 { background-color: rgba(255,160,0,0.2); 		 }
+ 
+h1 {
+	font-size: 32px;
+	font-size: 2rem;
+	letter-spacing: 0.05em;
+	padding: 2% 0;
+}
+
+.fragmentsList {
+	font-size: 2em;
+	margin-left: 30%;
+}
+
+/* DEMO LOGIC */
+
+.switches {
+	font-family: Verdana, sans-serif;
+	text-align: right;
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 100;
+	background-color: #222222;
+	background-color: rgba(0,0,0,0.5);
+}
+
+.switches p {
+	font-size: 0.8em;
+	margin: 0.6em;
+}
+
+/* CREDITS */
+
+.credits {
+	font-family: Verdana, sans-serif;
+	text-align: right;
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	z-index: 100;
+	background-color: #222222;
+	background-color: rgba(0,0,0,0.5);
+}
+
+.credits p {
+	font-size: 0.8em;
+	margin: 0.6em;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+	color: #7cb2ee;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* NAVIGATION */
+
+.navigation {
+	font-size: 12px;
+	font-family: Verdana, sans-serif;
+	text-align: left;
+	padding: 1em;
+	position: fixed;
+	bottom: 150px;
+	left: 0;
+	z-index: 100;
+	background-color: #222222;
+	background-color: rgba(0,0,0,0.5);
+}
+
+.navigation ul {
+	list-style-type: none;
+}
