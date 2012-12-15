@@ -2,3 +2,4 @@
 .svn
 *.sublime-project
 *.sublime-workspace
+*.dev.*
