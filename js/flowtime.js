@@ -6,11 +6,6 @@
  * Copyright (C) 2012 Marco Lago, http://marcolago.com
  */
 
-/**
- * DEBUG
- * IE9 non toglie lo stato actual dalle thumb e dalle slides in overview
- */
-
 var Flowtime = (function ()
 {
 
@@ -82,7 +77,6 @@ var Flowtime = (function ()
 
 	function onNavClick(e)
 	{
-		// console.log("### onNavClick");
 		var href = e.target.getAttribute("href");
 		// links with href starting with #
 		if (href && href.substr(0,1) == "#")
@@ -118,17 +112,12 @@ var Flowtime = (function ()
 	//
 	function onPopState(e)
 	{
-		// console.log("### onPopState");
 		useHash = false;
 		if (e.state)
 		{
 			var h = e.state.token.replace("#/", "");
 			var dest = NavigationMatrix.setPage(h);
 			navigateTo(dest, false);
-		}
-		else
-		{
-			// console.log("### First time in home");
 		}
 	}
 
@@ -145,7 +134,6 @@ var Flowtime = (function ()
 	 */
 	function onHashChange(e, d)
 	{
-		// console.log("### onHashChange", useHash, d, pushHistory);
 		if (useHash || d)
 		{
 			var h = document.location.hash.replace("#/", "");
@@ -203,7 +191,6 @@ var Flowtime = (function ()
 	 */
 	function getElementByHash(h)
 	{
-		// console.log("### getElementByHash", h);
 		if (h.length > 0)
 		{
 			var aHash = h.replace("#/", "").split("/"); // TODO considerare l'ultimo slash come nullo
@@ -230,7 +217,6 @@ var Flowtime = (function ()
 	 */
 	function _updateNavigation()
 	{
-		// console.log("### _updateNavigation");
 		NavigationMatrix.update();
 		onHashChange(null, true);
 	}
@@ -242,12 +228,10 @@ var Flowtime = (function ()
 	 */
 	function setTitle(h)
 	{
-		// console.log("### setTitle");
 		var t = siteName;
 		var ht = NavigationMatrix.getCurrentSubPage().getAttribute("data-title");
 		if (ht == null)
 		{
-			// console.log("A");
 			var hs = h.split("/");
 			for (var i = 0; i < hs.length; i++)
 			{
@@ -256,7 +240,6 @@ var Flowtime = (function ()
 		}
 		else
 		{
-			// console.log("B");
 			if (NavigationMatrix.getCurrentPage().getAttribute("data-title") != null)
 			{
 				t += " | " + NavigationMatrix.getCurrentPage().getAttribute("data-title");
@@ -326,7 +309,6 @@ var Flowtime = (function ()
 	 */
 	function navigateTo(dest, push, linked)
 	{
-		// console.log("### navigateTo", dest, push);
 		push = push == false ? push : true;
 		// if dest doesn't exist then go to homepage
 		if (!dest)
@@ -346,7 +328,6 @@ var Flowtime = (function ()
 		var pageIndex = NavigationMatrix.getPageIndex(dest);
 		if (_slideWithPx == true)
 		{
-			// console.log("_slideWithPx", _slideWithPx);
 			// calculate the coordinates of the destination
 			x = dest.offsetLeft + dest.parentNode.offsetLeft;
 			y = dest.offsetTop + dest.parentNode.offsetTop;	
@@ -417,7 +398,6 @@ var Flowtime = (function ()
 		{
 			if (_slideWithPx)
 			{
-				// console.log("_slideWithPx", x, y);
 				pageContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";	
 			}
 			else
@@ -429,7 +409,6 @@ var Flowtime = (function ()
 		{
 			if (_slideWithPx)
 			{
-				// console.log("_slideWithPx", _slideWithPx);
 				pageContainer.style.top = -y + "px";
 				pageContainer.style.left = -x + "px";
 			}
@@ -455,7 +434,6 @@ var Flowtime = (function ()
 
 	function buildProgressIndicator()
 	{
-		// console.log("### buildProgressIndicator");
 		var domFragment = document.createDocumentFragment();
 		// create the progress container div
 		defaultProgress = document.createElement("div");
@@ -491,7 +469,6 @@ var Flowtime = (function ()
 
 	function updateProgress()
 	{
-		// console.log("### updateProgress", defaultProgress);
 		if (defaultProgress != null)
 		{
 			var spts = document.querySelectorAll(".ft-default-progress .sub-page-thumb");
@@ -544,7 +521,6 @@ var Flowtime = (function ()
 	 */
 	function zoomIn(undo)
 	{
-		// console.log("### zoomIn", undo, overviewCachedDest);
 		isOverview = false;
 		Brav1Toolbox.removeClass(body, "ft-overview");
 		NavigationMatrix.hideFragments();
@@ -581,23 +557,6 @@ var Flowtime = (function ()
 		{
 			overviewZoomTypeB(true);
 		}
-
-		// translateZ version
-		// console.log(NavigationMatrix.getPagesLength(), NavigationMatrix.getSubPagesLength());
-		// var offsetX = -((NavigationMatrix.getPagesLength() * 100 / 2) - 50);
-		// var offsetY = -((NavigationMatrix.getSubPagesLength() * 100 / 2) - 50);
-		// console.log(offsetX, offsetY);
-		// pageContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translate3d(" + 0 + "%, " + 0 + "%, -2000px)";
-		//
-
-		// pageContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + offsetX + "%)" + " translateY(" + offsetY + "%)" + " translateZ(-2500px)";
-
-		//
-		// var msp = document.querySelectorAll(".page");
-		// for (var i = 0; i < msp.length; i++)
-		// {
-		// 	msp[i].style[Brav1Toolbox.getPrefixed("transform")] = "translateZ(-100px)";
-		// }
 	}
 
 	function overviewZoomTypeA(out)
@@ -649,7 +608,6 @@ var Flowtime = (function ()
 	
 	function onKeyDown(e)
 	{
-		// console.log("### onKeyDown", e.keyCode);
 		var tag = e.target.tagName;
 		if (tag != "INPUT" && tag != "TEXTAREA" && tag != "SELECT")
 		{
@@ -662,7 +620,6 @@ var Flowtime = (function ()
 	
 	function onKeyUp(e)
 	{
-		// console.log("### onKeyUp", e.keyCode);
 		var tag = e.target.tagName;
 		var elem;
 		if (tag != "INPUT" && tag != "TEXTAREA" && tag != "SELECT")
@@ -799,29 +756,19 @@ var Flowtime = (function ()
 		var args = _gotoPage.arguments;
 		if (args.length > 0)
 		{
-			// console.log("ci sono argomenti");
 			if (args.length == 1)
 			{
-				// console.log("typoeOf", Brav1Toolbox.typeOf(args[0]));
-				// console.log("c'è un solo argomento")
 				if (Brav1Toolbox.typeOf(args[0]) === "Object")
 				{
-					// console.log("è un oggetto");
 					var o = args[0];
 					var p = o.page;
-					// console.log("p", p);
 					var sp = o.subPage;
-					// console.log("sp", sp);
 					if (p != null && p != undefined)
 					{
-						// console.log(".page[data-id=" + safeAttr(p) + "]");
 						var pd = document.querySelector(".page[data-id=" + safeAttr(p) + "]");
-						// console.log("pd", pd);
 						if (sp != null && sp != undefined)
 						{
-							// console.log(".subPage[data-id=" + safeAttr(sp) + "]");
 							var spd = pd.querySelector(SUB_PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
-							// console.log("spd", spd);
 							if (spd != null)
 							{
 								navigateTo(spd);
@@ -832,7 +779,6 @@ var Flowtime = (function ()
 				}
 				else if (args[0].nodeName != undefined)
 				{
-					// console.log("è un Elemento HTML")
 					navigateTo(args[0], null, true);
 				}
 			}
@@ -886,7 +832,6 @@ var Flowtime = (function ()
 		 */
 		function _updateMatrix()
 		{
-			// console.log("### _updateMatrix");
 			pagesArray = [];
 			fragments = document.querySelectorAll(FRAGMENT_SELECTOR);
 			fragmentsArray = [];
@@ -938,7 +883,6 @@ var Flowtime = (function ()
 		 */
 		function _getNextPage(top, fos, io)
 		{
-			// console.log("###_getNextPage", top, fos, io);
 			var sub = sp;
 			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && top != true && io == false)
 			{
@@ -993,7 +937,6 @@ var Flowtime = (function ()
 		 */
 		function _getNearestSubPage(pg, sub, io)
 		{
-			// console.log("### _getNearestSubPage", pg, sub, io)
 			var nsp = pg[sub];
 			if (nsp == undefined)
 			{
@@ -1075,7 +1018,6 @@ var Flowtime = (function ()
 		 */
 		function hiliteOrNavigate(d, io)
 		{
-			// console.log("### hiliteOrNavigate", d, io);
 			if (io == true)
 			{
 				_switchActiveSubPage(d);
@@ -1097,7 +1039,6 @@ var Flowtime = (function ()
 		 */
 		function _showFragment(fp, fsp, f)
 		{
-			// console.log("### _showFragment", fp, fsp, f);
 			if (f != undefined)
 			{
 				fr[fp][fsp] = f;
@@ -1119,7 +1060,6 @@ var Flowtime = (function ()
 		 */
 		function _hideFragment(fp, fsp, f)
 		{
-			// console.log("### _hideFragment", fp, fsp, f);
 			if (f != undefined)
 			{
 				fr[fp][fsp] = f;
@@ -1158,7 +1098,6 @@ var Flowtime = (function ()
 
 		function _updateFragments()
 		{
-			// console.log("###_updateFragments", p, sp);
 			for (var ip = 0; ip < fragmentsArray.length; ip++)
 			{
 				var frp = fragmentsArray[ip];
@@ -1169,7 +1108,6 @@ var Flowtime = (function ()
 					{
 						if (ip > p)
 						{
-							// console.log("	pagina MAGGIORE di", ip, p)
 							for (var f = frsp.length - 1; f >= 0; f--)
 							{
 								_hideFragment(ip, isp, f);
@@ -1177,7 +1115,6 @@ var Flowtime = (function ()
 						}
 						else if (ip < p)
 						{
-							// console.log("	pagina minore di", ip, p)
 							for (var f = 0; f < frsp.length; f++)
 							{
 								_showFragment(ip, isp, f);
@@ -1185,10 +1122,8 @@ var Flowtime = (function ()
 						}
 						else if (ip == p)
 						{
-							// console.log("	stessa pagina", ip, p, isp, sp)
 							if (isp > sp)
 							{
-								// console.log("sotto pagina MAGGIORE di", isp, sp)
 								for (var f = frsp.length - 1; f >= 0; f--)
 								{
 									_hideFragment(ip, isp, f);
@@ -1196,7 +1131,6 @@ var Flowtime = (function ()
 							}
 							else if (isp < sp)
 							{
-								// console.log("sotto pagina minore di", isp, sp)
 								for (var f = 0; f < frsp.length; f++)
 								{
 									_showFragment(ip, isp, f);
@@ -1206,8 +1140,6 @@ var Flowtime = (function ()
 							{	
 								for (var f = 0; f < frsp.length; f++)
 								{
-									// console.log("stessa sotto pagina di", isp, sp);
-									// console.log("fr[ip][isp]", fr[ip][isp]);
 									if (_showFragmentsOnBack == false)
 									{
 										_hideFragment(ip, isp, f);
@@ -1374,7 +1306,6 @@ var Flowtime = (function ()
 		 */
 		function _getHash(d)
 		{
-			// console.log("### _getHash", d);
 			if (d != undefined)
 			{
 				sp = _getPageIndex(d).subPage;
@@ -1397,12 +1328,10 @@ var Flowtime = (function ()
 		 */
 		function _setPage(h)
 		{
-			// console.log("### _setPage");
 			var elem = getElementByHash(h);
 			if (elem)
 			{
 				var pElem = elem.parentNode;
-				// console.log("pagesArray.length", pagesArray.length);
 				for (var i = 0; i < pagesArray.length; i++)
 				{
 					var pa = pagesArray[i];
@@ -1426,7 +1355,6 @@ var Flowtime = (function ()
 
 		function _switchActiveSubPage(d, navigate)
 		{
-			// console.log("### _switchActiveSubPage");
 			for (var i = 0; i < pagesArray.length; i++)
 			{
 				var pa = pagesArray[i];
@@ -1502,7 +1430,6 @@ var Flowtime = (function ()
 	 */
 	function _start()
 	{
-		// console.log("### start");
 		// init and configuration
 		if (_showProgress && defaultProgress == null)
 		{
