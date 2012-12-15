@@ -388,7 +388,7 @@ var Flowtime = (function ()
 		NavigationMatrix.switchActiveSubPage(NavigationMatrix.getCurrentSubPage(), true);
 		//
 		// dispatches an event populated with navigation data
-		Brav1Toolbox.dispatchEvent("navigated",	{
+		Brav1Toolbox.dispatchEvent("flowtimenavigation",	{
 													page: NavigationMatrix.getCurrentPage(),
 													subPage: NavigationMatrix.getCurrentSubPage(),
 													pageIndex: pageIndex.page, 
@@ -482,7 +482,6 @@ var Flowtime = (function ()
 
 	function hideProgressIndicator()
 	{
-		console.log(defaultProgress);
 		if (defaultProgress != null)
 		{
 			body.removeChild(defaultProgress);
@@ -841,7 +840,6 @@ var Flowtime = (function ()
 			{
 				if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0)
 				{
-					console.log("@@@ numero")
 					var spd = NavigationMatrix.getSubPageByIndex(args[1], args[0]);
 					navigateTo(spd);
 					return;

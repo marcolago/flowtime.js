@@ -20,7 +20,8 @@
 	<meta name="author" content="marcolago">
 	<title>Flowtime Demo</title>
 	<link rel="stylesheet" href="../assets/css/typography.css">
-	<link rel="stylesheet" href="../css/flowtime.css">
+	<link rel="stylesheet" href="../assets/css/reset.css">
+	<link rel="stylesheet" href="../css/flowtime.min.css">
 	<link rel="stylesheet" href="../assets/css/demo.css">
 </head>
 <body class="">
@@ -167,12 +168,11 @@
 		<p>Slide Using Pixels: <a href="javascript:Flowtime.slideWithPx(true);">true</a>, <a href="javascript:Flowtime.slideWithPx(false);">false</a></p>
 	</div>
 	
-	<script src="../js/brav1toolbox.js"></script>
-	<script src="../js/flowtime.js"></script>
+	<script src="../js/flowtime.min.js"></script>
 
 	<script>
 		Flowtime.showProgress(true);
-		document.addEventListener("navigated", onNavigation, false);
+		document.addEventListener("flowtimenavigation", onNavigation, false);
 		function onNavigation(e)
 		{
 			console.log("page", e.page);

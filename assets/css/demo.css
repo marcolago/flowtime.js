@@ -26,8 +26,6 @@ body {
 
 .sub-page {
 	background-color: #999999;
-	background-position: center center;
-	background-repeat: no-repeat;
 }
 
 .page1 .sub-page1 { background-color: rgba(220,0,0,1.0); 		 }

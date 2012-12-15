@@ -1,3 +1,8 @@
+.sub-page {
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
 .page1 .sub-page1 { background-color: rgba(220,0,0,1.0); 		background-image: url(../img/_1.png);	background-image: url(../img/1.png), url(../img/_1.png); }
 .page1 .sub-page2 { background-color: rgba(220,0,0,0.9); 		background-image: url(../img/_2.png);	background-image: url(../img/1.png), url(../img/_2.png); }
 .page1 .sub-page3 { background-color: rgba(220,0,0,0.8); 		background-image: url(../img/_3.png);	background-image: url(../img/1.png), url(../img/_3.png); }

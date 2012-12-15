@@ -113,15 +113,15 @@ var Brav1Toolbox = (function()
 			{
 				if (cl.indexOf(" " + c) != -1)
 				{
-					cl.replace(" " + c, "");
+					cl = cl.replace(" " + c, "");
 				}
 				else if (cl.indexOf(c + " ") != -1)
 				{
-					cl.replace(c + " ", "");
+					cl = cl.replace(c + " ", "");
 				}
 				else
 				{
-					cl.replace(c, "");
+					cl = cl.replace(c, "");
 				}
 			}
 			el.className = cl;
