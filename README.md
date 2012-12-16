@@ -14,8 +14,9 @@ You can take a look at some demos to quick learn about the possibilities:
 
 ## Main Features
 
-**Full page fluid layout**.  
+**Full Page Fluid Layout Boilerplate**.  
 Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` technique.
+This frameworks doesn't style you presentations or sites for you but it takes care of all the annoying things like navigation and deep-linking, so you are free to style every single element of your design as you like.
 
 **Multiple controlled navigation**.  
 You can navigate through pages via links, keyboard or deep-linking.  
