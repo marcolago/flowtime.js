@@ -7,7 +7,7 @@ You can take a look at some demos to quick learn about the possibilities:
 - [Candy demo - same as Basic demo but more eye candy](http://marcolago.com/flowtime-js/demo-candy/)
 - [Skyline demo - same as Basic demo but with different vertical-align](http://marcolago.com/flowtime-js/demo-skyline/)
 
-**For more information check the [wiki]()**
+**For more information check the [wiki](https://github.com/marcolago/flowtime.js/wiki)**
 - [Browser Support](https://github.com/marcolago/flowtime.js/wiki/Browser-Support)
 - [Made with Flowtime.js](https://github.com/marcolago/flowtime.js/wiki/Made-With-Flowtime.js)
 - [Credits and Thanks](https://github.com/marcolago/flowtime.js/wiki/Credits-and-Thanks)
