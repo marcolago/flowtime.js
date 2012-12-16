@@ -3,9 +3,9 @@
 Flowtime.js is a framework to easily build HTML presentations or websites.
 
 You can take a look at some demos to quick learn about the possibilities:
-- [Base demo](http://marcolago.com/demo/flowtime-js/demo/)
-- [Candy demo - same as Base demo but more eye candy](http://marcolago.com/demo/flowtime-js/demo-candy/)
-- [Skyline demo - same as Base demo but with different vertical-align](http://marcolago.com/demo/flowtime-js/demo-skyline/)
+- [Base demo](http://marcolago.com/flowtime-js/demo/)
+- [Candy demo - same as Base demo but more eye candy](http://marcolago.com/flowtime-js/demo-candy/)
+- [Skyline demo - same as Base demo but with different vertical-align](http://marcolago.com/flowtime-js/demo-skyline/)
 
 Flowtime.js takes care of tasks such:
 - full page and fluid layout,
