@@ -9,7 +9,7 @@
 		white-space: nowrap; 	/* disable the wrapping of the space between articles */
 	}
 
-	.page-container {
+	.flowtime {
 		font-size: 0; 			/* remove the white spaces between inline-block elements */
 		width: 100%;
 		height: 100%;
@@ -35,10 +35,10 @@
 				transition:         transform 0.5s cubic-bezier(.77, .10, .22, 1);
 	}
 
-/* PAGES (COLUMNS) */
+/* SECTIONS (COLUMNS) */
 
-	/* base page */
-	.page {
+	/* base section */
+	.ft-section {
 		width: 100%;
 		height: 100%;
 
@@ -50,8 +50,8 @@
 				transform: translateZ(0);
 	}
 
-	/* page and page thumb aignment */
-	.page, .page-thumb {
+	/* section and section thumb aignment */
+	.ft-section, .ft-section-thumb {
 		font-size: 16px; 		/* reset the regular font size, in the old way… */
 		font-size: 1rem; 		/* and in the modern way */
 		display: inline-block;	/* let the block elements stay on the same line */
@@ -61,16 +61,15 @@
 								/* if different from "top" set Flowtime.slideWithPx(true) */
 	}
 
-/* SUB PAGES */
+/* PAGES */
 
-	/* base sub page */
-	.sub-page {
+	/* base page */
+	.ft-page {
 		   -moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
 		        box-sizing: border-box;
 		width: 100%;
 		height: 100%;
-		padding: 2em;
 		position: relative;
 		     -o-transform: translateZ(0);
 		    -ms-transform: translateZ(0);
@@ -79,8 +78,8 @@
 				transform: translateZ(0);
 	}
 
-	/* sub page thumb */
-	.sub-page-thumb {
+	/* page thumb */
+	.ft-page-thumb {
 		   -moz-box-sizing: border-box;
 		-webkit-box-sizing: border-box;
 		        box-sizing: border-box;
@@ -97,17 +96,17 @@
 		        transition: background-color 0.5s;
 	}
 
-	.sub-page-thumb:hover {
+	.ft-page-thumb:hover {
 		background-color: rgba(255,255,255,0.7);
 	}
 
-	.sub-page-thumb.actual {
+	.ft-page-thumb.actual {
 		background-color: rgba(255,255,255,0.5);
 		border: 1px solid #ffffff;	
 	}
 
-	/* sub pages in overview mode */
-	.ft-overview .sub-page {
+	/* pages in overview mode */
+	.ft-overview .ft-page {
 		opacity: 0.7;
 		cursor: pointer;
 		     -o-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
@@ -127,19 +126,19 @@
 				transform-origin: 50% 50%;
 	}
 
-	.ft-overview .sub-page.actual {
+	.ft-overview .ft-page.actual {
 		opacity: 0.3;
 	}
 
-	.ft-overview .sub-page.hilite {
+	.ft-overview .ft-page.hilite {
 		opacity: 1;
 	}
 
-	.ft-overview .sub-page:hover {
+	.ft-overview .ft-page:hover {
 		opacity: 1;
 	}
 
-	.ft-overview .sub-page * {
+	.ft-overview .ft-page * {
 		pointer-events: none;
 	}
 
@@ -169,11 +168,8 @@
 	}
 
 /* FRAGMENTS */
-	.fragmentsList {
 
-	}
-
-	.fragment {
+	.ft-fragment {
 		opacity: 0;
 		     -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 		    -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
@@ -182,7 +178,7 @@
 				transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 	}
 
-	.fragment.revealed, .fragment.revealed-temp {
+	.ft-fragment.revealed, .ft-fragment.revealed-temp {
 		opacity: 1;
 	}
 

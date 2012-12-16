@@ -21,29 +21,29 @@
 	<title>Flowtime Demo</title>
 	<link rel="stylesheet" href="../assets/css/typography.css">
 	<link rel="stylesheet" href="../assets/css/reset.css">
-	<link rel="stylesheet" href="../css/flowtime.min.css">
+	<link rel="stylesheet" href="../css/flowtime.css">
 	<link rel="stylesheet" href="../assets/css/demo.css">
 </head>
 <body class="">
 	
-	<h1 class="main-title">Flowtime.js (Working Title)</h1>
+	<h1 class="main-title">Flowtime.js</h1>
 
 	<div class="navigation">
-		<p>Sample Navigation</p>
+		<p><b>Sample Navigation</b></p>
 		<ul>
-			<li><a href="#/page-1/sub-page-1">Page 1 / Sub Page 1</a></li>
-			<li><a href="#/page-1/sub-page-2">Page 1 / Sub Page 2</a></li>
-			<li><a href="#/page-1/sub-page-3">Page 1 / Sub Page 3</a></li>
-			<li><a href="#/page-2/sub-page-1">Page 2 / Sub Page 1</a></li>
-			<li><a href="#/page-3/sub-page-1">Page 3 / Sub Page 1</a></li>
-			<li><a href="#/page-3/sub-page-2">Page 3 / Sub Page 2</a></li>
-			<li><a href="#/page-3/sub-page-3">Page 3 / Sub Page 3</a></li>
-			<li><a href="#/page-3/sub-page-4">Page 3 / Sub Page 4</a></li>
-			<li><a href="#/page-4/sub-page-1">Page 4 / Sub Page 1</a></li>
-			<li><a href="#/page-4/sub-page-2">Page 4 / Sub Page 2</a></li>
-			<li><a href="#/page-4/sub-page-3">Page 4 / Sub Page 3</a></li>
-			<li><a href="#/page-4/sub-page-4">Page 4 / Sub Page 4</a></li>
-			<li><a href="#/page-4/sub-page-5">Page 4 / Sub Page 5</a></li>
+			<li><a href="#/section-1/page-1">Section 1 / Page 1</a></li>
+			<li><a href="#/section-1/page-2">Section 1 / Page 2</a></li>
+			<li><a href="#/section-1/page-3">Section 1 / Page 3</a></li>
+			<li><a href="#/section-2/page-1">Section 2 / Page 1</a></li>
+			<li><a href="#/section-3/page-1">Section 3 / Page 1</a></li>
+			<li><a href="#/section-3/page-2">Section 3 / Page 2</a></li>
+			<li><a href="#/section-3/page-3">Section 3 / Page 3</a></li>
+			<li><a href="#/section-3/page-4">Section 3 / Page 4</a></li>
+			<li><a href="#/section-4/page-1">Section 4 / Page 1</a></li>
+			<li><a href="#/section-4/page-2">Section 4 / Page 2</a></li>
+			<li><a href="#/section-4/page-3">Section 4 / Page 3</a></li>
+			<li><a href="#/section-4/page-4">Section 4 / Page 4</a></li>
+			<li><a href="#/section-4/page-5">Section 4 / Page 5</a></li>
 		</ul>
 	</div>
 	<div class="credits">
@@ -52,112 +52,110 @@
 		<p>CHUNKFIVE font by <a href="http://www.theleagueofmoveabletype.com/chunk" target="_blank">The League of Moveable Type</a></p>
 		<p>@font-face rules and files from <a href="http://www.fontsquirrel.com/fonts/ChunkFive" target="_blank">Font Squirrel</a></p>
 	</div>
-	<div class="page-container">
-		<div class="page page1" data-id="page-1" data-title="Title 1">
-			<div class="sub-page sub-page1" data-id="sub-page-1" data-title="Sub Title 1"><h1 class="page-title">Page 1 / Sub Page 1</h1></div>
-			<div class="sub-page sub-page2" data-id="sub-page-2" data-title="Sub Title 2"><h1 class="page-title">Page 1 / Sub Page 2</h1></div>
-			<div class="sub-page sub-page3" data-id="sub-page-3" data-title="Sub Title 3"><h1 class="page-title">Page 1 / Sub Page 3</h1></div>
+	<div class="flowtime">
+		<div class="ft-section section1" data-id="section-1" data-title="Title 1">
+			<div class="ft-page page1" data-id="page-1" data-title="Sub Title 1"><h1 class="section-title">Section 1 / Page 1</h1></div>
+			<div class="ft-page page2" data-id="page-2" data-title="Sub Title 2"><h1 class="section-title">Section 1 / Page 2</h1></div>
+			<div class="ft-page page3" data-id="page-3" data-title="Sub Title 3"><h1 class="section-title">Section 1 / Page 3</h1></div>
 		</div>
-		<div class="page page2" data-id="page-2">
-			<div class="sub-page sub-page1" data-id="sub-page-1"><h1 class="page-title">Page 2 / Sub Page 1</h1></div>
-			<!-- <div class="sub-page sub-page2" data-id="sub-page-2"><h1 class="page-title">Page 2 / Sub Page 2</h1></div> -->
-			<!-- <div class="sub-page sub-page3" data-id="sub-page-3"><h1 class="page-title">Page 2 / Sub Page 3</h1></div> -->
+		<div class="ft-section section2" data-id="section-2">
+			<div class="ft-page page1" data-id="page-1"><h1 class="section-title">Section 2 / Page 1</h1></div>
 		</div>
-		<div class="page page3" data-id="page-3">
-			<div class="sub-page sub-page1" data-id="sub-page-1" data-title="Sub Title 3/1"><h1 class="page-title">Page 3 / Sub Page 1</h1></div>
-			<div class="sub-page sub-page2" data-id="sub-page-2"><h1 class="page-title">Page 3 / Sub Page 2</h1>
-				<ul class="fragmentsList">
-					<li class="fragment">Fragment 1</li>
-					<li class="fragment">Fragment 2</li>
-					<li class="fragment">Fragment 3</li>
-					<li class="fragment">Fragment 4</li>
-					<li class="fragment">Fragment 5</li>
+		<div class="ft-section section3" data-id="section-3">
+			<div class="ft-page page1" data-id="page-1" data-title="Sub Title 3/1"><h1 class="section-title">Section 3 / Page 1</h1></div>
+			<div class="ft-page page2" data-id="page-2"><h1 class="section-title">Section 3 / Page 2</h1>
+				<ul class="fragments-list">
+					<li class="ft-fragment">Fragment 1</li>
+					<li class="ft-fragment">Fragment 2</li>
+					<li class="ft-fragment">Fragment 3</li>
+					<li class="ft-fragment">Fragment 4</li>
+					<li class="ft-fragment">Fragment 5</li>
 				</ul>
 			</div>
-			<div class="sub-page sub-page3" data-id="sub-page-3"><h1 class="page-title">Page 3 / Sub Page 3</h1>
-				<ul class="fragmentsList">
-					<li class="fragment">Fragment 1</li>
-					<li class="fragment">Fragment 2</li>
-					<li class="fragment">Fragment 3</li>
+			<div class="ft-page page3" data-id="page-3"><h1 class="section-title">Section 3 / Page 3</h1>
+				<ul class="fragments-list">
+					<li class="ft-fragment">Fragment 1</li>
+					<li class="ft-fragment">Fragment 2</li>
+					<li class="ft-fragment">Fragment 3</li>
 				</ul>
 			</div>
-			<div class="sub-page sub-page4" data-id="sub-page-4"><h1 class="page-title">Page 3 / Sub Page 4</h1></div>
+			<div class="ft-page page4" data-id="page-4"><h1 class="section-title">Section 3 / Page 4</h1></div>
 		</div>
-		<div class="page page4" data-id="page-4">
-			<div class="sub-page sub-page1" data-id="sub-page-1"><h1 class="page-title">Page 4 / Sub Page 1</h1></div>
-			<div class="sub-page sub-page2" data-id="sub-page-2"><h1 class="page-title">Page 4 / Sub Page 2</h1></div>
-			<div class="sub-page sub-page3" data-id="sub-page-3"><h1 class="page-title">Page 4 / Sub Page 3</h1></div>
-			<div class="sub-page sub-page4" data-id="sub-page-4"><h1 class="page-title">Page 4 / Sub Page 4</h1></div>
-			<div class="sub-page sub-page5" data-id="sub-page-5"><h1 class="page-title">Page 4 / Sub Page 5</h1></div>
+		<div class="ft-section section4" data-id="section-4">
+			<div class="ft-page page1" data-id="page-1"><h1 class="section-title">Section 4 / Page 1</h1></div>
+			<div class="ft-page page2" data-id="page-2"><h1 class="section-title">Section 4 / Page 2</h1></div>
+			<div class="ft-page page3" data-id="page-3"><h1 class="section-title">Section 4 / Page 3</h1></div>
+			<div class="ft-page page4" data-id="page-4"><h1 class="section-title">Section 4 / Page 4</h1></div>
+			<div class="ft-page page5" data-id="page-5"><h1 class="section-title">Section 4 / Page 5</h1></div>
 		</div>
-		<div class="page page5" data-id="page-5" data-title="Title 5">
-			<div class="sub-page sub-page1" data-id="sub-page-1"><h1 class="page-title">Page 5 / Sub Page 1</h1></div>
-			<div class="sub-page sub-page2" data-id="sub-page-2"><h1 class="page-title">Page 5 / Sub Page 2</h1></div>
-			<div class="sub-page sub-page3" data-id="sub-page-3"><h1 class="page-title">Page 5 / Sub Page 3</h1></div>
-			<div class="sub-page sub-page4" data-id="sub-page-4"><h1 class="page-title">Page 5 / Sub Page 4</h1></div>
-			<div class="sub-page sub-page5" data-id="sub-page-5"><h1 class="page-title">Page 5 / Sub Page 5</h1></div>
+		<div class="ft-section section5" data-id="section-5" data-title="Title 5">
+			<div class="ft-page page1" data-id="page-1"><h1 class="section-title">Section 5 / Page 1</h1></div>
+			<div class="ft-page page2" data-id="page-2"><h1 class="section-title">Section 5 / Page 2</h1></div>
+			<div class="ft-page page3" data-id="page-3"><h1 class="section-title">Section 5 / Page 3</h1></div>
+			<div class="ft-page page4" data-id="page-4"><h1 class="section-title">Section 5 / Page 4</h1></div>
+			<div class="ft-page page5" data-id="page-5"><h1 class="section-title">Section 5 / Page 5</h1></div>
 		</div>
-		<div class="page page6" data-id="page-6">
-			<div class="sub-page sub-page1" data-id="sub-page-1"><h1 class="page-title">Page 6 / Sub Page 1</h1></div>
-			<div class="sub-page sub-page2" data-id="sub-page-2"><h1 class="page-title">Page 6 / Sub Page 2</h1></div>
-			<div class="sub-page sub-page3" data-id="sub-page-3"><h1 class="page-title">Page 6 / Sub Page 3</h1></div>
-			<div class="sub-page sub-page4" data-id="sub-page-4"><h1 class="page-title">Page 6 / Sub Page 4</h1></div>
-			<div class="sub-page sub-page5" data-id="sub-page-5"><h1 class="page-title">Page 6 / Sub Page 5</h1></div>
-			<div class="sub-page sub-page6" data-id="sub-page-6"><h1 class="page-title">Page 6 / Sub Page 6</h1></div>
-			<div class="sub-page sub-page7" data-id="sub-page-7"><h1 class="page-title">Page 6 / Sub Page 7</h1></div>
-			<div class="sub-page sub-page8" data-id="sub-page-8"><h1 class="page-title">Page 6 / Sub Page 8</h1></div>
-			<div class="sub-page sub-page9" data-id="sub-page-9"><h1 class="page-title">Page 6 / Sub Page 9</h1></div>
+		<div class="ft-section section6" data-id="section-6">
+			<div class="ft-page page1" data-id="page-1"><h1 class="section-title">Section 6 / Page 1</h1></div>
+			<div class="ft-page page2" data-id="page-2"><h1 class="section-title">Section 6 / Page 2</h1></div>
+			<div class="ft-page page3" data-id="page-3"><h1 class="section-title">Section 6 / Page 3</h1></div>
+			<div class="ft-page page4" data-id="page-4"><h1 class="section-title">Section 6 / Page 4</h1></div>
+			<div class="ft-page page5" data-id="page-5"><h1 class="section-title">Section 6 / Page 5</h1></div>
+			<div class="ft-page page6" data-id="page-6"><h1 class="section-title">Section 6 / Page 6</h1></div>
+			<div class="ft-page page7" data-id="page-7"><h1 class="section-title">Section 6 / Page 7</h1></div>
+			<div class="ft-page page8" data-id="page-8"><h1 class="section-title">Section 6 / Page 8</h1></div>
+			<div class="ft-page page9" data-id="page-9"><h1 class="section-title">Section 6 / Page 9</h1></div>
 		</div>
-		<div class="page page7" data-id="page-7">
-			<div class="sub-page sub-page1" data-id="sub-page-1" data-title="Sub Title 7/1"><h1 class="page-title">Page 7 / Sub Page 1</h1></div>
-			<div class="sub-page sub-page2" data-id="sub-page-2"><h1 class="page-title">Page 7 / Sub Page 2</h1>
-				<ul class="fragmentsList">
-					<li class="fragment">Fragment 1</li>
-					<li class="fragment">Fragment 2</li>
-					<li class="fragment">Fragment 3</li>
-					<li class="fragment">Fragment 4</li>
-					<li class="fragment">Fragment 5</li>
+		<div class="ft-section section7" data-id="section-7">
+			<div class="ft-page page1" data-id="page-1" data-title="Sub Title 7/1"><h1 class="section-title">Section 7 / Page 1</h1></div>
+			<div class="ft-page page2" data-id="page-2"><h1 class="section-title">Section 7 / Page 2</h1>
+				<ul class="fragments-list">
+					<li class="ft-fragment">Fragment 1</li>
+					<li class="ft-fragment">Fragment 2</li>
+					<li class="ft-fragment">Fragment 3</li>
+					<li class="ft-fragment">Fragment 4</li>
+					<li class="ft-fragment">Fragment 5</li>
 				</ul>
 			</div>
-			<div class="sub-page sub-page3" data-id="sub-page-3"><h1 class="page-title">Page 7 / Sub Page 3</h1>
-				<ul class="fragmentsList">
-					<li class="fragment">Fragment 1</li>
-					<li class="fragment">Fragment 2</li>
-					<li class="fragment">Fragment 3</li>
+			<div class="ft-page page3" data-id="page-3"><h1 class="section-title">Section 7 / Page 3</h1>
+				<ul class="fragments-list">
+					<li class="ft-fragment">Fragment 1</li>
+					<li class="ft-fragment">Fragment 2</li>
+					<li class="ft-fragment">Fragment 3</li>
 				</ul>
 			</div>
-			<div class="sub-page sub-page4" data-id="sub-page-4"><h1 class="page-title">Page 7 / Sub Page 4</h1></div>
+			<div class="ft-page page4" data-id="page-4"><h1 class="section-title">Section 7 / Page 4</h1></div>
 		</div>
-		<div class="page page8" data-id="page-8">
-			<div class="sub-page sub-page1" data-id="sub-page-1"><h1 class="page-title">Page 8 / Sub Page 1</h1></div>
-			<div class="sub-page sub-page2" data-id="sub-page-2"><h1 class="page-title">Page 8 / Sub Page 2</h1></div>
-			<div class="sub-page sub-page3" data-id="sub-page-3"><h1 class="page-title">Page 8 / Sub Page 3</h1></div>
-			<div class="sub-page sub-page4" data-id="sub-page-4"><h1 class="page-title">Page 8 / Sub Page 4</h1></div>
-			<div class="sub-page sub-page5" data-id="sub-page-5"><h1 class="page-title">Page 8 / Sub Page 5</h1></div>
-			<div class="sub-page sub-page6" data-id="sub-page-6"><h1 class="page-title">Page 8 / Sub Page 6</h1></div>
-			<div class="sub-page sub-page7" data-id="sub-page-7"><h1 class="page-title">Page 8 / Sub Page 7</h1></div>
-			<div class="sub-page sub-page8" data-id="sub-page-8"><h1 class="page-title">Page 8 / Sub Page 8</h1></div>
-			<div class="sub-page sub-page9" data-id="sub-page-9"><h1 class="page-title">Page 8 / Sub Page 9</h1></div>
+		<div class="ft-section section8" data-id="section-8">
+			<div class="ft-page page1" data-id="page-1"><h1 class="section-title">Section 8 / Page 1</h1></div>
+			<div class="ft-page page2" data-id="page-2"><h1 class="section-title">Section 8 / Page 2</h1></div>
+			<div class="ft-page page3" data-id="page-3"><h1 class="section-title">Section 8 / Page 3</h1></div>
+			<div class="ft-page page4" data-id="page-4"><h1 class="section-title">Section 8 / Page 4</h1></div>
+			<div class="ft-page page5" data-id="page-5"><h1 class="section-title">Section 8 / Page 5</h1></div>
+			<div class="ft-page page6" data-id="page-6"><h1 class="section-title">Section 8 / Page 6</h1></div>
+			<div class="ft-page page7" data-id="page-7"><h1 class="section-title">Section 8 / Page 7</h1></div>
+			<div class="ft-page page8" data-id="page-8"><h1 class="section-title">Section 8 / Page 8</h1></div>
+			<div class="ft-page page9" data-id="page-9"><h1 class="section-title">Section 8 / Page 9</h1></div>
 		</div>
-		<div class="page page9" data-id="page-9">
-			<div class="sub-page sub-page1" data-id="sub-page-1" data-title="Sub Title 7/1"><h1 class="page-title">Page 7 / Sub Page 1</h1></div>
-			<div class="sub-page sub-page2" data-id="sub-page-2"><h1 class="page-title">Page 9 / Sub Page 2</h1>
-				<ul class="fragmentsList">
-					<li class="fragment">Fragment 1</li>
-					<li class="fragment">Fragment 2</li>
-					<li class="fragment">Fragment 3</li>
-					<li class="fragment">Fragment 4</li>
-					<li class="fragment">Fragment 5</li>
+		<div class="ft-section section9" data-id="section-9">
+			<div class="ft-page page1" data-id="page-1" data-title="Sub Title 7/1"><h1 class="section-title">Section 7 / Page 1</h1></div>
+			<div class="ft-page page2" data-id="page-2"><h1 class="section-title">Section 9 / Page 2</h1>
+				<ul class="fragments-list">
+					<li class="ft-fragment">Fragment 1</li>
+					<li class="ft-fragment">Fragment 2</li>
+					<li class="ft-fragment">Fragment 3</li>
+					<li class="ft-fragment">Fragment 4</li>
+					<li class="ft-fragment">Fragment 5</li>
 				</ul>
 			</div>
-			<div class="sub-page sub-page3" data-id="sub-page-3"><h1 class="page-title">Page 9 / Sub Page 3</h1>
-				<ul class="fragmentsList">
-					<li class="fragment">Fragment 1</li>
-					<li class="fragment">Fragment 2</li>
-					<li class="fragment">Fragment 3</li>
+			<div class="ft-page page3" data-id="page-3"><h1 class="section-title">Section 9 / Page 3</h1>
+				<ul class="fragments-list">
+					<li class="ft-fragment">Fragment 1</li>
+					<li class="ft-fragment">Fragment 2</li>
+					<li class="ft-fragment">Fragment 3</li>
 				</ul>
 			</div>
-			<div class="sub-page sub-page4" data-id="sub-page-4"><h1 class="page-title">Page 9 / Sub Page 4</h1></div>
+			<div class="ft-page page4" data-id="page-4"><h1 class="section-title">Section 9 / Page 4</h1></div>
 		</div>
 	</div>
 	<div class="switches">
@@ -172,22 +170,6 @@
 
 	<script>
 		Flowtime.showProgress(true);
-		document.addEventListener("flowtimenavigation", onNavigation, false);
-		function onNavigation(e)
-		{
-			console.log("page", e.page);
-			console.log("subPage", e.subPage);
-			console.log("pageIndex", e.pageIndex);
-			console.log("subPageIndex", e.subPageIndex);
-			console.log("prevPage", e.prevPage);
-			console.log("NextPage", e.nextPage);
-			console.log("prev", e.prev);
-			console.log("next", e.next);
-			console.log("progress", e.progress);
-			console.log("total", e.total);
-			console.log("_________________________________________________________")
-			console.log("progress %:", Math.round(e.progress * 100 / e.total) + "%");
-		}
 		Flowtime.start();
 	</script>
 </body>

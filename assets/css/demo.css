@@ -24,99 +24,100 @@ body {
 	z-index: 100;
 }
 
-.sub-page {
+.ft-page {
+	padding: 2em;
 	background-color: #999999;
 }
 
-.page1 .sub-page1 { background-color: rgba(220,0,0,1.0); 		 }
-.page1 .sub-page2 { background-color: rgba(220,0,0,0.9); 		 }
-.page1 .sub-page3 { background-color: rgba(220,0,0,0.8); 		 }
-.page1 .sub-page4 { background-color: rgba(220,0,0,0.7); 		 }
-.page1 .sub-page5 { background-color: rgba(220,0,0,0.6); 		 }
-.page1 .sub-page6 { background-color: rgba(220,0,0,0.5); 		 }
-.page1 .sub-page7 { background-color: rgba(220,0,0,0.4); 		 }
-.page1 .sub-page8 { background-color: rgba(220,0,0,0.3); 		 }
-.page1 .sub-page9 { background-color: rgba(220,0,0,0.2); 		 }
+.section1 .page1 { background-color: rgba(220,0,0,1.0); 		 }
+.section1 .page2 { background-color: rgba(220,0,0,0.9); 		 }
+.section1 .page3 { background-color: rgba(220,0,0,0.8); 		 }
+.section1 .page4 { background-color: rgba(220,0,0,0.7); 		 }
+.section1 .page5 { background-color: rgba(220,0,0,0.6); 		 }
+.section1 .page6 { background-color: rgba(220,0,0,0.5); 		 }
+.section1 .page7 { background-color: rgba(220,0,0,0.4); 		 }
+.section1 .page8 { background-color: rgba(220,0,0,0.3); 		 }
+.section1 .page9 { background-color: rgba(220,0,0,0.2); 		 }
 																	
-.page2 .sub-page1 { background-color: rgba(190,0,150,1.0); 		 }
-.page2 .sub-page2 { background-color: rgba(190,0,150,0.9); 		 }
-.page2 .sub-page3 { background-color: rgba(190,0,150,0.8); 		 }
-.page2 .sub-page4 { background-color: rgba(190,0,150,0.7); 		 }
-.page2 .sub-page5 { background-color: rgba(190,0,150,0.6); 		 }
-.page2 .sub-page6 { background-color: rgba(190,0,150,0.5); 		 }
-.page2 .sub-page7 { background-color: rgba(190,0,150,0.4); 		 }
-.page2 .sub-page8 { background-color: rgba(190,0,150,0.3); 		 }
-.page2 .sub-page9 { background-color: rgba(190,0,150,0.2); 		 }
+.section2 .page1 { background-color: rgba(190,0,150,1.0); 		 }
+.section2 .page2 { background-color: rgba(190,0,150,0.9); 		 }
+.section2 .page3 { background-color: rgba(190,0,150,0.8); 		 }
+.section2 .page4 { background-color: rgba(190,0,150,0.7); 		 }
+.section2 .page5 { background-color: rgba(190,0,150,0.6); 		 }
+.section2 .page6 { background-color: rgba(190,0,150,0.5); 		 }
+.section2 .page7 { background-color: rgba(190,0,150,0.4); 		 }
+.section2 .page8 { background-color: rgba(190,0,150,0.3); 		 }
+.section2 .page9 { background-color: rgba(190,0,150,0.2); 		 }
 																	
-.page3 .sub-page1 { background-color: rgba(120,0,200,1.0); 		 }
-.page3 .sub-page2 { background-color: rgba(120,0,200,0.9); 		 }
-.page3 .sub-page3 { background-color: rgba(120,0,200,0.8); 		 }
-.page3 .sub-page4 { background-color: rgba(120,0,200,0.7); 		 }
-.page3 .sub-page5 { background-color: rgba(120,0,200,0.6); 		 }
-.page3 .sub-page6 { background-color: rgba(120,0,200,0.5); 		 }
-.page3 .sub-page7 { background-color: rgba(120,0,200,0.4); 		 }
-.page3 .sub-page8 { background-color: rgba(120,0,200,0.3); 		 }
-.page3 .sub-page9 { background-color: rgba(120,0,200,0.2); 		 }
+.section3 .page1 { background-color: rgba(120,0,200,1.0); 		 }
+.section3 .page2 { background-color: rgba(120,0,200,0.9); 		 }
+.section3 .page3 { background-color: rgba(120,0,200,0.8); 		 }
+.section3 .page4 { background-color: rgba(120,0,200,0.7); 		 }
+.section3 .page5 { background-color: rgba(120,0,200,0.6); 		 }
+.section3 .page6 { background-color: rgba(120,0,200,0.5); 		 }
+.section3 .page7 { background-color: rgba(120,0,200,0.4); 		 }
+.section3 .page8 { background-color: rgba(120,0,200,0.3); 		 }
+.section3 .page9 { background-color: rgba(120,0,200,0.2); 		 }
 																	
-.page4 .sub-page1 { background-color: rgba(0,0,180,1.0); 		 }
-.page4 .sub-page2 { background-color: rgba(0,0,180,0.9); 		 }
-.page4 .sub-page3 { background-color: rgba(0,0,180,0.8); 		 }
-.page4 .sub-page4 { background-color: rgba(0,0,180,0.7); 		 }
-.page4 .sub-page5 { background-color: rgba(0,0,180,0.6); 		 }
-.page4 .sub-page6 { background-color: rgba(0,0,180,0.5); 		 }
-.page4 .sub-page7 { background-color: rgba(0,0,180,0.4); 		 }
-.page4 .sub-page8 { background-color: rgba(0,0,180,0.3); 		 }
-.page4 .sub-page9 { background-color: rgba(0,0,180,0.2); 		 }
+.section4 .page1 { background-color: rgba(0,0,180,1.0); 		 }
+.section4 .page2 { background-color: rgba(0,0,180,0.9); 		 }
+.section4 .page3 { background-color: rgba(0,0,180,0.8); 		 }
+.section4 .page4 { background-color: rgba(0,0,180,0.7); 		 }
+.section4 .page5 { background-color: rgba(0,0,180,0.6); 		 }
+.section4 .page6 { background-color: rgba(0,0,180,0.5); 		 }
+.section4 .page7 { background-color: rgba(0,0,180,0.4); 		 }
+.section4 .page8 { background-color: rgba(0,0,180,0.3); 		 }
+.section4 .page9 { background-color: rgba(0,0,180,0.2); 		 }
 																	
-.page5 .sub-page1 { background-color: rgba(0,150,190,1.0); 		 }
-.page5 .sub-page2 { background-color: rgba(0,150,190,0.9); 		 }
-.page5 .sub-page3 { background-color: rgba(0,150,190,0.8); 		 }
-.page5 .sub-page4 { background-color: rgba(0,150,190,0.7); 		 }
-.page5 .sub-page5 { background-color: rgba(0,150,190,0.6); 		 }
-.page5 .sub-page6 { background-color: rgba(0,150,190,0.5); 		 }
-.page5 .sub-page7 { background-color: rgba(0,150,190,0.4); 		 }
-.page5 .sub-page8 { background-color: rgba(0,150,190,0.3); 		 }
-.page5 .sub-page9 { background-color: rgba(0,150,190,0.2); 		 }
+.section5 .page1 { background-color: rgba(0,150,190,1.0); 		 }
+.section5 .page2 { background-color: rgba(0,150,190,0.9); 		 }
+.section5 .page3 { background-color: rgba(0,150,190,0.8); 		 }
+.section5 .page4 { background-color: rgba(0,150,190,0.7); 		 }
+.section5 .page5 { background-color: rgba(0,150,190,0.6); 		 }
+.section5 .page6 { background-color: rgba(0,150,190,0.5); 		 }
+.section5 .page7 { background-color: rgba(0,150,190,0.4); 		 }
+.section5 .page8 { background-color: rgba(0,150,190,0.3); 		 }
+.section5 .page9 { background-color: rgba(0,150,190,0.2); 		 }
 																	
-.page6 .sub-page1 { background-color: rgba(0,190,130,1.0); 		 }
-.page6 .sub-page2 { background-color: rgba(0,190,130,0.9); 		 }
-.page6 .sub-page3 { background-color: rgba(0,190,130,0.8); 		 }
-.page6 .sub-page4 { background-color: rgba(0,190,130,0.7); 		 }
-.page6 .sub-page5 { background-color: rgba(0,190,130,0.6); 		 }
-.page6 .sub-page6 { background-color: rgba(0,190,130,0.5); 		 }
-.page6 .sub-page7 { background-color: rgba(0,190,130,0.4); 		 }
-.page6 .sub-page8 { background-color: rgba(0,190,130,0.3); 		 }
-.page6 .sub-page9 { background-color: rgba(0,190,130,0.2); 		 }
+.section6 .page1 { background-color: rgba(0,190,130,1.0); 		 }
+.section6 .page2 { background-color: rgba(0,190,130,0.9); 		 }
+.section6 .page3 { background-color: rgba(0,190,130,0.8); 		 }
+.section6 .page4 { background-color: rgba(0,190,130,0.7); 		 }
+.section6 .page5 { background-color: rgba(0,190,130,0.6); 		 }
+.section6 .page6 { background-color: rgba(0,190,130,0.5); 		 }
+.section6 .page7 { background-color: rgba(0,190,130,0.4); 		 }
+.section6 .page8 { background-color: rgba(0,190,130,0.3); 		 }
+.section6 .page9 { background-color: rgba(0,190,130,0.2); 		 }
 																	
-.page7 .sub-page1 { background-color: rgba(0,190,0,1.0); 		 }
-.page7 .sub-page2 { background-color: rgba(0,190,0,0.9); 		 }
-.page7 .sub-page3 { background-color: rgba(0,190,0,0.8); 		 }
-.page7 .sub-page4 { background-color: rgba(0,190,0,0.7); 		 }
-.page7 .sub-page5 { background-color: rgba(0,190,0,0.6); 		 }
-.page7 .sub-page6 { background-color: rgba(0,190,0,0.5); 		 }
-.page7 .sub-page7 { background-color: rgba(0,190,0,0.4); 		 }
-.page7 .sub-page8 { background-color: rgba(0,190,0,0.3); 		 }
-.page7 .sub-page9 { background-color: rgba(0,190,0,0.2); 		 }
+.section7 .page1 { background-color: rgba(0,190,0,1.0); 		 }
+.section7 .page2 { background-color: rgba(0,190,0,0.9); 		 }
+.section7 .page3 { background-color: rgba(0,190,0,0.8); 		 }
+.section7 .page4 { background-color: rgba(0,190,0,0.7); 		 }
+.section7 .page5 { background-color: rgba(0,190,0,0.6); 		 }
+.section7 .page6 { background-color: rgba(0,190,0,0.5); 		 }
+.section7 .page7 { background-color: rgba(0,190,0,0.4); 		 }
+.section7 .page8 { background-color: rgba(0,190,0,0.3); 		 }
+.section7 .page9 { background-color: rgba(0,190,0,0.2); 		 }
 																	
-.page8 .sub-page1 { background-color: rgba(180,220,0,1.0); 		 }
-.page8 .sub-page2 { background-color: rgba(180,220,0,0.9); 		 }
-.page8 .sub-page3 { background-color: rgba(180,220,0,0.8); 		 }
-.page8 .sub-page4 { background-color: rgba(180,220,0,0.7); 		 }
-.page8 .sub-page5 { background-color: rgba(180,220,0,0.6); 		 }
-.page8 .sub-page6 { background-color: rgba(180,220,0,0.5); 		 }
-.page8 .sub-page7 { background-color: rgba(180,220,0,0.4); 		 }
-.page8 .sub-page8 { background-color: rgba(180,220,0,0.3); 		 }
-.page8 .sub-page9 { background-color: rgba(180,220,0,0.2); 		 }
+.section8 .page1 { background-color: rgba(180,220,0,1.0); 		 }
+.section8 .page2 { background-color: rgba(180,220,0,0.9); 		 }
+.section8 .page3 { background-color: rgba(180,220,0,0.8); 		 }
+.section8 .page4 { background-color: rgba(180,220,0,0.7); 		 }
+.section8 .page5 { background-color: rgba(180,220,0,0.6); 		 }
+.section8 .page6 { background-color: rgba(180,220,0,0.5); 		 }
+.section8 .page7 { background-color: rgba(180,220,0,0.4); 		 }
+.section8 .page8 { background-color: rgba(180,220,0,0.3); 		 }
+.section8 .page9 { background-color: rgba(180,220,0,0.2); 		 }
 																	
-.page9 .sub-page1 { background-color: rgba(255,160,0,1.0); 		 }
-.page9 .sub-page2 { background-color: rgba(255,160,0,0.9); 		 }
-.page9 .sub-page3 { background-color: rgba(255,160,0,0.8); 		 }
-.page9 .sub-page4 { background-color: rgba(255,160,0,0.7); 		 }
-.page9 .sub-page5 { background-color: rgba(255,160,0,0.6); 		 }
-.page9 .sub-page6 { background-color: rgba(255,160,0,0.5); 		 }
-.page9 .sub-page7 { background-color: rgba(255,160,0,0.4); 		 }
-.page9 .sub-page8 { background-color: rgba(255,160,0,0.3); 		 }
-.page9 .sub-page9 { background-color: rgba(255,160,0,0.2); 		 }
+.section9 .page1 { background-color: rgba(255,160,0,1.0); 		 }
+.section9 .page2 { background-color: rgba(255,160,0,0.9); 		 }
+.section9 .page3 { background-color: rgba(255,160,0,0.8); 		 }
+.section9 .page4 { background-color: rgba(255,160,0,0.7); 		 }
+.section9 .page5 { background-color: rgba(255,160,0,0.6); 		 }
+.section9 .page6 { background-color: rgba(255,160,0,0.5); 		 }
+.section9 .page7 { background-color: rgba(255,160,0,0.4); 		 }
+.section9 .page8 { background-color: rgba(255,160,0,0.3); 		 }
+.section9 .page9 { background-color: rgba(255,160,0,0.2); 		 }
  
 h1 {
 	font-size: 32px;
@@ -125,7 +126,7 @@ h1 {
 	padding: 2% 0;
 }
 
-.fragmentsList {
+.fragments-list {
 	font-size: 2em;
 	margin-left: 30%;
 }

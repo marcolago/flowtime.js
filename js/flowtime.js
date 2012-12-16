@@ -23,19 +23,26 @@ var Flowtime = (function ()
 	/**
 	 * application constants
 	 */
-	var PAGE_CLASS = "page";
+	var SECTION_CLASS = "ft-section";
+	var SECTION_SELECTOR = "." + SECTION_CLASS;
+	var PAGE_CLASS = "ft-page";
 	var PAGE_SELECTOR = "." + PAGE_CLASS;
-	var SUB_PAGE_CLASS = "sub-page";
-	var SUB_PAGE_SELECTOR = "." + SUB_PAGE_CLASS;
-	var FRAGMENT_CLASS = "fragment";
+	var FRAGMENT_CLASS = "ft-fragment";
 	var FRAGMENT_SELECTOR = "." + FRAGMENT_CLASS;
+	var DEFAULT_PROGRESS_CLASS = "ft-default-progress";
+	var DEFAULT_PROGRESS_SELECTOR = "." + DEFAULT_PROGRESS_CLASS;
+	var SECTION_THUMB_CLASS = "ft-section-thumb";
+	var SECTION_THUMB_SELECTOR = "." + SECTION_THUMB_CLASS;
+	var PAGE_THUMB_CLASS = "ft-page-thumb";
+	var PAGE_THUMB_SELECTOR = "." + PAGE_THUMB_CLASS;
 	/**
 	 * application variables
 	 */
-	var pageContainer = document.querySelector(".page-container");	// cached reference to .page-container element
+	var ftContainer = document.querySelector(".flowtime");			// cached reference to .flowtime element
 	var body = document.querySelector("body");						// cached reference to body element
 	var useHash = false;											// if true the engine uses only the hash change logic
-	var currentHash = "";											// the hash string of the current page / sub page pair
+	var currentHash = "";											// the hash string of the current section / page pair
+	var pastIndex;													// section and page indexes of the past page
 	var isOverview = false;											// Boolean status for the overview 
 	var siteName = document.title;									// cached base string for the site title
 	var overviewCachedDest;											// caches the destination before performing an overview zoom out for navigation back purposes
@@ -86,13 +93,13 @@ var Flowtime = (function ()
 			var dest = NavigationMatrix.setPage(h);
 			navigateTo(dest, null, true);
 		}
-		// sub pages in oveview mode
-		if (isOverview && Brav1Toolbox.hasClass(e.target, SUB_PAGE_CLASS))
+		// pages in oveview mode
+		if (isOverview && Brav1Toolbox.hasClass(e.target, PAGE_CLASS))
 		{
 			navigateTo(e.target, null, true);
 		}
 		// thumbs in the default progress indicator
-		if (Brav1Toolbox.hasClass(e.target, "sub-page-thumb"))
+		if (Brav1Toolbox.hasClass(e.target, PAGE_THUMB_CLASS))
 		{
 			var pTo = Number(unsafeAttr(e.target.getAttribute("data-p")));
 			var spTo = Number(unsafeAttr(e.target.getAttribute("data-sp")));
@@ -113,12 +120,17 @@ var Flowtime = (function ()
 	function onPopState(e)
 	{
 		useHash = false;
+		var h;
 		if (e.state)
 		{
-			var h = e.state.token.replace("#/", "");
-			var dest = NavigationMatrix.setPage(h);
-			navigateTo(dest, false);
+			h = e.state.token.replace("#/", "");
 		}
+		else
+		{
+			h = document.location.hash.replace("#/", "");
+		}
+		var dest = NavigationMatrix.setPage(h);
+		navigateTo(dest, false);
 	}
 
 	/**
@@ -194,17 +206,17 @@ var Flowtime = (function ()
 		if (h.length > 0)
 		{
 			var aHash = h.replace("#/", "").split("/"); // TODO considerare l'ultimo slash come nullo
-			var p = document.querySelector(".page[data-id=__" + aHash[0] + "]") || document.querySelector(".page[data-prog=__" + aHash[0] + "]");
+			var p = document.querySelector(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]") || document.querySelector(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
 			if (p != null)
 			{
 				var sp = null;
 				if (aHash.length > 1)
 				{
-					sp = p.querySelector(SUB_PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(SUB_PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
+					sp = p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
 				}
 				if (sp == null)
 				{
-					sp = p.querySelector(SUB_PAGE_SELECTOR);
+					sp = p.querySelector(PAGE_SELECTOR);
 				}
 				return sp;
 			}
@@ -223,13 +235,13 @@ var Flowtime = (function ()
 
 	/**
 	 * builds and sets the title of the document parsing the attributes of the current section
-	 * if a data-title is available in a sub page and or in a page then it will be used
+	 * if a data-title is available in a page and or in a section then it will be used
 	 * otherwise it will be used a formatted version of the hash string
 	 */
 	function setTitle(h)
 	{
 		var t = siteName;
-		var ht = NavigationMatrix.getCurrentSubPage().getAttribute("data-title");
+		var ht = NavigationMatrix.getCurrentPage().getAttribute("data-title");
 		if (ht == null)
 		{
 			var hs = h.split("/");
@@ -240,9 +252,9 @@ var Flowtime = (function ()
 		}
 		else
 		{
-			if (NavigationMatrix.getCurrentPage().getAttribute("data-title") != null)
+			if (NavigationMatrix.getCurrentSection().getAttribute("data-title") != null)
 			{
-				t += " | " + NavigationMatrix.getCurrentPage().getAttribute("data-title");
+				t += " | " + NavigationMatrix.getCurrentSection().getAttribute("data-title");
 			}
 			t += " | " + ht
 		}
@@ -303,9 +315,9 @@ var Flowtime = (function ()
 
 	/**
 	 * navigation transition logic
-	 * @param	dest HTMLElement	the sub page to go to
+	 * @param	dest HTMLElement	the page to go to
 	 * @param	push Boolean if true the hash string were pushed to the history API
-	 * @param	linked Boolean if true triggers a forced update of all the fragments in the sub pages, used when navigating from links or overview
+	 * @param	linked Boolean if true triggers a forced update of all the fragments in the pages, used when navigating from links or overview
 	 */
 	function navigateTo(dest, push, linked)
 	{
@@ -313,13 +325,13 @@ var Flowtime = (function ()
 		// if dest doesn't exist then go to homepage
 		if (!dest)
 		{
-			if (NavigationMatrix.getCurrentSubPage() != null)
+			if (NavigationMatrix.getCurrentPage() != null)
 			{
-				dest = NavigationMatrix.getCurrentSubPage();
+				dest = NavigationMatrix.getCurrentPage();
 			}
 			else
 			{
-				dest = document.querySelector(SUB_PAGE_SELECTOR);
+				dest = document.querySelector(PAGE_SELECTOR);
 			}
 			push = true;
 		}
@@ -335,11 +347,13 @@ var Flowtime = (function ()
 		else
 		{
 			// calculate the index of the destination page
-			x = pageIndex.page;
-			y = pageIndex.subPage;
+			x = pageIndex.section;
+			y = pageIndex.page;
 		}
 		// check what properties use for navigation and set the style
 		setNavProperty(x, y);
+		// cache the section and page index to determine the direction of the next navigation
+		pastIndex = pageIndex;
 		//
 		var h = NavigationMatrix.getHash(dest);
 		if (linked == true)
@@ -366,20 +380,20 @@ var Flowtime = (function ()
 		{
 			zoomIn();
 		}
-		NavigationMatrix.switchActiveSubPage(NavigationMatrix.getCurrentSubPage(), true);
+		NavigationMatrix.switchActivePage(NavigationMatrix.getCurrentPage(), true);
 		//
 		// dispatches an event populated with navigation data
 		Brav1Toolbox.dispatchEvent("flowtimenavigation",	{
+													section: NavigationMatrix.getCurrentSection(),
 													page: NavigationMatrix.getCurrentPage(),
-													subPage: NavigationMatrix.getCurrentSubPage(),
+													sectionIndex: pageIndex.section, 
 													pageIndex: pageIndex.page, 
-													subPageIndex: pageIndex.subPage, 
-													prevPage: NavigationMatrix.hasPrevPage(),
-													nextPage: NavigationMatrix.hasNextPage(),
-													prev: NavigationMatrix.hasPrevSubPage(),
-													next: NavigationMatrix.hasNextSubPage(),
+													prevSection: NavigationMatrix.hasPrevSection(),
+													nextSection: NavigationMatrix.hasNextSection(),
+													prev: NavigationMatrix.hasPrevPage(),
+													next: NavigationMatrix.hasNextPage(),
 													progress: NavigationMatrix.getProgress(),
-													total: NavigationMatrix.getSubPagesTotalLength()
+													total: NavigationMatrix.getPagesTotalLength()
 												} );
 
 		if (_showProgress)
@@ -398,24 +412,24 @@ var Flowtime = (function ()
 		{
 			if (_slideWithPx)
 			{
-				pageContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";	
+				ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";	
 			}
 			else
 			{
-				pageContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%) translateY(" + -y * 100 + "%)";
+				ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%) translateY(" + -y * 100 + "%)";
 			}
 		}
 		else
 		{
 			if (_slideWithPx)
 			{
-				pageContainer.style.top = -y + "px";
-				pageContainer.style.left = -x + "px";
+				ftContainer.style.top = -y + "px";
+				ftContainer.style.left = -x + "px";
 			}
 			else
 			{
-				pageContainer.style.top = -y * 100 + "%";
-				pageContainer.style.left = -x * 100 + "%";
+				ftContainer.style.top = -y * 100 + "%";
+				ftContainer.style.left = -x * 100 + "%";
 			}
 		}
 	}
@@ -437,18 +451,18 @@ var Flowtime = (function ()
 		var domFragment = document.createDocumentFragment();
 		// create the progress container div
 		defaultProgress = document.createElement("div");
-		defaultProgress.className = "ft-default-progress";
+		defaultProgress.className = DEFAULT_PROGRESS_CLASS;
 		domFragment.appendChild(defaultProgress);
-		// loop through pages
-		for (var i = 0; i < NavigationMatrix.getPagesLength(); i++)
+		// loop through sections
+		for (var i = 0; i < NavigationMatrix.getSectionsLength(); i++)
 		{
 			var pDiv = document.createElement("div");
-			pDiv.className = "page-thumb";
-			// loop through sub pages
-			var spArray = NavigationMatrix.getSubPages(i)
+			pDiv.className = SECTION_THUMB_CLASS;
+			// loop through pages
+			var spArray = NavigationMatrix.getPages(i)
 			for (var ii = 0; ii < spArray.length; ii++) {
 				var spDiv = document.createElement("div");
-				spDiv.className = "sub-page-thumb";
+				spDiv.className = PAGE_THUMB_CLASS;
 				spDiv.setAttribute("data-p", "__" + i);
 				spDiv.setAttribute("data-sp", "__" + ii);
 				pDiv.appendChild(spDiv);
@@ -471,13 +485,13 @@ var Flowtime = (function ()
 	{
 		if (defaultProgress != null)
 		{
-			var spts = document.querySelectorAll(".ft-default-progress .sub-page-thumb");
+			var spts = defaultProgress.querySelectorAll(PAGE_THUMB_SELECTOR);
 			for (var i = 0; i < spts.length; i++)
 			{
 				var spt = spts[i];
 				var pTo = Number(unsafeAttr(spt.getAttribute("data-p")));
 				var spTo = Number(unsafeAttr(spt.getAttribute("data-sp")));
-				if (pTo == NavigationMatrix.getPageIndex().page && spTo == NavigationMatrix.getPageIndex().subPage)
+				if (pTo == NavigationMatrix.getPageIndex().section && spTo == NavigationMatrix.getPageIndex().page)
 				{
 					Brav1Toolbox.addClass(spts[i], "actual");
 				}
@@ -511,13 +525,13 @@ var Flowtime = (function ()
 		}
 		else
 		{
-			overviewCachedDest = NavigationMatrix.getCurrentSubPage();
+			overviewCachedDest = NavigationMatrix.getCurrentPage();
 			zoomOut();
 		}
 	}
 
 	/**
-	 * zoom in the page container to focus on the current page / sub page
+	 * zoom in the view to focus on the current section / page
 	 */
 	function zoomIn(undo)
 	{
@@ -532,16 +546,10 @@ var Flowtime = (function ()
 		{
 			navigateTo();
 		}
-		//
-		// var msp = document.querySelectorAll(".page");
-		// for (var i = 0; i < msp.length; i++)
-		// {
-		// 	msp[i].style[Brav1Toolbox.getPrefixed("transform")] = "translateZ(0)";
-		// }
 	}
 
 	/**
-	 * zoom out the page container for an overview of all the pages / sub pages
+	 * zoom out the view for an overview of all the sections / pages
 	 */
 	function zoomOut()
 	{
@@ -561,15 +569,15 @@ var Flowtime = (function ()
 
 	function overviewZoomTypeA(out)
 	{	
-		// pageContainer scale version
+		// ftContainer scale version
 		if (out)
 		{
-			var scaleX = 100 / NavigationMatrix.getPagesLength();
-			var scaleY = 100 / NavigationMatrix.getSubPagesLength();
+			var scaleX = 100 / NavigationMatrix.getSectionsLength();
+			var scaleY = 100 / NavigationMatrix.getPagesLength();
 			var scale = Math.min(scaleX, scaleY) * 0.9;
-			var offsetX = (100 - NavigationMatrix.getPagesLength() * scale) / 2;
-			var offsetY = (100 - NavigationMatrix.getSubPagesLength() * scale) / 2;
-			pageContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
+			var offsetX = (100 - NavigationMatrix.getSectionsLength() * scale) / 2;
+			var offsetY = (100 - NavigationMatrix.getPagesLength() * scale) / 2;
+			ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
 		}
 		else
 		{
@@ -579,14 +587,14 @@ var Flowtime = (function ()
 
 	function overviewZoomTypeB(out)
 	{
-		// pageContainer scale alternative version
+		// ftContainer scale alternative version
 		if (out)
 		{
 			var scale = overviewFixedScaleFactor // Math.min(scaleX, scaleY) * 0.9;
 			var pIndex = NavigationMatrix.getPageIndex();
-			var offsetX = 50 - (scale * pIndex.page) - (scale / 2);
-			var offsetY = 50 - (scale * pIndex.subPage) - (scale / 2);
-			pageContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
+			var offsetX = 50 - (scale * pIndex.section) - (scale / 2);
+			var offsetY = 50 - (scale * pIndex.page) - (scale / 2);
+			ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
 		}
 	}
 
@@ -631,16 +639,16 @@ var Flowtime = (function ()
 					_toggleOverview(true);
 					break;
 				case 37 : // left
-					_prevPage(e.shiftKey);
+					_prevSection(e.shiftKey);
 					break;
 				case 39 : // right
-					_nextPage(e.shiftKey);
+					_nextSection(e.shiftKey);
 					break;
 				case 38 : // up
-					_prevSubPage(e.shiftKey);
+					_prevPage(e.shiftKey);
 					break;
 				case 40 : // down
-					_nextSubPage(e.shiftKey);
+					_nextPage(e.shiftKey);
 					break;
 				case 13 : // return
 				{
@@ -667,12 +675,51 @@ var Flowtime = (function ()
 */
 
 	/*
-	 * Public API to go to the next page
-	 * @param	top	Boolean	if true the next page will be the first sub page in the next array; if false the next page will be the same index sub page in the next array
+	 * Public API to go to the next section
+	 * @param	top	Boolean	if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
 	 */
-	function _nextPage(top)
+	function _nextSection(top)
 	{
-		var d = NavigationMatrix.getNextPage(top, _fragmentsOnSide, isOverview);
+		var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide, isOverview);
+		if (d != undefined)
+		{
+			navigateTo(d);
+		}
+		else
+		{
+			if (isOverview && _useOverviewVariant)
+			{
+				zoomOut();
+			}
+		}
+	}
+
+	/*
+	 * Public API to go to the prev section
+	 * 
+	 */
+	function _prevSection(top)
+	{
+		var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide, isOverview);
+		if (d != undefined)
+		{
+			navigateTo(d);
+		}
+		else
+		{
+			if (isOverview && _useOverviewVariant)
+			{
+				zoomOut();
+			}
+		}
+	}
+
+	/*
+	 * Public API to go to the next page
+	 */
+	function _nextPage(jump)
+	{
+		var d = NavigationMatrix.getNextPage(jump, isOverview);
 		if (d != undefined)
 		{
 			navigateTo(d);
@@ -688,11 +735,10 @@ var Flowtime = (function ()
 
 	/*
 	 * Public API to go to the prev page
-	 * 
 	 */
-	function _prevPage(top)
+	function _prevPage(jump)
 	{
-		var d = NavigationMatrix.getPrevPage(top, _fragmentsOnSide, isOverview);
+		var d = NavigationMatrix.getPrevPage(jump, isOverview);
 		if (d != undefined)
 		{
 			navigateTo(d);
@@ -707,49 +753,11 @@ var Flowtime = (function ()
 	}
 
 	/*
-	 * Public API to go to the next sub page
-	 */
-	function _nextSubPage(jump)
-	{
-		var d = NavigationMatrix.getNextSubPage(jump, isOverview);
-		if (d != undefined)
-		{
-			navigateTo(d);
-		}
-		else
-		{
-			if (isOverview && _useOverviewVariant)
-			{
-				zoomOut();
-			}
-		}
-	}
-
-	/*
-	 * Public API to go to the prev sub page
-	 */
-	function _prevSubPage(jump)
-	{
-		var d = NavigationMatrix.getPrevSubPage(jump, isOverview);
-		if (d != undefined)
-		{
-			navigateTo(d);
-		}
-		else
-		{
-			if (isOverview && _useOverviewVariant)
-			{
-				zoomOut();
-			}
-		}
-	}
-
-	/*
-	 * Public API to go to a specified page / sub page
+	 * Public API to go to a specified section / page
 	 * the method accepts vary parameters:
-	 * if two numbers were passed it assumes that the first is the page index and the second is the sub page index;
-	 * if an object is passed it assumes that the object has a page property and a subPage property to get the indexes to navigate;
-	 * if an HTMLElement is passed it assumes the element is a destination sub page 
+	 * if two numbers were passed it assumes that the first is the section index and the second is the page index;
+	 * if an object is passed it assumes that the object has a section property and a page property to get the indexes to navigate;
+	 * if an HTMLElement is passed it assumes the element is a destination page 
 	 */
 	function _gotoPage()
 	{
@@ -765,10 +773,10 @@ var Flowtime = (function ()
 					var sp = o.subPage;
 					if (p != null && p != undefined)
 					{
-						var pd = document.querySelector(".page[data-id=" + safeAttr(p) + "]");
+						var pd = document.querySelector(SECTION_SELECTOR + "[data-id=" + safeAttr(p) + "]");
 						if (sp != null && sp != undefined)
 						{
-							var spd = pd.querySelector(SUB_PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
+							var spd = pd.querySelector(PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
 							if (spd != null)
 							{
 								navigateTo(spd);
@@ -786,7 +794,7 @@ var Flowtime = (function ()
 			{
 				if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0)
 				{
-					var spd = NavigationMatrix.getSubPageByIndex(args[1], args[0]);
+					var spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
 					navigateTo(spd);
 					return;
 				}
@@ -811,19 +819,19 @@ var Flowtime = (function ()
 	
 	var NavigationMatrix = (function ()
 	{
-		var pages;						// HTML Collection of .page-container > .page elements
-		var pagesArray;					// multi-dimensional array containing the sub pages' array
-		var fragments;					// HTML Collection of .fragment elements 
-		var fragmentsArray;				// multi-dimensional array containing the per sub page fragments' array
-		var fr = [];					// multi-dimensional array containing the index of the current active fragment per sub page
-		var pagesLength = 0;			// cached total number of .page elements
-		var subPagesLength = 0;			// cached max number of .sub-page elements
-		var subPagesTotalLength = 0;	// cached total number of .sub-page elements
-		var p = 0;						// index of the current page viewved or higlighted
-		var sp = 0;						// index of the current sub page viewved or higlighted
-		var pCache = 0;					// cache index of the current page
-		var spCache = 0;				// cache index of the current sub page
-		var hilited;					// the current sub page higlighted, useful for overview mode
+		var sections;						// HTML Collection of .flowtime > .ft-section elements
+		var sectionsArray;					// multi-dimensional array containing the pages' array
+		var fragments;						// HTML Collection of .fragment elements 
+		var fragmentsArray;					// multi-dimensional array containing the per page fragments' array
+		var fr = [];						// multi-dimensional array containing the index of the current active fragment per sub page
+		var sectionsLength = 0;				// cached total number of .ft-section elements
+		var pagesLength = 0;				// cached max number of .page elements
+		var pagesTotalLength = 0;			// cached total number of .page elements
+		var p = 0;							// index of the current section viewved or higlighted
+		var sp = 0;							// index of the current page viewved or higlighted
+		var pCache = 0;						// cache index of the current section
+		var spCache = 0;					// cache index of the current page
+		var hilited;						// the current page higlighted, useful for overview mode
 		
 		/**
 		 * update the navigation matrix array
@@ -832,56 +840,56 @@ var Flowtime = (function ()
 		 */
 		function _updateMatrix()
 		{
-			pagesArray = [];
+			sectionsArray = [];
 			fragments = document.querySelectorAll(FRAGMENT_SELECTOR);
 			fragmentsArray = [];
-			pages = pageContainer.querySelectorAll(".page-container > " + PAGE_SELECTOR);
+			sections = ftContainer.querySelectorAll(".flowtime > " + SECTION_SELECTOR);
 			//
-			for (var i = 0; i < pages.length; i++)
+			for (var i = 0; i < sections.length; i++)
 			{
-				var subPagesArray = [];
-				var page = pages[i];
+				var pagesArray = [];
+				var section = sections[i];
 				fragmentsArray[i] = [];
 				fr[i] = [];
 				//
-				if (page.getAttribute("data-id"))
+				if (section.getAttribute("data-id"))
 				{
-					page.setAttribute("data-id", "__" + page.getAttribute("data-id")); // prevents attributes starting with a number
+					section.setAttribute("data-id", "__" + section.getAttribute("data-id")); // prevents attributes starting with a number
 				}
-				page.setAttribute("data-prog", "__" + (i + 1));
-				page.index = i;
+				section.setAttribute("data-prog", "__" + (i + 1));
+				section.index = i;
 				//
-				var subPages = page.querySelectorAll(SUB_PAGE_SELECTOR);
-				subPagesTotalLength += subPages.length;
-				subPagesLength = Math.max(subPagesLength, subPages.length); // sets the sub pages max number for overview purposes
-				for (var ii = 0; ii < subPages.length; ii++)
+				var pages = section.querySelectorAll(PAGE_SELECTOR);
+				pagesTotalLength += pages.length;
+				pagesLength = Math.max(pagesLength, pages.length); // sets the sub pages max number for overview purposes
+				for (var ii = 0; ii < pages.length; ii++)
 				{
-					var _sp = subPages[ii];
+					var _sp = pages[ii];
 					if (_sp.getAttribute("data-id"))
 					{
 						_sp.setAttribute("data-id", "__" + _sp.getAttribute("data-id")); // prevents attributes starting with a number
 					}
 					_sp.setAttribute("data-prog", "__" + (ii + 1));
 					_sp.index = ii;
-					subPagesArray.push(_sp);
+					pagesArray.push(_sp);
 					//
 					var subFragments = _sp.querySelectorAll(FRAGMENT_SELECTOR);
 					fragmentsArray[i][ii] = subFragments;
 					fr[i][ii] = -1;
 				}
-				pagesArray.push(subPagesArray);
+				sectionsArray.push(pagesArray);
 			}
 			//
-			pagesLength = pages.length; // sets the pages max number for overview purposes
+			sectionsLength = sections.length; // sets the sections max number for overview purposes
 		}
 		
 		/**
-		 * returns the next page in navigation
-		 * @param	top	Boolean	if true the next page will be the first sub page in the next array; if false the next page will be the same index sub page in the next array
+		 * returns the next section in navigation
+		 * @param	top	Boolean	if true the next page will be the first page in the next array; if false the next section will be the same index page in the next array
 		 * @param	fos	Boolean value of _fragmentsOnSide
 		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getNextPage(top, fos, io)
+		function _getNextSection(top, fos, io)
 		{
 			var sub = sp;
 			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && top != true && io == false)
@@ -891,23 +899,23 @@ var Flowtime = (function ()
 			else
 			{
 				sub = 0;
-				if (top != true || _showFragmentsOnBack == true || p + 1 > pagesArray.length - 1)
+				if (top != true || _showFragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
 				{
 					sub = sp;
 				}
-				p = Math.min(p + 1, pagesArray.length - 1);
-				return _getNearestSubPage(pagesArray[p], sub, io);
+				p = Math.min(p + 1, sectionsArray.length - 1);
+				return _getNearestPage(sectionsArray[p], sub, io);
 			}
-			return hiliteOrNavigate(pagesArray[p][sp], io);
+			return hiliteOrNavigate(sectionsArray[p][sp], io);
 		}
 		
 		/**
-		 * returns the prev page in navigation
-		 * @param	top	Boolean	if true the next page will be the first sub page in the prev array; if false the prev page will be the same index sub page in the prev array
+		 * returns the prev section in navigation
+		 * @param	top	Boolean	if true the next section will be the first page in the prev array; if false the prev section will be the same index page in the prev array
 		 * @param	fos	Boolean value of _fragmentsOnSide
 		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getPrevPage(top, fos, io)
+		function _getPrevSection(top, fos, io)
 		{
 			var sub = sp;
 			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && top != true && io == false)
@@ -922,20 +930,20 @@ var Flowtime = (function ()
 					sub = sp;
 				}
 				p = Math.max(p - 1, 0);
-				return _getNearestSubPage(pagesArray[p], sub, io);
+				return _getNearestPage(sectionsArray[p], sub, io);
 			}
-			return hiliteOrNavigate(pagesArray[p][sp], io);
+			return hiliteOrNavigate(sectionsArray[p][sp], io);
 		}
 		
 		/**
-		 * checks if there is a valid sub page in the current page array
-		 * if the passed sub page is not valid thne check which is the first valid sub page in the array
-		 * then returns the sub page
-		 * @param	p	Number	the page index in the pages array
-		 * @param	sub	Number	the sub page index in the pages->page array
+		 * checks if there is a valid page in the current section array
+		 * if the passed page is not valid thne check which is the first valid page in the array
+		 * then returns the page
+		 * @param	p	Number	the section index in the sections array
+		 * @param	sub	Number	the page index in the sections->page array
 		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getNearestSubPage(pg, sub, io)
+		function _getNearestPage(pg, sub, io)
 		{
 			var nsp = pg[sub];
 			if (nsp == undefined)
@@ -956,12 +964,12 @@ var Flowtime = (function ()
 		}
 		
 		/**
-		 * returns the next sub page in navigation
-		 * if the next sub page is not in the current page array returns the first sub page in the next page array
-		 * @param	jump	Boolean	if true jumps over the fragments directly to the next sub page
+		 * returns the next page in navigation
+		 * if the next page is not in the current section array returns the first page in the next section array
+		 * @param	jump	Boolean	if true jumps over the fragments directly to the next page
 		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getNextSubPage(jump, io)
+		function _getNextPage(jump, io)
 		{
 			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump != true && io == false)
 			{
@@ -969,26 +977,26 @@ var Flowtime = (function ()
 			}
 			else
 			{
-				if (pagesArray[p][sp + 1] == undefined && pagesArray[p + 1] != undefined)
+				if (sectionsArray[p][sp + 1] == undefined && sectionsArray[p + 1] != undefined)
 				{
 					p += 1;
 					sp = 0;
 				}
 				else
 				{
-					sp = Math.min(sp + 1, pagesArray[p].length - 1);
+					sp = Math.min(sp + 1, sectionsArray[p].length - 1);
 				}
 			}
-			return hiliteOrNavigate(pagesArray[p][sp], io);
+			return hiliteOrNavigate(sectionsArray[p][sp], io);
 		}
 		
 		/**
-		 * returns the prev sub page in navigation
-		 * if the prev sub page is not in the current page array returns the first sub page in the prev page array
-		 * @param	jump	Boolean	if true jumps over the fragments directly to the prev sub page
+		 * returns the prev page in navigation
+		 * if the prev page is not in the current section array returns the last page in the prev section array
+		 * @param	jump	Boolean	if true jumps over the fragments directly to the prev page
 		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getPrevSubPage(jump, io)
+		function _getPrevPage(jump, io)
 		{
 			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && io == false)
 			{
@@ -996,21 +1004,21 @@ var Flowtime = (function ()
 			}
 			else
 			{
-				if (sp == 0 && pagesArray[p - 1] != undefined)
+				if (sp == 0 && sectionsArray[p - 1] != undefined)
 				{
 					p -= 1;
-					sp = pagesArray[p].length - 1;
+					sp = sectionsArray[p].length - 1;
 				}
 				else
 				{
 					sp = Math.max(sp - 1, 0);
 				}
 			}
-			return hiliteOrNavigate(pagesArray[p][sp], io);
+			return hiliteOrNavigate(sectionsArray[p][sp], io);
 		}
 
 		/**
-		 * returns the destination sub page or
+		 * returns the destination page or
 		 * if the application is in overview mode
 		 * switch the active page without returning a destination
 		 * @param	d	HTMLElement	the candidate destination
@@ -1020,7 +1028,7 @@ var Flowtime = (function ()
 		{
 			if (io == true)
 			{
-				_switchActiveSubPage(d);
+				_switchActivePage(d);
 				return;
 			}
 			else
@@ -1030,11 +1038,11 @@ var Flowtime = (function ()
 		}
 
 		/**
-		 * show a single fragment inside the specified page / sub page
+		 * show a single fragment inside the specified section / sub page
 		 * the fragment index parameter is optional, if passed force the specified fragment to show
 		 * otherwise the method shows the current fragment
-		 * @param	fp	Number	the page index
-		 * @param	fsp	Number	the sub page index
+		 * @param	fp	Number	the section index
+		 * @param	fsp	Number	the page index
 		 * @param	f	Number	the fragment index (optional)
 		 */
 		function _showFragment(fp, fsp, f)
@@ -1051,11 +1059,11 @@ var Flowtime = (function ()
 		}
 
 		/**
-		 * hide a single fragment inside the specified page / sub page
+		 * hide a single fragment inside the specified section / sub page
 		 * the fragment index parameter is optional, if passed force the specified fragment to hide
 		 * otherwise the method hides the current fragment
-		 * @param	fp	Number	the page index
-		 * @param	fsp	Number	the sub page index
+		 * @param	fp	Number	the section index
+		 * @param	fsp	Number	the page index
 		 * @param	f	Number	the fragment index (optional)
 		 */
 		function _hideFragment(fp, fsp, f)
@@ -1069,6 +1077,7 @@ var Flowtime = (function ()
 				f = fr[fp][fsp];
 			}
 			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], "revealed");
+			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], "revealed-temp");
 			fr[fp][fsp] -= 1;
 		}
 
@@ -1146,16 +1155,30 @@ var Flowtime = (function ()
 									}
 									else
 									{
-										_showFragments(ip, isp, f);
+										if (pastIndex.section > NavigationMatrix.getPageIndex().section)
+										{
+											_showFragment(ip, isp, f);
+										}
+										else
+										{
+											_hideFragment(ip, isp, f);
+										}
 									}
 								}
 								if (_showFragmentsOnBack == false)
 								{
 									fr[ip][isp] = -1
 								}
-								else
+								else 
 								{
-									fr[ip][isp] = f - 1;	
+									if (pastIndex.section > NavigationMatrix.getPageIndex().section)
+									{
+										fr[ip][isp] = f - 1;	
+									}
+									else
+									{
+										fr[ip][isp] = -1
+									}
 								}
 							}
 						}
@@ -1165,47 +1188,55 @@ var Flowtime = (function ()
 		}
 		
 		/**
+		 * returns the current section index
+		 */
+		function _getSection(h)
+		{
+			if (h)
+			{
+				// TODO return the index of the section by hash
+			}
+			return p;
+		}
+		
+		/**
 		 * returns the current page index
 		 */
 		function _getPage(h)
 		{
 			if (h)
 			{
-				// TODO restituire l'index della pagina dall'hash
-			}
-			return p;
-		}
-		
-		/**
-		 * returns the current sub page index
-		 */
-		function _getSubPage(h)
-		{
-			if (h)
-			{
-				// TODO restituire l'index della sotto pagina dall'hash
+				// TODO return the index of the page by hash
 			}
 			return sp;
 		}
 
 		/**
-		 * returns the pages collection
+		 * returns the sections collection
 		 */
-		 function _getPages()
+		 function _getSections()
 		 {
-		 	return pages;
+		 	return sections;
 		 }
 
 		/**
-		 * returns the sub pages collection inside the passed page index
+		 * returns the pages collection inside the passed section index
 		 */
-		 function _getSubPages(i)
+		 function _getPages(i)
 		 {
-		 	return pagesArray[i];
+		 	return sectionsArray[i];
 		 }
 
 		/**
-		 * returns the number of pages
+		 * returns the number of sections
+		 */
+		function _getSectionsLength()
+		{
+			return sectionsLength;
+		}
+
+		/**
+		 * returns the max number of pages
 		 */
 		function _getPagesLength()
 		{
@@ -1213,23 +1244,15 @@ var Flowtime = (function ()
 		}
 
 		/**
-		 * returns the max number of sub pages
+		 * returns the total number of pages
 		 */
-		function _getSubPagesLength()
+		function _getPagesTotalLength()
 		{
-			return subPagesLength;
+			return pagesTotalLength;
 		}
 
 		/**
-		 * returns the total number of sub pages
-		 */
-		function _getSubPagesTotalLength()
-		{
-			return subPagesTotalLength;
-		}
-
-		/**
-		 * returns a object with the index of the current page and sub page
+		 * returns a object with the index of the current section and page
 		 */
 		function _getPageIndex(d)
 		{
@@ -1240,51 +1263,51 @@ var Flowtime = (function ()
 				pIndex = d.parentNode.index; //parseInt(d.parentNode.getAttribute("data-prog").replace(/__/, "")) - 1;
 				spIndex = d.index; //parseInt(d.getAttribute("data-prog").replace(/__/, "")) - 1;
 			}
-			return {page: pIndex, subPage: spIndex };
+			return {section: pIndex, page: spIndex };
 		}
 
-		function _getPageByIndex(i)
+		function _getSectionByIndex(i)
 		{
-			return pages[i];
+			return sections[i];
 		}
 
-		function _getSubPageByIndex(i, pi)
+		function _getPageByIndex(i, pi)
 		{
-			return pagesArray[pi][i];
+			return sectionsArray[pi][i];
+		}
+
+		function _getCurrentSection()
+		{
+			return sections[p];
 		}
 
 		function _getCurrentPage()
 		{
-			return pages[p];
+			return sectionsArray[p][sp];
 		}
 
-		function _getCurrentSubPage()
+		function _hasNextSection()
 		{
-			return pagesArray[p][sp];
+			return p < sections.length - 1;
 		}
 
-		function _hasNextPage()
-		{
-			return p < pages.length - 1;
-		}
-
-		function _hasPrevPage()
+		function _hasPrevSection()
 		{
 			return p > 0;
 		}
 
-		function _hasNextSubPage()
+		function _hasNextPage()
 		{
-			return sp < pagesArray[p].length - 1;
+			return sp < sectionsArray[p].length - 1;
 		}
 
-		function _hasPrevSubPage()
+		function _hasPrevPage()
 		{
 			return sp > 0;
 		}
 
 		/**
-		 * get a progress value calculated on the total number of sub pages
+		 * get a progress value calculated on the total number of pages
 		 */
 		function _getProgress()
 		{
@@ -1295,29 +1318,29 @@ var Flowtime = (function ()
 			var c = 0;
 			for (var i = 0; i < p; i++)
 			{
-				c += pagesArray[i].length;
+				c += sectionsArray[i].length;
 			}
-			c += pagesArray[p][sp].index + 1;
+			c += sectionsArray[p][sp].index + 1;
 			return c;
 		}
 
 		/**
-		 * get a composed hash based on current page and sub page
+		 * get a composed hash based on current section and page
 		 */
 		function _getHash(d)
 		{
 			if (d != undefined)
 			{
-				sp = _getPageIndex(d).subPage;
-				p = _getPageIndex(d).page;
+				sp = _getPageIndex(d).page;
+				p = _getPageIndex(d).section;
 			}
 			var h = "";
 			// append to h the value of data-id attribute or, if data-id is not defined, the data-prog attribute
-			var _p = pages[p];
+			var _p = sections[p];
 			h += getPageId(_p);
-			if (pagesArray[p].length > 1)
+			if (sectionsArray[p].length > 1)
 			{
-				var _sp = pagesArray[p][sp];
+				var _sp = sectionsArray[p][sp];
 				h += "/" + getPageId(_sp);
 			}
 			return h;
@@ -1332,10 +1355,10 @@ var Flowtime = (function ()
 			if (elem)
 			{
 				var pElem = elem.parentNode;
-				for (var i = 0; i < pagesArray.length; i++)
+				for (var i = 0; i < sectionsArray.length; i++)
 				{
-					var pa = pagesArray[i];
-					if (pages[i] === pElem)
+					var pa = sectionsArray[i];
+					if (sections[i] === pElem)
 					{
 						p = i;
 						for (var ii = 0; ii < pa.length; ii++)
@@ -1353,18 +1376,18 @@ var Flowtime = (function ()
 			return elem;
 		}
 
-		function _switchActiveSubPage(d, navigate)
+		function _switchActivePage(d, navigate)
 		{
-			for (var i = 0; i < pagesArray.length; i++)
+			for (var i = 0; i < sectionsArray.length; i++)
 			{
-				var pa = pagesArray[i];
+				var pa = sectionsArray[i];
 				for (var ii = 0; ii < pa.length; ii++)
 				{
-					var spa = pagesArray[i][ii];
+					var spa = sectionsArray[i][ii];
 					if (spa !== d)
 					{
 						Brav1Toolbox.removeClass(spa, "hilite");
-						if (isOverview == false && spa !== _getCurrentSubPage())
+						if (isOverview == false && spa !== _getCurrentPage())
 						{
 							Brav1Toolbox.removeClass(spa, "actual");
 						}
@@ -1396,31 +1419,31 @@ var Flowtime = (function ()
 			updateFragments: _updateFragments,
 			showFragments: _showFragments,
 			hideFragments: _hideFragments,
+			getSection: _getSection,
 			getPage: _getPage,
-			getSubPage: _getSubPage,
+			getSections: _getSections,
 			getPages: _getPages,
-			getSubPages: _getSubPages,
+			getNextSection: _getNextSection,
+			getPrevSection: _getPrevSection,
 			getNextPage: _getNextPage,
 			getPrevPage: _getPrevPage,
-			getNextSubPage: _getNextSubPage,
-			getPrevSubPage: _getPrevSubPage,
+			getSectionsLength: _getSectionsLength,
 			getPagesLength: _getPagesLength,
-			getSubPagesLength: _getSubPagesLength,
-			getSubPagesTotalLength: _getSubPagesTotalLength,
+			getPagesTotalLength: _getPagesTotalLength,
 			getPageIndex: _getPageIndex,
+			getSectionByIndex: _getSectionByIndex,
 			getPageByIndex: _getPageByIndex,
-			getSubPageByIndex: _getSubPageByIndex,
+			getCurrentSection: _getCurrentSection,
 			getCurrentPage: _getCurrentPage,
-			getCurrentSubPage: _getCurrentSubPage,
 			getProgress: _getProgress,
 			getHash: _getHash,
 			setPage: _setPage,
-			switchActiveSubPage: _switchActiveSubPage,
+			switchActivePage: _switchActivePage,
 			getCurrentHilited: _getCurrentHilited,
+			hasNextSection: _hasNextSection,
+			hasPrevSection: _hasPrevSection,
 			hasNextPage: _hasNextPage,
-			hasPrevPage: _hasPrevPage,
-			hasNextSubPage: _hasNextSubPage,
-			hasPrevSubPage: _hasPrevSubPage
+			hasPrevPage: _hasPrevPage
 		}
 	})();
 	
@@ -1522,12 +1545,12 @@ var Flowtime = (function ()
 	return {
 		start: _start,
 		updateNavigation: _updateNavigation,
-		nextPage: _nextPage,
-		prevPage: _prevPage,
-		next: _nextSubPage,
-		prev: _prevSubPage,
-		nextFragment: _nextSubPage,
-		prevFragment: _prevSubPage,
+		nextSection: _nextSection,
+		prevSection: _prevSection,
+		next: _nextPage,
+		prev: _prevPage,
+		nextFragment: _nextPage,
+		prevFragment: _prevPage,
 		gotoPage: _gotoPage,
 		toggleOverview: _toggleOverview,
 		fragmentsOnSide: _setFragmentsOnSide,
