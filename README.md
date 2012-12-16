@@ -19,25 +19,25 @@ It's also configurable by a very simple API methods to customize some behaviours
 ## How to build the markup
 
 Markup for Flowtime.js is really simple and easy to learn.
-All you have to do is wrap some divs in a parent `<div class="flowtime">`, then, marking up the column with `class="ft-page"` and the single sub page with `class="ft-sub-page"`.
+All you have to do is wrap some divs in a parent `<div class="flowtime">`, then, marking up the section with `class="ft-section"` and the single page with `class="ft-page"`.
 To better understand the markup take a look at this snippet:
 
     <div class="flowtime">
-      <div class="ft-page">
-        <div class="ft-sub-page">Page 1 / Sub Page 1</div>
-        <div class="ft-sub-page">Page 1 / Sub Page 2</div>
+      <div class="ft-section">
+        <div class="ft-page">Section 1 / Page 1</div>
+        <div class="ft-page">Section 1 / Page 2</div>
       </div>
     </div>
     
-Every single sub page is a full page view - or a single slide if you prefer - and it's a relative formatting context.
-Even if you have only single slides ordered in a row you have to nest the sub pages in pages; take a look at this markup which creates two slides one aside the other:
+Every single page is a full window view - or a single slide if you prefer - and it's a relative formatting context.
+Even if you have only single slides ordered in a row you have to nest the pages in sections; take a look at this markup which creates two slides one aside the other:
 
     <div class="flowtime">
-      <div class="ft-page">
-        <div class="ft-sub-page">Page 1 / Sub Page 1</div>
+      <div class="ft-section">
+        <div class="ft-page">Section 1 / Page 1</div>
       </div>
       <div class="ft-page">
-        <div class="ft-sub-page">Page 2 / Sub Page 1</div>
+        <div class="ft-page">Section 2 / Page 1</div>
       </div>
     </div>
 
@@ -57,7 +57,7 @@ If you does'n call the `start()` method Flowtime.js starts itself but some confi
 Force the update of the navigation object which stores the data about every possibile destination in the site (the sub pages).
 If you change the number of sub pages at runtime call this method after the DOM manipulation.
 
-`Flowtime.prevPage([Boolean top]);` and `Flowtime.nextPage([Boolean top]);`
+`Flowtime.prevSection([Boolean top]);` and `Flowtime.nextSection([Boolean top]);`
 
 Navigate to the previous or the next section.
 If the optional `top` parameter is `true` the section starts at the first page; if the `top` parameter is `false` the section starts at the page with the same index than the previous section or, if the index does not exist, at the last page available.
