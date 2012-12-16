@@ -1,6 +1,6 @@
 /*!
  * Flowtime.js
- * http://marcolago.com/absolide/flowtime/
+ * http://marcolago.com/flowtime-js/
  * MIT licensed
  *
  * Copyright (C) 2012 Marco Lago, http://marcolago.com
@@ -51,17 +51,39 @@ var Flowtime = (function ()
 
 	var _fragmentsOnSide = false;									// enable fragments navigation even when navigating from pages
 	var _showFragmentsOnBack = false;								// shows fragments when navigating back to a sub page
-	var _slideWithPx = false;										// calculate the slide position in px instead of %, use in case the % mode does not works
+	var _slideInPx = false;											// calculate the slide position in px instead of %, use in case the % mode does not works
+	var _sectionsSlideToTop = false;								// if true navigation with right or left arrow go to the first page of the section
 	var _useOverviewVariant = false;								// use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
 	var _twoStepsSlide = false;										// not yet implemented! slides up or down before, then slides to the sub page
 	var _showProgress = false;										// show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
 
 	/**
+	 * test the base support
+	 */
+	var browserSupport = true;
+	try
+	{
+		var htmlClass = document.querySelector("html").className.toLowerCase();
+		if (htmlClass.indexOf("ie7") != -1 ||
+			htmlClass.indexOf("ie8") != -1 ||
+			htmlClass.indexOf("lt-ie9") != -1 )
+		{
+			browserSupport = false;
+		}
+	}
+	catch(e)
+	{
+		browserSupport = false;
+	}
+	/**
 	 * add "ft-absolute-nav" hook class to body
 	 * to set the CSS properties
 	 * needed for application scrolling
 	 */
-	Brav1Toolbox.addClass(body, "ft-absolute-nav");
+	if (browserSupport)
+	{
+		Brav1Toolbox.addClass(body, "ft-absolute-nav");
+	}
 
 /*
 	##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ##    ######## ##     ## ######## ##    ## ########  ######  
@@ -77,7 +99,7 @@ var Flowtime = (function ()
 	 * add a listener for event delegation
 	 * used for navigation purposes
 	 */
-	if (!isTouchDevice)
+	if (!isTouchDevice && browserSupport)
 	{
 		Brav1Toolbox.addListener(document, "click", onNavClick, false);
 	}
@@ -338,7 +360,7 @@ var Flowtime = (function ()
 		var x;
 		var y;
 		var pageIndex = NavigationMatrix.getPageIndex(dest);
-		if (_slideWithPx == true)
+		if (_slideInPx == true)
 		{
 			// calculate the coordinates of the destination
 			x = dest.offsetLeft + dest.parentNode.offsetLeft;
@@ -410,7 +432,7 @@ var Flowtime = (function ()
 	{
 		if (Brav1Toolbox.testCSS("transform"))
 		{
-			if (_slideWithPx)
+			if (_slideInPx)
 			{
 				ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";	
 			}
@@ -421,7 +443,7 @@ var Flowtime = (function ()
 		}
 		else
 		{
-			if (_slideWithPx)
+			if (_slideInPx)
 			{
 				ftContainer.style.top = -y + "px";
 				ftContainer.style.left = -x + "px";
@@ -432,6 +454,7 @@ var Flowtime = (function ()
 				ftContainer.style.left = -x * 100 + "%";
 			}
 		}
+		window.scrollTo(0,0); // fix the eventually occurred page scrolling resetting the scroll values to 0
 	}
 
 /*
@@ -858,6 +881,7 @@ var Flowtime = (function ()
 				}
 				section.setAttribute("data-prog", "__" + (i + 1));
 				section.index = i;
+				section.setAttribute("id", "");
 				//
 				var pages = section.querySelectorAll(PAGE_SELECTOR);
 				pagesTotalLength += pages.length;
@@ -871,6 +895,7 @@ var Flowtime = (function ()
 					}
 					_sp.setAttribute("data-prog", "__" + (ii + 1));
 					_sp.index = ii;
+					_sp.setAttribute("id", "");
 					pagesArray.push(_sp);
 					//
 					var subFragments = _sp.querySelectorAll(FRAGMENT_SELECTOR);
@@ -892,14 +917,15 @@ var Flowtime = (function ()
 		function _getNextSection(top, fos, io)
 		{
 			var sub = sp;
-			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && top != true && io == false)
+			var toTop = top === !_sectionsSlideToTop;
+			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop != true && io == false)
 			{
 				_showFragment(p, sp);
 			}
 			else
 			{
 				sub = 0;
-				if (top != true || _showFragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
+				if (toTop != true || _showFragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
 				{
 					sub = sp;
 				}
@@ -918,14 +944,15 @@ var Flowtime = (function ()
 		function _getPrevSection(top, fos, io)
 		{
 			var sub = sp;
-			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && top != true && io == false)
+			var toTop = top == !_sectionsSlideToTop;
+			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop != true && io == false)
 			{
 				_hideFragment(p, sp);
 			}
 			else
 			{
 				var sub = 0;
-				if (top != true || _showFragmentsOnBack == true || p - 1 < 0)
+				if (toTop != true || _showFragmentsOnBack == true || p - 1 < 0)
 				{
 					sub = sp;
 				}
@@ -1475,7 +1502,7 @@ var Flowtime = (function ()
 				updateProgress();
 			}
 		}
-	}
+	}	
 
 /*
 	 ######  ######## ######## ######## ######## ########   ######  
@@ -1503,10 +1530,15 @@ var Flowtime = (function ()
 		pushHistory = v;
 	}
 
-	function _setSlideWithPx(v)
+	function _setSlideInPx(v)
 	{
-		_slideWithPx = v;
+		_slideInPx = v;
 		navigateTo();
+	}
+
+	function _setSectionsSlideToTop(v)
+	{
+		_sectionsSlideToTop = v;
 	}
 
 	function _setUseOverviewVariant(v)
@@ -1556,11 +1588,11 @@ var Flowtime = (function ()
 		fragmentsOnSide: _setFragmentsOnSide,
 		showFragmentsOnBack: _setShowFragmentsOnBack,
 		useHistory: _setUseHistory,
-		slideWithPx: _setSlideWithPx,
+		slideInPx: _setSlideInPx,
+		sectionsSlideToTop: _setSectionsSlideToTop,
 		useOverviewVariant: _setUseOverviewVariant,
 		twoStepsSlide: _setTwoStepsSlide,
 		showProgress: _setShowProgress
 	};
 	
 })();
-

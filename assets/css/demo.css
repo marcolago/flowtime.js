@@ -136,6 +136,7 @@ h1 {
 .switches {
 	font-family: Verdana, sans-serif;
 	text-align: right;
+	padding-right: 150px;
 	position: fixed;
 	top: 0;
 	right: 0;

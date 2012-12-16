@@ -31,6 +31,9 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 }
+strong, b {
+	font-weight: bold;
+}
 ol, ul {
 	list-style: none;
 }

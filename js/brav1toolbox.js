@@ -1,3 +1,10 @@
+/*!
+ * Brav1Toolbox.js - common utility scripts and polyfills
+ * http://marcolago.com/
+ * MIT licensed
+ *
+ * Copyright (C) 2012 Marco Lago, http://marcolago.com
+ */
 var Brav1Toolbox = (function()
 {
 	var cssPrefixes = ["", "-webkit-", "-moz-", "-ms-", "-o-"];
@@ -148,13 +155,16 @@ var Brav1Toolbox = (function()
 	 */
 	 function _dispatchEvent(t, ps)
 	 {
-		var e = document.createEvent( "HTMLEvents");
-		e.initEvent(t, true, true);
-		for (var p in ps)
-		{
-			e[p] = ps[p];
+	 	if (document.createEvent)
+	 	{
+			var e = document.createEvent( "HTMLEvents");
+			e.initEvent(t, true, true);
+			for (var p in ps)
+			{
+				e[p] = ps[p];
+			}
+			document.dispatchEvent(e);
 		}
-		document.dispatchEvent(e);
 	}
 	
 	return {

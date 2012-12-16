@@ -10,7 +10,10 @@
 	}
 
 	.flowtime {
-		font-size: 0; 			/* remove the white spaces between inline-block elements */
+		font-size: 0; 			/* removes the white spaces between inline-block elements */
+								/* WARNING! this technique does non remove the white-space in Safari for Windows */
+								/* unless you use this hack: http://absolide.tumblr.com/post/36597829434/safari-inline-block-white-spaces-bug-fix */
+								/* you can use any other white-space removal technique as per: http://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
 		width: 100%;
 		height: 100%;
 		     -o-transform-origin: 0 0;
