@@ -7,6 +7,18 @@ You can take a look at some demos to quick learn about the possibilities:
 - [Candy demo - same as Base demo but more eye candy](http://marcolago.com/flowtime-js/demo-candy/)
 - [Skyline demo - same as Base demo but with different vertical-align](http://marcolago.com/flowtime-js/demo-skyline/)
 
+## Main Features
+
+**Full page fluid layout**.
+Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` technique.
+
+**Multiple controlled navigation**.
+You can navigate through pages via links, keyboard or deep-linking.
+Links are managed using the href value targetting a formatted hash destination.
+Keyboard navigation is based on arrow keys with the Shift key as a modifier to jump over fragments or sections, see the command list:
+
+- Right Arrow: navigate to the next section 
+
 Flowtime.js takes care of tasks such:
 - full page and fluid layout,
 - navigation logics by links and keyboard,
@@ -57,6 +69,41 @@ If you does'n call the `start()` method Flowtime.js starts itself but some confi
 Force the update of the navigation object which stores the data about every possibile destination in the site (the sub pages).
 If you change the number of sub pages at runtime call this method after the DOM manipulation.
 
+`Flowtime.showProgress(Boolean show);`
+
+Default `false`. Show the default progress when in page mode (the standard content navigation mode).
+The default progress is a miniature of the structure placed in the lower left corner with the current page highlighted.
+Clicking on a page thumb in the default progress indicator triggers the navigation to that page.
+The default value is false, so if you wanto to show the progress you have to call `Flowtime.showProgress(true);` and then start the presentation.
+Calling this API during the navigation cause the progress to appear or disappear manipulating the DOM so watch out for performance issues.
+You are not limited to the default progress indicator. If you want to buil your own progress bar or another indicator with a custom logic you can listen for the navigation events and use the event properties (check out the event section).
+
+`Flowtime.fragmentsOnSide(Boolean show);`
+
+Default `false`. Enable the fragments navigation also on section navigation (left and right arrows) and no only on page navigation.
+If true it also enable `showFragmentsOnBack`.
+
+`Flowtime.showFragmentsOnBack(Boolean show);`
+
+Default `false`. Shows the fragments when navigating back from a section to a page with fragments inside. The default behaviour (false) hide all fragments when navigating to a page from a higher section index.
+
+`Flowtime.useHistory(Boolean use);`
+
+Default `true`. Enable or disable the use of HTML History API;
+If History API is not used Flowtime.js fallbacks on the hashchange event.
+
+`Flowtime.slideWithPx(Boolean true);`
+
+Default `false`. If true performs the calculation for the container translation in pixels and not in % values.
+Use true if you want to alter the default placement of the sections (i.e. setting `vertical-align` different from `top`) or in any case the pages does not perfectly fit the viewport (i.e. Safari for Windows with the `font-size: 0;` bug).
+
+`Flowtime.useOverviewVariant(Boolean true);`
+
+Default `false`. Uses a built in overview variant which does not show all the pages in a single view but center the current page in the available space scrilling the view when navigating with the arrows.
+In Webkit browsers the default overview mode can cause rendering problems if the pages are too much; using the variant you can minimize the problem.
+
+### Navigation API
+
 `Flowtime.prevSection([Boolean top]);` and `Flowtime.nextSection([Boolean top]);`
 
 Navigate to the previous or the next section.
@@ -71,14 +118,20 @@ If the `jump` parameter is `true` all the fragments will be jumped.
 
 Navigate to the previous or the next fragment.
 
+`Flowtime.gotoPage(Number sectionIndex, Number pageIndex)`
 
+Navigate to the section/page pair.
 
-		gotoPage: _gotoPage,
-		toggleOverview: _toggleOverview,
-		fragmentsOnSide: _setFragmentsOnSide,
-		showFragmentsOnBack: _setShowFragmentsOnBack,
-		useHistory: _setUseHistory,
-		slideWithPx: _setSlideWithPx,
-		useOverviewVariant: _setUseOverviewVariant,
-		twoStepsSlide: _setTwoStepsSlide,
-		showProgress: _setShowProgress
+`Flowtime.gotoPage(String sectionId, String pageId)`
+
+Navigate to the section/page pair.
+
+`Flowtime.gotoPage(HTMLElement target)`
+
+Navigate to the page element.
+
+`Flowtime.toggleOverview();`
+
+Toggles the overview mode switching between overview and page mode.
+Toggling the overview mode when in overview does not navigate to the highlighted page.
+
