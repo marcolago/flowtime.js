@@ -9,24 +9,35 @@ You can take a look at some demos to quick learn about the possibilities:
 
 ## Main Features
 
-**Full page fluid layout**.
+**Full page fluid layout**.  
 Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` technique.
 
-**Multiple controlled navigation**.
+**Multiple controlled navigation**.  
 You can navigate through pages via links, keyboard or deep-linking.
-Links are managed using the href value targetting a formatted hash destination.
+Links are managed using the href value targeting a formatted hash destination.
 Keyboard navigation is based on arrow keys with the Shift key as a modifier to jump over fragments or sections, see the command list:
 
-- Right Arrow: navigate to the next section 
+- **Down or Up Arrows**: navigate to the previous or the next page. This is the main navigation input; the entire content is navigable using this keys only. If there are fragments in the page every input shows or hides a fragment.
+- ** Shift + Down or Up Arrows**: navigate to the prev o next page jumping all the fragments.
+- **Left or Right Arrows**: navigate to the prev or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the higher available index..
+- **Shift + Left or Right Arrows**: Navigate to the first page of the previous or next section.
+- **ESC**: toggles the overview mode.
 
-Flowtime.js takes care of tasks such:
-- full page and fluid layout,
-- navigation logics by links and keyboard,
-- transition beetween pages (needs support for CSS3 trnasitions),
-- history management and deep-linking,
-- overview on the entire contents.
+**Overview Mode**.  
+Overview mode allows you to look at the entire site/presentation structure in a single view or from a distant point of view (alternate version).
+When in overview mode you can navigate to a page by click on it or using the arrow keys and **then press Return to go**.
 
-It's also configurable by a very simple API methods to customize some behaviours.
+**History Management**.  
+Flowtime.js is built on top of the **HTML History APIs** so you can navigate using the browser's back and forward buttons and deep-link a page for sharing.
+Flowtime.js is a client side only framework so if you want to optimize SEO you have to add a server side logic to serve only the single page content to search engines.
+If the History APIs were not available the framework degrades well using the hashchange event.
+
+**Transitions**.  
+Flowtime.js animate the page transition using **native CSS3 transitions**. Where transitions were not available (IE9) the page change is immediate but works.
+
+**Browser Support**
+Flowtime.js is tested and works on **every modern desktop browser and IE9 and above**.  
+Where the basic support is not available the framework degrades to a native scrolling with anchor links but the full page fluid layouts remains intact.
 
 ## How to build the markup
 
