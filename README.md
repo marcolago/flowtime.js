@@ -3,9 +3,9 @@
 Flowtime.js is a framework to easily build HTML presentations or websites.
 
 You can take a look at some demos to quick learn about the possibilities:
-- [Base demo](http://marcolago.com/flowtime-js/demo/)
-- [Candy demo - same as Base demo but more eye candy](http://marcolago.com/flowtime-js/demo-candy/)
-- [Skyline demo - same as Base demo but with different vertical-align](http://marcolago.com/flowtime-js/demo-skyline/)
+- [Basic demo](http://marcolago.com/flowtime-js/demo/)
+- [Candy demo - same as Basic demo but more eye candy](http://marcolago.com/flowtime-js/demo-candy/)
+- [Skyline demo - same as Basic demo but with different vertical-align](http://marcolago.com/flowtime-js/demo-skyline/)
 
 ## Main Features
 
@@ -13,8 +13,8 @@ You can take a look at some demos to quick learn about the possibilities:
 Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` technique.
 
 **Multiple controlled navigation**.  
-You can navigate through pages via links, keyboard or deep-linking.
-Links are managed using the href value targeting a formatted hash destination.
+You can navigate through pages via links, keyboard or deep-linking.  
+Links are managed using the href value targeting a formatted hash destination; see the demos source code for an example.  
 Keyboard navigation is based on arrow keys with the Shift key as a modifier to jump over fragments or sections, see the command list:
 
 - **Down or Up Arrows**: navigate to the previous or the next page. This is the main navigation input; the entire content is navigable using this keys only. If there are fragments in the page every input shows or hides a fragment.
@@ -63,6 +63,30 @@ Even if you have only single slides ordered in a row you have to nest the pages 
         <div class="ft-page">Section 2 / Page 1</div>
       </div>
     </div>
+    
+### Titles and Pages URL
+
+Flowtime.js adds automatically a `data-prog` attribute to every div marked as `ft-section` or as `ft-page` in order to manage the navigation.
+By default page title and URL will be numeric indexes.  
+If you want to customize URL and title you can add some data attributes to any section or page.
+You can add the `data-title` attribute both to `ft-section` and to `ft-page` elements; if a `data-title` attribute was found it will be used to write the title in the browser tab.
+You can add the `data-id` attribute both to `ft-section` and to `ft-page` elements; if this attribute was found it will be used to build the page URL.
+To better understand the use of data attributes here it is an example:
+
+    <div class="flowtime">
+      <div class="ft-section" data-title="Section 1 Title" data-id="section-1">
+        <div class="ft-page" data-title="Page 1 Title" data-id="page-1">
+            When navigating to this page the title will be [site name] | Section 1 Title | Page 1 Title
+            and the URL will be http://[site URL]/#/section-1/page-1/
+        </div>
+      </div>
+      <div class="ft-section"data-id="section-2">
+        <div class="ft-page" data-title="Page Title" data-id="page-1">
+            When navigating to this page the title will be [site name] | Page Title
+            and the URL will be http://[site URL]/#/section-2/page-1/
+        </div>
+      </div>
+    </div>
 
 ## Javascript API
 
@@ -103,10 +127,13 @@ Default `false`. Shows the fragments when navigating back from a section to a pa
 Default `true`. Enable or disable the use of HTML History API;
 If History API is not used Flowtime.js fallbacks on the hashchange event.
 
-`Flowtime.slideWithPx(Boolean true);`
+`Flowtime.slideInPx(Boolean usePx);`
 
 Default `false`. If true performs the calculation for the container translation in pixels and not in % values.
 Use true if you want to alter the default placement of the sections (i.e. setting `vertical-align` different from `top`) or in any case the pages does not perfectly fit the viewport (i.e. Safari for Windows with the `font-size: 0;` bug).
+
+`Flowtime.sectionsSlideToTop(Boolean toTop);`
+Default `false`. If true when navigating by sections (left or right arrows) the target page will be the first of the new section.
 
 `Flowtime.useOverviewVariant(Boolean true);`
 
