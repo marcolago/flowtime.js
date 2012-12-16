@@ -10,6 +10,7 @@ You can take a look at some demos to quick learn about the possibilities:
 **For more information check the [wiki]()**
 - [Browser Support](https://github.com/marcolago/flowtime.js/wiki/Browser-Support)
 - [Made with Flowtime.js](https://github.com/marcolago/flowtime.js/wiki/Made-With-Flowtime.js)
+- [Credits and Thanks](https://github.com/marcolago/flowtime.js/wiki/Credits-and-Thanks)
 
 ## Main Features
 
