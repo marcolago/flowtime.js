@@ -15,7 +15,7 @@ You can take a look at some demos to quick learn about the possibilities:
 ## Main Features
 
 **Full Page Fluid Layout Boilerplate**.  
-Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` technique.
+Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` technique.  
 This frameworks doesn't style you presentations or sites for you but it takes care of all the annoying things like navigation and deep-linking, so you are free to style every single element of your design as you like.
 
 **Multiple controlled navigation**.  
@@ -24,7 +24,7 @@ Links are managed using the href value targeting a formatted hash destination; s
 Keyboard navigation is based on arrow keys with the Shift key as a modifier to jump over fragments or sections, see the command list:
 
 - **Down or Up Arrows**: navigate to the previous or the next page. This is the main navigation input; the entire content is navigable using this keys only. If there are fragments in the page every input shows or hides a fragment.
-- ** Shift + Down or Up Arrows**: navigate to the prev o next page jumping all the fragments.
+- **Shift + Down or Up Arrows**: navigate to the prev o next page jumping all the fragments.
 - **Left or Right Arrows**: navigate to the prev or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the higher available index..
 - **Shift + Left or Right Arrows**: Navigate to the first page of the previous or next section.
 - **ESC**: toggles the overview mode.
