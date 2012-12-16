@@ -43,4 +43,42 @@ Even if you have only single slides ordered in a row you have to nest the sub pa
 
 ## Javascript API
 
-Flowtime comes with configuration APIs useful for customizing the experience and the installation and with navigation APIs for controlling navigation and get the state of the application.
+Flowtime.js comes with configuration APIs useful for customizing the experience and the installation and with navigation APIs for controlling navigation and get the state of the application.
+
+### Configuration API
+
+`Flowtime.start();`
+
+Starts the application logic. This method is optional but is required if you change some configuration parameters.
+If you does'n call the `start()` method Flowtime.js starts itself but some configuration parameters will be applied only after the first navigation action.
+
+`Flowtime.updateNavigation();`
+
+Force the update of the navigation object which stores the data about every possibile destination in the site (the sub pages).
+If you change the number of sub pages at runtime call this method after the DOM manipulation.
+
+`Flowtime.prevPage([Boolean top]);` and `Flowtime.nextPage([Boolean top]);`
+
+Navigate to the previous or the next section.
+If the optional `top` parameter is `true` the section starts at the first page; if the `top` parameter is `false` the section starts at the page with the same index than the previous section or, if the index does not exist, at the last page available.
+
+`Flowtime.prev([Boolean jump]);` and `Flowtime.next([Boolean jump]);`
+
+Navigate to the previous or the next page or, if there are fragments, to the previous or next fragment.
+If the `jump` parameter is `true` all the fragments will be jumped.
+
+`Flowtime.prevFragment();` and `Flowtime.nextFragment();`
+
+Navigate to the previous or the next fragment.
+
+
+
+		gotoPage: _gotoPage,
+		toggleOverview: _toggleOverview,
+		fragmentsOnSide: _setFragmentsOnSide,
+		showFragmentsOnBack: _setShowFragmentsOnBack,
+		useHistory: _setUseHistory,
+		slideWithPx: _setSlideWithPx,
+		useOverviewVariant: _setUseOverviewVariant,
+		twoStepsSlide: _setTwoStepsSlide,
+		showProgress: _setShowProgress
