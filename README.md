@@ -221,8 +221,7 @@ Toggling the overview mode when in overview does not navigate to the highlighted
 ### Events
 
 When navigating Flowtime.js dispatches a `flowtimenavigation` event useful for create custom behaviours and callbacks.  
-You can register the event using `Flowtime.addEventListener("flowtimenavigation", callback, false);` method.
-There is no need of register the event using the `attachEvent` method because the browser detection is built in.  
+You can register the event using `Flowtime.addEventListener("flowtimenavigation", callback, useCapture);` API. 
 The callback receive an `event` parameter with some custom properties useful to manage the navigation status.  
 Here it is the list of the properties, supposing the event parameter is named `e`:
 
