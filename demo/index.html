@@ -173,6 +173,11 @@
 
 	<script>
 		Flowtime.showProgress(true);
+		Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
+		function onNavigation(e)
+		{
+			console.log(e.progress);
+		}
 		Flowtime.start();
 	</script>
 </body>

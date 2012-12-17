@@ -35,6 +35,12 @@ var Flowtime = (function ()
 	var SECTION_THUMB_SELECTOR = "." + SECTION_THUMB_CLASS;
 	var PAGE_THUMB_CLASS = "ft-page-thumb";
 	var PAGE_THUMB_SELECTOR = "." + PAGE_THUMB_CLASS;
+
+	/**
+	 * events
+	 */
+
+	var NAVIGATION_EVENT = "flowtimenavigation";
 	/**
 	 * application variables
 	 */
@@ -94,12 +100,11 @@ var Flowtime = (function ()
 	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ###    ##         ## ##   ##       ##   ###    ##    ##    ## 
 	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ##    ########    ###    ######## ##    ##    ##     ######  
 */
-
 	/**
 	 * add a listener for event delegation
 	 * used for navigation purposes
 	 */
-	if (!isTouchDevice && browserSupport)
+	if (browserSupport)
 	{
 		Brav1Toolbox.addListener(document, "click", onNavClick, false);
 	}
@@ -405,15 +410,15 @@ var Flowtime = (function ()
 		NavigationMatrix.switchActivePage(NavigationMatrix.getCurrentPage(), true);
 		//
 		// dispatches an event populated with navigation data
-		Brav1Toolbox.dispatchEvent("flowtimenavigation",	{
+		Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT,	{
 													section: NavigationMatrix.getCurrentSection(),
 													page: NavigationMatrix.getCurrentPage(),
 													sectionIndex: pageIndex.section, 
 													pageIndex: pageIndex.page, 
 													prevSection: NavigationMatrix.hasPrevSection(),
 													nextSection: NavigationMatrix.hasNextSection(),
-													prev: NavigationMatrix.hasPrevPage(),
-													next: NavigationMatrix.hasNextPage(),
+													prevPage: NavigationMatrix.hasPrevPage(),
+													nextPage: NavigationMatrix.hasNextPage(),
 													progress: NavigationMatrix.getProgress(),
 													total: NavigationMatrix.getPagesTotalLength()
 												} );
@@ -1570,6 +1575,11 @@ var Flowtime = (function ()
 			}
 		}
 	}
+
+	function _addEventListener(type, handler, useCapture)
+	{
+		Brav1Toolbox.addListener(document, type, handler, useCapture);
+	}
 	
 	/**
 	 * return object for public methods
@@ -1592,7 +1602,8 @@ var Flowtime = (function ()
 		sectionsSlideToTop: _setSectionsSlideToTop,
 		useOverviewVariant: _setUseOverviewVariant,
 		twoStepsSlide: _setTwoStepsSlide,
-		showProgress: _setShowProgress
+		showProgress: _setShowProgress,
+		addEventListener: _addEventListener
 	};
 	
 })();
