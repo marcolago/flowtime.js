@@ -228,30 +228,72 @@ Here it is the list of the properties, supposing the event parameter is named `e
 ```javascript
 e.section
 ```
+
+The HTMLElement reference to the current section.
+
 ```javascript
 e.page
 ```
+
+The HTMLElement reference to the current page.
+
 ```javascript
 e.sectionIndex
 ```
+
+The current section index starting at 0.
+
 ```javascript
 e.pageIndex
 ```
+
+The current page index starting at 0.
+
 ```javascript
 e.prevSection
 ```
+
+Boolean value, id true there is a previous section.
+
 ```javascript
 e.nextSection
 ```
+
+Boolean value, id true there is a next section.
+
 ```javascript
 e.prevPage
 ```
+
+Boolean value, id true there is a previous page.
+
 ```javascript
 e.nextPage
 ```
+
+Boolean value, id true there is a next page.
+
 ```javascript
 e.progress
 ```
+The current page sequential index number starting at 0.
+
 ```javascript
 e.total
 ```
+
+The last page sequential index.
+
+###Calculating the completion percentage of the presentation
+
+In the `flowtimenavigation` event handler calculate the progress in % using this forumula:
+
+```javascript
+    function navigationHandler(e)
+    {
+      var value = Math.round(e.progress * 100 / e.total);
+      console.log('Completion: ' + value + '%');
+    }
+```
+
+The first page of the first section **ever returns 0 as progress value**.
