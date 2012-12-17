@@ -253,25 +253,25 @@ The current page index starting at 0.
 e.prevSection
 ```
 
-Boolean value, id true there is a previous section.
+Boolean value, if true there is a previous section.
 
 ```javascript
 e.nextSection
 ```
 
-Boolean value, id true there is a next section.
+Boolean value, if true there is a next section.
 
 ```javascript
 e.prevPage
 ```
 
-Boolean value, id true there is a previous page.
+Boolean value, if true there is a previous page.
 
 ```javascript
 e.nextPage
 ```
 
-Boolean value, id true there is a next page.
+Boolean value, if true there is a next page.
 
 ```javascript
 e.progress
