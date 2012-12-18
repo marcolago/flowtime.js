@@ -1,6 +1,6 @@
-![Flowtime.js](https://github.com/marcolago/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime-js Logo")
+![Flowtime.js](https://github.com/marcolago/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
-Flowtime.js is a framework to easily build HTML presentations or websites.  
+### Flowtime.js is a framework to easily build HTML presentations or websites.  
 
 You can take a look at some demos to quick learn about the possibilities:
 - [Basic demo](http://marcolago.com/flowtime-js/demo/)
@@ -98,6 +98,21 @@ To better understand the use of data attributes here it is an example:
         <div class="ft-page" data-title="Page Title" data-id="page-1">
             When navigating to this page the title will be [site name] | Page Title
             and the URL will be http://[site URL]/#/section-2/page-1/
+        </div>
+      </div>
+    </div>
+```
+
+### Fragments
+
+If you want to delay the showing and navigate single parts in a page just put the class `ft-fragment` on the element you want to delay. Here it is an example.
+
+```html
+    <div class="flowtime">
+      <div class="ft-section" data-title="Section 1 Title" data-id="section-1">
+        <div class="ft-page" data-title="Page 1 Title" data-id="page-1">
+            <p>First Paragraph; this text is visible from start.</p>
+            <p class="ft-fragment">This paragraph shows up only when you navigate forward and disappears when you navigate back.</p>
         </div>
       </div>
     </div>
