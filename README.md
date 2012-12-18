@@ -331,10 +331,10 @@ The first page of the first section **ever returns 0 as progress value**.
 
 ### Customize the fragments animation
 
-Every animation in Flowtime.js is managed with native CSS3 transitions so if you would customize the fragment animation (and you want to do this on a website, I know) just edit the following CSS classes to override the transitions.
+Every animation in Flowtime.js is managed with native CSS3 transitions so if you would customize the fragment animation (and you want to do this on a website, I know) just edit the following CSS classes to override the transitions or set the default value of the `opacity` to `1`.
 
 ```css
-    .ft-fragment {
+  .ft-fragment {
     opacity: 0;
          -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
         -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
