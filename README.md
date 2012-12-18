@@ -29,7 +29,7 @@ Keyboard navigation is based on arrow keys with the Shift key as a modifier to j
 - **Shift + Left or Right Arrows**: Navigate to the first page of the previous or next section.
 - **ESC**: toggles the overview mode.
 
-**Fragments Support**
+**Fragments Support**.  
 Navigate step by step in a page or jump directly to the next or previous page.
 
 **Overview Mode**.  
