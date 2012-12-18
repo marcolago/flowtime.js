@@ -59,7 +59,7 @@
 			<div id="/section-1/page-3" class="ft-page page3" data-id="page-3" data-title="Sub Title 3"><h1 class="section-title">Section 1 / Page 3</h1></div>
 		</div>
 		<div class="ft-section section2" data-id="section-2">
-			<div id="/section-2/page-1" class="ft-page page1" data-id="page-1"><h1 class="section-title">Section 2 / Page 1</h1></div>
+			<div id="/section-2/page-1" class="ft-page page1" data-id="page-1" data-title="The Only Page in Section 2"><h1 class="section-title">Section 2 / Page 1</h1></div>
 		</div>
 		<div class="ft-section section3" data-id="section-3">
 			<div id="/section-3/page-1" class="ft-page page1" data-id="page-1" data-title="Sub Title 3/1"><h1 class="section-title">Section 3 / Page 1</h1></div>
@@ -163,7 +163,7 @@
 		<p>Overview Variant: <a href="javascript:Flowtime.useOverviewVariant(true);">true</a>, <a href="javascript:Flowtime.useOverviewVariant(false);">false</a></p>
 		<p>Fragments On Side: <a href="javascript:Flowtime.fragmentsOnSide(true);">true</a>, <a href="javascript:Flowtime.fragmentsOnSide(false);">false</a></p>
 		<p>Show Fragments On Back: <a href="javascript:Flowtime.showFragmentsOnBack(true);">true</a>, <a href="javascript:Flowtime.showFragmentsOnBack(false);">false</a></p>
-		<p>Slide Using Pixels: <a href="javascript:Flowtime.slideWithPx(true);">true</a>, <a href="javascript:Flowtime.slideWithPx(false);">false</a></p>
+		<p>Slide Using Pixels: <a href="javascript:Flowtime.slideInPx(true);">true</a>, <a href="javascript:Flowtime.slideInPx(false);">false</a></p>
 	</div>
 
 	<a href="https://github.com/marcolago/flowtime.js"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 1000;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
@@ -177,6 +177,8 @@
 		function onNavigation(e)
 		{
 			console.log(e.progress, e.total);
+      		var value = Math.round(e.progress * 100 / e.total);
+      		console.log('Completion: ' + value + '%');
 		}
 		Flowtime.start();
 	</script>
