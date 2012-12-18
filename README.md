@@ -316,7 +316,7 @@ The last page sequential index.
 
 ### Calculating the completion percentage of the presentation
 
-In the `flowtimenavigation` event handler calculate the progress in % using this forumula:
+In the `flowtimenavigation` event handler calculate the progress in % using this formula:
 
 ```javascript
     function navigationHandler(e)
@@ -327,6 +327,7 @@ In the `flowtimenavigation` event handler calculate the progress in % using this
 ```
 
 The first page of the first section **ever returns 0 as progress value**.
+`progress` and `total` values does not consider fragments.
 
 ### Customize the fragments animation
 
