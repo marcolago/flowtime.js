@@ -326,7 +326,7 @@ In the `flowtimenavigation` event handler calculate the progress in % using this
     }
 ```
 
-The first page of the first section **ever returns 0 as progress value**.
+The first page of the first section **ever returns 0 as progress value**.  
 `progress` and `total` values does not consider fragments.
 
 ### Customize the fragments animation
