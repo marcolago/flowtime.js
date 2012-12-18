@@ -29,6 +29,8 @@ var Flowtime = (function ()
 	var PAGE_SELECTOR = "." + PAGE_CLASS;
 	var FRAGMENT_CLASS = "ft-fragment";
 	var FRAGMENT_SELECTOR = "." + FRAGMENT_CLASS;
+	var FRAGMENT_REVEALED_CLASS = "revealed";
+	var FRAGMENT_REVEALED_TEMP_CLASS = "revealed-temp";
 	var DEFAULT_PROGRESS_CLASS = "ft-default-progress";
 	var DEFAULT_PROGRESS_SELECTOR = "." + DEFAULT_PROGRESS_CLASS;
 	var SECTION_THUMB_CLASS = "ft-section-thumb";
@@ -991,7 +993,10 @@ var Flowtime = (function ()
 				}
 			}
 			sp = sub;
-			_updateFragments();
+			if (!isOverview)
+			{
+				_updateFragments();
+			}
 			return hiliteOrNavigate(nsp, io);
 		}
 		
@@ -1087,7 +1092,7 @@ var Flowtime = (function ()
 			{
 				f = fr[fp][fsp] += 1;
 			}
-			Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], "revealed");
+			Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_CLASS);
 		}
 
 		/**
@@ -1108,8 +1113,8 @@ var Flowtime = (function ()
 			{
 				f = fr[fp][fsp];
 			}
-			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], "revealed");
-			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], "revealed-temp");
+			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_CLASS);
+			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_TEMP_CLASS);
 			fr[fp][fsp] -= 1;
 		}
 
@@ -1121,7 +1126,7 @@ var Flowtime = (function ()
 		{
 			for (var i = 0; i < fragments.length; i++)
 			{
-				Brav1Toolbox.addClass(fragments[i], "revealed-temp");
+				Brav1Toolbox.addClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
 			}
 		}
 
@@ -1133,7 +1138,7 @@ var Flowtime = (function ()
 		{
 			for (var i = 0; i < fragments.length; i++)
 			{
-				Brav1Toolbox.removeClass(fragments[i], "revealed-temp");
+				Brav1Toolbox.removeClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
 			}
 		}
 

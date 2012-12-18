@@ -1,6 +1,6 @@
 # Flowtime.js
 
-Flowtime.js is a framework to easily build HTML presentations or websites.
+Flowtime.js is a framework to easily build HTML presentations or websites.  
 
 You can take a look at some demos to quick learn about the possibilities:
 - [Basic demo](http://marcolago.com/flowtime-js/demo/)
@@ -20,7 +20,7 @@ This frameworks doesn't style you presentations or sites for you but it takes ca
 
 **Multiple controlled navigation**.  
 You can navigate through pages via links, keyboard or deep-linking.  
-Links are managed using the href value targeting a formatted hash destination; see the demos source code for an example.  
+Links are managed using the href value targeting a formatted hash destination; see the demos source code for more examples.  
 Keyboard navigation is based on arrow keys with the Shift key as a modifier to jump over fragments or sections, see the command list:
 
 - **Down or Up Arrows**: navigate to the previous or the next page. This is the main navigation input; the entire content is navigable using this keys only. If there are fragments in the page every input shows or hides a fragment.
@@ -28,6 +28,9 @@ Keyboard navigation is based on arrow keys with the Shift key as a modifier to j
 - **Left or Right Arrows**: navigate to the prev or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the higher available index..
 - **Shift + Left or Right Arrows**: Navigate to the first page of the previous or next section.
 - **ESC**: toggles the overview mode.
+
+**Fragments Support**
+Navigate step by step in a page or jump directly to the next or previous page.
 
 **Overview Mode**.  
 Overview mode allows you to look at the entire site/presentation structure in a single view or from a distant point of view (alternate version).
