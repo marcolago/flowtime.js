@@ -176,6 +176,7 @@
 		Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
 		function onNavigation(e)
 		{
+			console.log(e.fragment, e.fragmentIndex);
 			console.log(e.progress, e.total);
       		var value = Math.round(e.progress * 100 / e.total);
       		console.log('Completion: ' + value + '%');

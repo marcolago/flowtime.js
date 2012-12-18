@@ -413,16 +413,18 @@ var Flowtime = (function ()
 		//
 		// dispatches an event populated with navigation data
 		Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT,	{
-													section: NavigationMatrix.getCurrentSection(),
-													page: NavigationMatrix.getCurrentPage(),
-													sectionIndex: pageIndex.section, 
-													pageIndex: pageIndex.page, 
-													prevSection: NavigationMatrix.hasPrevSection(),
-													nextSection: NavigationMatrix.hasNextSection(),
-													prevPage: NavigationMatrix.hasPrevPage(),
-													nextPage: NavigationMatrix.hasNextPage(),
-													progress: NavigationMatrix.getProgress(),
-													total: NavigationMatrix.getPagesTotalLength()
+													section: 		NavigationMatrix.getCurrentSection(),
+													page: 			NavigationMatrix.getCurrentPage(),
+													sectionIndex: 	pageIndex.section, 
+													pageIndex: 		pageIndex.page, 
+													prevSection: 	NavigationMatrix.hasPrevSection(),
+													nextSection: 	NavigationMatrix.hasNextSection(),
+													prevPage: 		NavigationMatrix.hasPrevPage(),
+													nextPage: 		NavigationMatrix.hasNextPage(),
+													fragment: 		NavigationMatrix.getCurrentFragment(),
+													fragmentIndex: 	NavigationMatrix.getCurrentFragmentIndex(),
+													progress: 		NavigationMatrix.getProgress(),
+													total: 			NavigationMatrix.getPagesTotalLength()
 												} );
 
 		if (_showProgress)
@@ -1300,7 +1302,7 @@ var Flowtime = (function ()
 				pIndex = d.parentNode.index; //parseInt(d.parentNode.getAttribute("data-prog").replace(/__/, "")) - 1;
 				spIndex = d.index; //parseInt(d.getAttribute("data-prog").replace(/__/, "")) - 1;
 			}
-			return {section: pIndex, page: spIndex };
+			return { section: pIndex, page: spIndex };
 		}
 
 		function _getSectionByIndex(i)
@@ -1321,6 +1323,16 @@ var Flowtime = (function ()
 		function _getCurrentPage()
 		{
 			return sectionsArray[p][sp];
+		}
+
+		function _getCurrentFragment()
+		{
+			return fragmentsArray[p][sp][_getCurrentFragmentIndex()];
+		}
+
+		function _getCurrentFragmentIndex()
+		{
+			return fr[p][sp];
 		}
 
 		function _hasNextSection()
@@ -1472,6 +1484,8 @@ var Flowtime = (function ()
 			getPageByIndex: _getPageByIndex,
 			getCurrentSection: _getCurrentSection,
 			getCurrentPage: _getCurrentPage,
+			getCurrentFragment: _getCurrentFragment,
+			getCurrentFragmentIndex: _getCurrentFragmentIndex,
 			getProgress: _getProgress,
 			getHash: _getHash,
 			setPage: _setPage,

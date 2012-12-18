@@ -180,7 +180,7 @@ Use true if you want to alter the default placement of the sections (i.e. settin
 Flowtime.sectionsSlideToTop(Boolean toTop);
 ```
 
-Default `false`. If true when navigating by sections (left or right arrows) the target page will be the first of the new section.
+Default `true`. Set to false if you want to customize the fragment animation with a more complex behaviour. This methd enables or disables the animation only and not the internal fragments counter logic. See the event section for more info on how manage a custom fragment navigation.
 
 ```javascript
 Flowtime.useOverviewVariant(Boolean true);
@@ -292,6 +292,18 @@ e.nextPage
 Boolean value, if true there is a next page.
 
 ```javascript
+e.fragment
+```
+
+If the navigation targets a fragment returns the fragment itself as HTMLElement, otherwise returns `undefined`.
+
+```javascript
+e.fragmentIndex
+```
+
+Returns the index of the current fragment starting at 0; otherwise returns `-1`.
+
+```javascript
 e.progress
 ```
 The current page sequential index number starting at 0.
@@ -302,7 +314,7 @@ e.total
 
 The last page sequential index.
 
-###Calculating the completion percentage of the presentation
+### Calculating the completion percentage of the presentation
 
 In the `flowtimenavigation` event handler calculate the progress in % using this forumula:
 
@@ -315,3 +327,22 @@ In the `flowtimenavigation` event handler calculate the progress in % using this
 ```
 
 The first page of the first section **ever returns 0 as progress value**.
+
+### Customize the fragments animation
+
+Every animation in Flowtime.js is managed with native CSS3 transitions so if you would customize the fragment animation (and you want to do this on a website, I know) just edit the following CSS classes to override the transitions.
+
+```css
+    .ft-fragment {
+    opacity: 0;
+         -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+        -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+       -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+    -webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+        transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+  }
+
+  .ft-fragment.revealed, .ft-fragment.revealed-temp {
+    opacity: 1;
+  }
+```
