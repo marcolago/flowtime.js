@@ -358,7 +358,7 @@ Every animation in Flowtime.js is managed with native CSS3 transitions so if you
   }
 ```
 
-### Customize the Looking of Overview Thumbnails
+### Customize the Look of Pages in Overview Mode
 
 To customize the way the thumbnails in overview mode look when idle, hovered and higlighted edit or override this CSS classes:
 
