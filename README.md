@@ -364,6 +364,7 @@ To customize the way the thumbnails in overview mode look when idle, hovered and
 
 ```css
   /* default progress page thumb */
+  
   .ft-page-thumb {
        -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
