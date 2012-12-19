@@ -81,33 +81,6 @@
 				transform: translateZ(0);
 	}
 
-	/* page thumb */
-	.ft-page-thumb {
-		   -moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		        box-sizing: border-box;
-		width: 1rem;
-		height: 0.7rem;
-		margin-right: 1px;
-		margin-bottom: 1px;
-		background-color: rgba(0,0,0,0.7);
-		cursor: pointer;
-		     -o-transition: background-color 0.5s;
-		    -ms-transition: background-color 0.5s;
-		   -moz-transition: background-color 0.5s;
-		-webkit-transition: background-color 0.5s;
-		        transition: background-color 0.5s;
-	}
-
-	.ft-page-thumb:hover {
-		background-color: rgba(255,255,255,0.7);
-	}
-
-	.ft-page-thumb.actual {
-		background-color: rgba(255,255,255,0.5);
-		border: 1px solid #ffffff;	
-	}
-
 	/* pages in overview mode */
 	.ft-overview .ft-page {
 		opacity: 0.7;
@@ -129,20 +102,31 @@
 				transform-origin: 50% 50%;
 	}
 
-	.ft-overview .ft-page.actual {
-		opacity: 0.3;
-	}
-
-	.ft-overview .ft-page.hilite {
-		opacity: 1;
-	}
-
-	.ft-overview .ft-page:hover {
-		opacity: 1;
-	}
-
 	.ft-overview .ft-page * {
 		pointer-events: none;
+	}
+
+/* JAVASCRIPT NAVIGATION HOOKS */
+
+	.ft-absolute-nav {
+		overflow: hidden;
+	}
+
+/* EYE CANDY OVERRIDABLE CLASSES AND PROPERTIES */
+
+/* FRAGMENTS */
+
+	.ft-fragment {
+		opacity: 0;
+		     -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+		    -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+		   -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+		-webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+				transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+	}
+
+	.ft-fragment.revealed, .ft-fragment.revealed-temp {
+		opacity: 1;
 	}
 
 /* DEFAULT PROGRESS */
@@ -170,23 +154,43 @@
 		pointer-events: none;
 	}
 
-/* FRAGMENTS */
-
-	.ft-fragment {
-		opacity: 0;
-		     -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-		    -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-		   -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-		-webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-				transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+	/* default progress page thumb */
+	.ft-page-thumb {
+		   -moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		        box-sizing: border-box;
+		width: 1rem;
+		height: 0.7rem;
+		margin-right: 1px;
+		margin-bottom: 1px;
+		background-color: rgba(0,0,0,0.7);
+		cursor: pointer;
+		     -o-transition: background-color 0.5s;
+		    -ms-transition: background-color 0.5s;
+		   -moz-transition: background-color 0.5s;
+		-webkit-transition: background-color 0.5s;
+		        transition: background-color 0.5s;
 	}
 
-	.ft-fragment.revealed, .ft-fragment.revealed-temp {
+	.ft-page-thumb:hover {
+		background-color: rgba(255,255,255,0.7);
+	}
+
+	.ft-page-thumb.actual {
+		background-color: rgba(255,255,255,0.5);
+		border: 1px solid #ffffff;	
+	}
+
+	/* overview mode page highlighting */
+
+	.ft-overview .ft-page.actual {
+		opacity: 0.3;
+	}
+
+	.ft-overview .ft-page.hilite {
 		opacity: 1;
 	}
 
-/* JAVASCRIPT NAVIGATION HOOKS */
-
-	.ft-absolute-nav {
-		overflow: hidden;
+	.ft-overview .ft-page:hover {
+		opacity: 1;
 	}

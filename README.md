@@ -314,7 +314,12 @@ e.total
 
 The last page sequential index.
 
-### Calculating the completion percentage of the presentation
+## Customizing and Styling Default Components and Behaviours
+
+As said before Flowtime.js comes with some default components like the two overview variants and a progress indicator.  
+You can change the way this parts appears editing or overwriting some CSS properties.
+
+### Calculating the Completion Percentage for Custom Visualization
 
 In the `flowtimenavigation` event handler calculate the progress in % using this formula:
 
@@ -329,7 +334,7 @@ In the `flowtimenavigation` event handler calculate the progress in % using this
 The first page of the first section **ever returns 0 as progress value**.  
 `progress` and `total` values does not consider fragments.
 
-### Customize the fragments animation
+### Customize the Fragments Animation
 
 Every animation in Flowtime.js is managed with native CSS3 transitions so if you would customize the fragment animation (and you want to do this on a website, I know) just edit the following CSS classes to override the transitions or set the default value of the `opacity` to `1`.
 
@@ -340,10 +345,62 @@ Every animation in Flowtime.js is managed with native CSS3 transitions so if you
         -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
        -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
     -webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-        transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+            transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
   }
 
   .ft-fragment.revealed, .ft-fragment.revealed-temp {
+    opacity: 1;
+  }
+
+  .ft-overview .ft-default-progress {
+    opacity: 0;
+    pointer-events: none;
+  }
+```
+
+### Customize the Looking of Overview Thumbnails
+
+To customize the way the thumbnails in overview mode look when idle, hovered and higlighted edit or override this CSS classes:
+
+```css
+  /* default progress page thumb */
+  .ft-page-thumb {
+       -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    width: 1rem;
+    height: 0.7rem;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    background-color: rgba(0,0,0,0.7);
+    cursor: pointer;
+         -o-transition: background-color 0.5s;
+        -ms-transition: background-color 0.5s;
+       -moz-transition: background-color 0.5s;
+    -webkit-transition: background-color 0.5s;
+            transition: background-color 0.5s;
+  }
+
+  .ft-page-thumb:hover {
+    background-color: rgba(255,255,255,0.7);
+  }
+
+  .ft-page-thumb.actual {
+    background-color: rgba(255,255,255,0.5);
+    border: 1px solid #ffffff;  
+  }
+
+  /* overview mode page highlighting */
+
+  .ft-overview .ft-page.actual {
+    opacity: 0.3;
+  }
+
+  .ft-overview .ft-page.hilite {
+    opacity: 1;
+  }
+
+  .ft-overview .ft-page:hover {
     opacity: 1;
   }
 ```
