@@ -230,11 +230,11 @@ Flowtime.gotoPage(HTMLElement target)
 Navigate to the page element.
 
 ```javascript
-Flowtime.toggleOverview();
+Flowtime.toggleOverview([Boolean back]);
 ```
 
 Toggles the overview mode switching between overview and page mode.
-Toggling the overview mode when in overview does not navigate to the highlighted page.
+If the optional `back` paramerter is `true` toggling the overview mode when in overview does not navigate to the highlighted page but will returns to the active page; default `false`.
 
 ### Events
 
@@ -271,25 +271,25 @@ The current page index starting at 0.
 e.prevSection
 ```
 
-Boolean value, if true there is a previous section.
+Boolean value, if `true` there is a previous section.
 
 ```javascript
 e.nextSection
 ```
 
-Boolean value, if true there is a next section.
+Boolean value, if `true` there is a next section.
 
 ```javascript
 e.prevPage
 ```
 
-Boolean value, if true there is a previous page.
+Boolean value, if `true` there is a previous page.
 
 ```javascript
 e.nextPage
 ```
 
-Boolean value, if true there is a next page.
+Boolean value, if `true` there is a next page.
 
 ```javascript
 e.fragment
@@ -304,8 +304,15 @@ e.fragmentIndex
 Returns the index of the current fragment starting at 0; otherwise returns `-1`.
 
 ```javascript
+e.isOverview
+```
+
+Boolean value, `true` if the overview mode is on, `false` if the overview mode is off.
+
+```javascript
 e.progress
 ```
+
 The current page sequential index number starting at 0.
 
 ```javascript

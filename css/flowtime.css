@@ -112,6 +112,11 @@
 		overflow: hidden;
 	}
 
+
+	.ft-absolute-nav .flowtime {
+		position: absolute;
+	}
+
 /* EYE CANDY OVERRIDABLE CLASSES AND PROPERTIES */
 
 /* FRAGMENTS */

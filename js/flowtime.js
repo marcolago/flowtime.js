@@ -407,11 +407,23 @@ var Flowtime = (function ()
 		setTitle(h);
 		if (isOverview)
 		{
-			zoomIn();
+			_toggleOverview(false, false);
 		}
 		NavigationMatrix.switchActivePage(NavigationMatrix.getCurrentPage(), true);
 		//
 		// dispatches an event populated with navigation data
+		fireNavigationEvent();
+		//
+		if (_showProgress)
+		{
+			updateProgress();
+		}
+
+	}
+
+	function fireNavigationEvent()
+	{
+		var pageIndex = NavigationMatrix.getPageIndex();
 		Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT,	{
 													section: 		NavigationMatrix.getCurrentSection(),
 													page: 			NavigationMatrix.getCurrentPage(),
@@ -423,14 +435,10 @@ var Flowtime = (function ()
 													nextPage: 		NavigationMatrix.hasNextPage(),
 													fragment: 		NavigationMatrix.getCurrentFragment(),
 													fragmentIndex: 	NavigationMatrix.getCurrentFragmentIndex(),
+													isOverview: 	isOverview, 
 													progress: 		NavigationMatrix.getProgress(),
 													total: 			NavigationMatrix.getPagesTotalLength()
 												} );
-
-		if (_showProgress)
-		{
-			updateProgress();
-		}
 	}
 
 	/**
@@ -549,11 +557,11 @@ var Flowtime = (function ()
 	/**
 	 * switch from the overview states
 	 */
-	function _toggleOverview(undo)
+	function _toggleOverview(back, navigate)
 	{
 		if (isOverview)
 		{
-			zoomIn(undo);
+			zoomIn(back, navigate);
 		}
 		else
 		{
@@ -565,18 +573,22 @@ var Flowtime = (function ()
 	/**
 	 * zoom in the view to focus on the current section / page
 	 */
-	function zoomIn(undo)
+	function zoomIn(back, navigate)
 	{
 		isOverview = false;
 		Brav1Toolbox.removeClass(body, "ft-overview");
 		NavigationMatrix.hideFragments();
-		if (undo == true)
+		navigate = navigate === false ? false : true;
+		if (navigate == true)
 		{
-			navigateTo(overviewCachedDest);
-		}
-		else
-		{
-			navigateTo();
+			if (back == true)
+			{
+				navigateTo(overviewCachedDest);
+			}
+			else
+			{
+				navigateTo();
+			}
 		}
 	}
 
@@ -597,6 +609,7 @@ var Flowtime = (function ()
 		{
 			overviewZoomTypeB(true);
 		}
+		fireNavigationEvent();
 	}
 
 	function overviewZoomTypeA(out)
@@ -610,10 +623,6 @@ var Flowtime = (function ()
 			var offsetX = (100 - NavigationMatrix.getSectionsLength() * scale) / 2;
 			var offsetY = (100 - NavigationMatrix.getPagesLength() * scale) / 2;
 			ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
-		}
-		else
-		{
-
 		}
 	}
 
