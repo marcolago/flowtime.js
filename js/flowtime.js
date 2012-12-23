@@ -50,7 +50,7 @@ var Flowtime = (function ()
 	var body = document.querySelector("body");						// cached reference to body element
 	var useHash = false;											// if true the engine uses only the hash change logic
 	var currentHash = "";											// the hash string of the current section / page pair
-	var pastIndex;													// section and page indexes of the past page
+	var pastIndex = { section:0, page:0 };													// section and page indexes of the past page
 	var isOverview = false;											// Boolean status for the overview 
 	var siteName = document.title;									// cached base string for the site title
 	var overviewCachedDest;											// caches the destination before performing an overview zoom out for navigation back purposes
@@ -186,7 +186,7 @@ var Flowtime = (function ()
 	/**
 	 * monitoring function that triggers hashChange when resizing window
 	 */
-	var hashMonitor = (function _hashMonitor()
+	var resizeMonitor = (function _resizeMonitor()
 	{
 		var ticker = NaN;
 		function _enable()
@@ -194,7 +194,7 @@ var Flowtime = (function ()
 			_disable();
 			if (!isOverview)
 			{
-				ticker = setTimeout(doHashChange, 300);
+				ticker = setTimeout(doResizeHandler, 300);
 			}
 		}
 		
@@ -203,9 +203,9 @@ var Flowtime = (function ()
 			clearTimeout(ticker);
 		}
 		
-		function doHashChange()
+		function doResizeHandler()
 		{
-			onHashChange(null, true);
+			navigateTo();
 		}
 		
 		Brav1Toolbox.addListener(window, "resize", _enable);
@@ -381,8 +381,6 @@ var Flowtime = (function ()
 		}
 		// check what properties use for navigation and set the style
 		setNavProperty(x, y);
-		// cache the section and page index to determine the direction of the next navigation
-		pastIndex = pageIndex;
 		//
 		var h = NavigationMatrix.getHash(dest);
 		if (linked == true)
@@ -413,6 +411,8 @@ var Flowtime = (function ()
 		//
 		// dispatches an event populated with navigation data
 		fireNavigationEvent();
+		// cache the section and page index to determine the direction of the next navigation
+		pastIndex = pageIndex;
 		//
 		if (_showProgress)
 		{
@@ -425,19 +425,21 @@ var Flowtime = (function ()
 	{
 		var pageIndex = NavigationMatrix.getPageIndex();
 		Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT,	{
-													section: 		NavigationMatrix.getCurrentSection(),
-													page: 			NavigationMatrix.getCurrentPage(),
-													sectionIndex: 	pageIndex.section, 
-													pageIndex: 		pageIndex.page, 
-													prevSection: 	NavigationMatrix.hasPrevSection(),
-													nextSection: 	NavigationMatrix.hasNextSection(),
-													prevPage: 		NavigationMatrix.hasPrevPage(),
-													nextPage: 		NavigationMatrix.hasNextPage(),
-													fragment: 		NavigationMatrix.getCurrentFragment(),
-													fragmentIndex: 	NavigationMatrix.getCurrentFragmentIndex(),
-													isOverview: 	isOverview, 
-													progress: 		NavigationMatrix.getProgress(),
-													total: 			NavigationMatrix.getPagesTotalLength()
+													section: 			NavigationMatrix.getCurrentSection(),
+													page: 				NavigationMatrix.getCurrentPage(),
+													sectionIndex: 		pageIndex.section, 
+													pageIndex: 			pageIndex.page,
+													pastSectionIndex: 	pastIndex.section,  
+													pastPageIndex: 		pastIndex.page,  
+													prevSection: 		NavigationMatrix.hasPrevSection(),
+													nextSection: 		NavigationMatrix.hasNextSection(),
+													prevPage: 			NavigationMatrix.hasPrevPage(),
+													nextPage: 			NavigationMatrix.hasNextPage(),
+													fragment: 			NavigationMatrix.getCurrentFragment(),
+													fragmentIndex: 		NavigationMatrix.getCurrentFragmentIndex(),
+													isOverview: 		isOverview, 
+													progress: 			NavigationMatrix.getProgress(),
+													total: 				NavigationMatrix.getPagesTotalLength()
 												} );
 	}
 

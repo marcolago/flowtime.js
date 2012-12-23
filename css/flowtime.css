@@ -142,11 +142,11 @@
 		left: 10px;
 		z-index: 1000;
 		opacity: 0.3;
-		     -o-transition: opacity 0.5s;
-		    -ms-transition: opacity 0.5s;
-		   -moz-transition: opacity 0.5s;
-		-webkit-transition: opacity 0.5s;
-		        transition: opacity 0.5s;
+		     -o-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		    -ms-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		   -moz-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		-webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+				transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 	}
 
 	.ft-default-progress:hover {
@@ -170,11 +170,11 @@
 		margin-bottom: 1px;
 		background-color: rgba(0,0,0,0.7);
 		cursor: pointer;
-		     -o-transition: background-color 0.5s;
-		    -ms-transition: background-color 0.5s;
-		   -moz-transition: background-color 0.5s;
-		-webkit-transition: background-color 0.5s;
-		        transition: background-color 0.5s;
+		     -o-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		    -ms-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		   -moz-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+		-webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+				transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 	}
 
 	.ft-page-thumb:hover {

@@ -1,0 +1,101 @@
+html {
+	font-size: 100%;
+	line-height: 1.5rem;
+}
+
+
+body:after {
+	background: url("http://basehold.it/image.php?height=8") repeat scroll left top transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: auto;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    z-index: 9999;
+}
+
+.flowtime h1,
+.flowtime h2,
+.flowtime h3 {
+	font-weight: bold;
+	text-align: center;
+}
+
+.flowtime h1 {
+	font-size: 3rem;
+	line-height: 3rem;
+	margin: 3rem 0;
+}
+
+.flowtime h2 {
+	font-size: 2rem;
+	line-height: 2rem;
+	margin: 2rem 0;
+}
+
+.flowtime h3 {
+	font-size: 1.75rem;
+	line-height: 2rem;
+	margin: 2rem 0;
+}
+
+.flowtime p {
+	font-size: 1rem;
+	line-height: 1.5rem;
+	text-align: center;
+	margin: 1.5rem 0;
+}
+
+.navigation, .credits, .switches {
+	display: none;
+}
+
+.ft-page {
+	padding: 2rem;
+}
+
+@media screen and (min-height: 40rem)
+{
+	html {
+		font-size: 125%;
+	}
+
+	.ft-page {
+		background-color: #ff0000;
+	}
+
+	body:after {
+		background: url("http://basehold.it/image.php?height=10") repeat scroll left top transparent;
+	}
+}
+
+@media screen and (min-height: 50rem)
+{
+	html {
+		font-size: 150%;
+	}
+
+	.ft-page {
+		background-color: #00ff00;
+	}
+
+	body:after {
+		background: url("http://basehold.it/image.php?height=12") repeat scroll left top transparent;
+	}
+}
+
+.flowtime h1,
+.flowtime h2,
+.flowtime h3,
+.flowtime p {
+	     -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+	    -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+	   -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+	-webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+			transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+}
