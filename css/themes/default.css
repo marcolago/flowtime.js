@@ -302,13 +302,15 @@ body {
 	color: #ff9900;
 	outline: none;
 	background-color: rgba(255,255,255,0.2);
-	box-shadow: 1px 2px 10px 0 rgba(0,0,0,0.5);
+	-webkit-box-shadow: 1px 2px 10px 0 rgba(0,0,0,0.5);
+	        box-shadow: 1px 2px 10px 0 rgba(0,0,0,0.5);
 }
 
 .flowtime a:hover img,
 .flowtime a:active img,
 .flowtime a:focus img {
-	box-shadow: 1px 2px 10px 5px rgba(0,0,0,0.5);
+	-webkit-box-shadow: 1px 2px 10px 5px rgba(0,0,0,0.5);
+	        box-shadow: 1px 2px 10px 5px rgba(0,0,0,0.5);
 }
 
 /* stackable content */
