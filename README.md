@@ -1,11 +1,8 @@
 ![Flowtime.js](https://github.com/marcolago/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
-### Flowtime.js is a framework to easily build HTML presentations or websites.  
+### Flowtime.js is a framework for easily build HTML presentations or websites.  
 
-You can take a look at some demos to quick learn about the possibilities:
-- [Basic demo](http://marcolago.com/flowtime-js/demo/)
-- [Candy demo - same as Basic demo but more eye candy](http://marcolago.com/flowtime-js/demo-candy/)
-- [Skyline demo - same as Basic demo but with different vertical-align](http://marcolago.com/flowtime-js/demo-skyline/)
+You can take a look at the [sample presentation](http://marcolago.com/flowtime-js/) to quick learn about the possibilities:
 
 **For more information check the [wiki](https://github.com/marcolago/flowtime.js/wiki)**
 - [Browser Support](https://github.com/marcolago/flowtime.js/wiki/Browser-Support)
@@ -15,10 +12,11 @@ You can take a look at some demos to quick learn about the possibilities:
 ## Main Features
 
 **Full Page Fluid Layout Boilerplate**.  
-Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` technique.  
-This frameworks doesn't style you presentations or sites for you but it takes care of all the annoying things like navigation and deep-linking, so you are free to style every single element of your design as you like.
+Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` foundation.  
+This frameworks doesn't style your presentations or sites for you but it takes care of all the annoying things like navigation and deep-linking, so you are free to style every single element of your design as you like.
+But for the ones who need a ready-to-use tool it comes with a default theme that you can edit or you can add new themes just by linking your css files.
 
-**Multiple controlled navigation**.  
+**Multiple Controls Navigation**.  
 You can navigate through pages via links, keyboard or deep-linking.  
 Links are managed using the href value targeting a formatted hash destination; see the demos source code for more examples.  
 Keyboard navigation is based on arrow keys with the Shift key as a modifier to jump over fragments or sections, see the command list:
@@ -27,6 +25,10 @@ Keyboard navigation is based on arrow keys with the Shift key as a modifier to j
 - **Shift + Down or Up Arrows**: navigate to the prev o next page jumping all the fragments.
 - **Left or Right Arrows**: navigate to the prev or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the higher available index..
 - **Shift + Left or Right Arrows**: Navigate to the first page of the previous or next section.
+- **Page Up**: navigates to the first page of the current section.
+- **Page Down**: navigates to the last page of the current section.
+- **Home**: navigates to the first page of the presentation.
+- **End**: navigates to the last page of the presentation.
 - **ESC**: toggles the overview mode.
 
 **Fragments Support**.  
@@ -154,13 +156,13 @@ Flowtime.fragmentsOnSide(Boolean show);
 ```
 
 Default `false`. Enable the fragments navigation also on section navigation (left and right arrows) and no only on page navigation.
-If true it also enable `showFragmentsOnBack`.
+If true it also set `fragmentsOnBack` on `true`.
 
 ```javascript
-Flowtime.showFragmentsOnBack(Boolean show);
+Flowtime.fragmentsOnBack(Boolean show);
 ```
 
-Default `false`. Shows the fragments when navigating back from a section to a page with fragments inside. The default behaviour (false) hide all fragments when navigating to a page from a higher section index.
+Default `true`. Shows or hide the fragments when navigating back from a section to a page with fragments inside.
 
 ```javascript
 Flowtime.useHistory(Boolean use);
@@ -183,10 +185,16 @@ Flowtime.sectionsSlideToTop(Boolean toTop);
 Default `true`. Set to false if you want to customize the fragment animation with a more complex behaviour. This methd enables or disables the animation only and not the internal fragments counter logic. See the event section for more info on how manage a custom fragment navigation.
 
 ```javascript
+Flowtime.gridNavigation(Boolean useGrid);
+```
+
+Default `false`. Just a proxy for `Flowtime.sectionsSlideToTop` but with reversed value; if `true` sets `Flowtime.sectionsSlideToTop` to `False`. Implemented just because the more semantic and easy to understand naming.
+
+```javascript
 Flowtime.useOverviewVariant(Boolean true);
 ```
 
-Default `false`. Uses a built in overview variant which does not show all the pages in a single view but center the current page in the available space scrilling the view when navigating with the arrows.
+Default `false`. Uses a built in overview variant which does not show all the pages in a single view but center the current page in the available space scroualtirlling the view when navigating with the arrows.
 In Webkit browsers the default overview mode can cause rendering problems if the pages are too much; using the variant you can minimize the problem.
 
 ### Navigation API
@@ -266,6 +274,18 @@ e.pageIndex
 ```
 
 The current page index starting at 0.
+
+```javascript
+e.pastSectionIndex
+```
+
+The previous visited section index starting at 0.
+
+```javascript
+e.pastPageIndex
+```
+
+The previous visited page index starting at 0.
 
 ```javascript
 e.prevSection

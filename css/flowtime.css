@@ -38,6 +38,15 @@
 				transition:         transform 0.5s cubic-bezier(.77, .10, .22, 1);
 	}
 
+	.flowtime.no-transition {
+
+		     -o-transition:      -o-transform 0s;
+		    -ms-transition:     -ms-transform 0s;
+		   -moz-transition:    -moz-transform 0s;
+		-webkit-transition: -webkit-transform 0s;
+				transition:         transform 0s;
+	}
+
 /* SECTIONS (COLUMNS) */
 
 	/* base section */
@@ -53,10 +62,11 @@
 				transform: translateZ(0);
 	}
 
-	/* section and section thumb aignment */
+	/* section and section thumb alignment */
 	.ft-section, .ft-section-thumb {
 		font-size: 16px; 		/* reset the regular font size, in the old way… */
 		font-size: 1rem; 		/* and in the modern way */
+		white-space: normal;
 		display: inline-block;	/* let the block elements stay on the same line */
 								/* used together the white-space: nowrap; declaration */
 								/* the elements doesn't break the line */
@@ -138,8 +148,10 @@
 
 	.ft-default-progress {
 		position: fixed;
-		bottom: 10px;
-		left: 10px;
+		bottom: 16px;
+		bottom: 1rem;
+		right: 16px;
+		right: 1rem;
 		z-index: 1000;
 		opacity: 0.3;
 		     -o-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);

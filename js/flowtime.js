@@ -57,12 +57,12 @@ var Flowtime = (function ()
 	var overviewFixedScaleFactor = 22;								// fixed scale factor for overview variant
 	var defaultProgress = null;										// default progress bar reference
 
-	var _fragmentsOnSide = false;									// enable fragments navigation even when navigating from pages
-	var _showFragmentsOnBack = false;								// shows fragments when navigating back to a sub page
+	var _fragmentsOnSide = false;									// enable or disable fragments navigation when navigating from sections
+	var _fragmentsOnBack = true;									// shows or hide fragments when navigating back to a page
 	var _slideInPx = false;											// calculate the slide position in px instead of %, use in case the % mode does not works
 	var _sectionsSlideToTop = false;								// if true navigation with right or left arrow go to the first page of the section
 	var _useOverviewVariant = false;								// use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
-	var _twoStepsSlide = false;										// not yet implemented! slides up or down before, then slides to the sub page
+	var _twoStepsSlide = false;										// not yet implemented! slides up or down before, then slides to the page
 	var _showProgress = false;										// show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
 
 	/**
@@ -117,10 +117,11 @@ var Flowtime = (function ()
 		// links with href starting with #
 		if (href && href.substr(0,1) == "#")
 		{
+			e.target.blur();
 			e.preventDefault();
 			var h = href;
 			var dest = NavigationMatrix.setPage(h);
-			navigateTo(dest, null, true);
+			navigateTo(dest, true, true);
 		}
 		// pages in oveview mode
 		if (isOverview && Brav1Toolbox.hasClass(e.target, PAGE_CLASS))
@@ -141,9 +142,13 @@ var Flowtime = (function ()
 	 * uses native history API to manage navigation
 	 * but uses the # for client side navigation on return
 	 */
-	if (useHash == false)
+	if (useHash == false && window.history.pushState)
 	{
 		window.onpopstate = onPopState;
+	}
+	else
+	{
+		useHash = true;
 	}
 	//
 	function onPopState(e)
@@ -181,6 +186,14 @@ var Flowtime = (function ()
 			var dest = NavigationMatrix.setPage(h);
 			navigateTo(dest, false);
 		}
+	}
+
+	Brav1Toolbox.addListener(window, "scroll", onNativeScroll);
+
+	function onNativeScroll(e)
+	{
+		e.preventDefault();
+		resetScroll();
 	}
 
 	/**
@@ -379,39 +392,38 @@ var Flowtime = (function ()
 			x = pageIndex.section;
 			y = pageIndex.page;
 		}
-		// check what properties use for navigation and set the style
-		setNavProperty(x, y);
+		// checks what properties use for navigation and set the style
+		navigate(x, y);
 		//
-		var h = NavigationMatrix.getHash(dest);
-		if (linked == true)
-		{
-			NavigationMatrix.updateFragments();
-		}
-		//
-		if (pushHistory && push != false)
-		{
-			var stateObj = { token: h };
-			var nextHash = "#/" + h;
-			if (nextHash != currentHash)
-			{
-				currentHash = nextHash;
-				window.history.pushState(stateObj, null, currentHash);
-			}
-		}
-		else
-		{
-			document.location.hash = "/" + h;
-		}
-		setTitle(h);
 		if (isOverview)
 		{
 			_toggleOverview(false, false);
 		}
 		NavigationMatrix.switchActivePage(NavigationMatrix.getCurrentPage(), true);
 		//
+		var h = NavigationMatrix.getHash(dest);
+		if (linked == true)
+		{
+			NavigationMatrix.updateFragments();
+		}
+		// set history properties
+		if (pushHistory != null && push != false && NavigationMatrix.getCurrentFragmentIndex() == -1)
+		{
+			var stateObj = { token: h };
+			var nextHash = "#/" + h;
+			currentHash = nextHash;
+			window.history.pushState(stateObj, null, currentHash);
+		}
+		else
+		{
+			document.location.hash = "/" + h;
+		}
+		// set the title
+		setTitle(h);
+		//
 		// dispatches an event populated with navigation data
 		fireNavigationEvent();
-		// cache the section and page index to determine the direction of the next navigation
+		// cache the section and page index, useful to determine the direction of the next navigation
 		pastIndex = pageIndex;
 		//
 		if (_showProgress)
@@ -447,7 +459,7 @@ var Flowtime = (function ()
 	 * check the availability of transform CSS property
 	 * if transform is not available then fallbacks to position absolute behaviour
 	 */
-	function setNavProperty(x, y)
+	function navigate(x, y)
 	{
 		if (Brav1Toolbox.testCSS("transform"))
 		{
@@ -473,6 +485,11 @@ var Flowtime = (function ()
 				ftContainer.style.left = -x * 100 + "%";
 			}
 		}
+		resetScroll();
+	}
+
+	function resetScroll()
+	{
 		window.scrollTo(0,0); // fix the eventually occurred page scrolling resetting the scroll values to 0
 	}
 
@@ -681,6 +698,21 @@ var Flowtime = (function ()
 				case 27 : // esc
 					_toggleOverview(true);
 					break;
+				case 33 : // pag up
+					var pageIndex = NavigationMatrix.getPageIndex();
+					_gotoPage(pageIndex.section, 0);
+					break;
+				case 34 : // pag down
+					var pageIndex = NavigationMatrix.getPageIndex();
+					_gotoPage(pageIndex.section, NavigationMatrix.getPages(pageIndex.section).length - 1);
+					break;
+				case 35 : // end
+					var sl = NavigationMatrix.getSectionsLength() - 1;
+					_gotoPage(sl, NavigationMatrix.getPages(sl).length - 1);
+					break;
+				case 36 : // home
+					_gotoPage(0, 0);
+					break;
 				case 37 : // left
 					_prevSection(e.shiftKey);
 					break;
@@ -812,8 +844,8 @@ var Flowtime = (function ()
 				if (Brav1Toolbox.typeOf(args[0]) === "Object")
 				{
 					var o = args[0];
-					var p = o.page;
-					var sp = o.subPage;
+					var p = o.section;
+					var sp = o.page;
 					if (p != null && p != undefined)
 					{
 						var pd = document.querySelector(SECTION_SELECTOR + "[data-id=" + safeAttr(p) + "]");
@@ -866,7 +898,7 @@ var Flowtime = (function ()
 		var sectionsArray;					// multi-dimensional array containing the pages' array
 		var fragments;						// HTML Collection of .fragment elements 
 		var fragmentsArray;					// multi-dimensional array containing the per page fragments' array
-		var fr = [];						// multi-dimensional array containing the index of the current active fragment per sub page
+		var fr = [];						// multi-dimensional array containing the index of the current active fragment per page
 		var sectionsLength = 0;				// cached total number of .ft-section elements
 		var pagesLength = 0;				// cached max number of .page elements
 		var pagesTotalLength = 0;			// cached total number of .page elements
@@ -905,7 +937,7 @@ var Flowtime = (function ()
 				//
 				var pages = section.querySelectorAll(PAGE_SELECTOR);
 				pagesTotalLength += pages.length;
-				pagesLength = Math.max(pagesLength, pages.length); // sets the sub pages max number for overview purposes
+				pagesLength = Math.max(pagesLength, pages.length); // sets the pages max number for overview purposes
 				for (var ii = 0; ii < pages.length; ii++)
 				{
 					var _sp = pages[ii];
@@ -916,6 +948,15 @@ var Flowtime = (function ()
 					_sp.setAttribute("data-prog", "__" + (ii + 1));
 					_sp.index = ii;
 					_sp.setAttribute("id", "");
+					// set data-title attributes to pages that doesn't have one and have at least an h1 heading element inside
+					if (!_sp.getAttribute("data-title"))
+					{
+						var heading = _sp.querySelector("h1");
+						if (heading != null && heading.textContent.lenght != "")
+						{
+							_sp.setAttribute("data-title", heading.textContent);
+						}
+					}
 					pagesArray.push(_sp);
 					//
 					var subFragments = _sp.querySelectorAll(FRAGMENT_SELECTOR);
@@ -926,6 +967,7 @@ var Flowtime = (function ()
 			}
 			//
 			sectionsLength = sections.length; // sets the sections max number for overview purposes
+			resetScroll();
 		}
 		
 		/**
@@ -945,7 +987,7 @@ var Flowtime = (function ()
 			else
 			{
 				sub = 0;
-				if (toTop != true || _showFragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
+				if (toTop != true || _fragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
 				{
 					sub = sp;
 				}
@@ -972,7 +1014,7 @@ var Flowtime = (function ()
 			else
 			{
 				var sub = 0;
-				if (toTop != true || _showFragmentsOnBack == true || p - 1 < 0)
+				if (toTop != true || _fragmentsOnBack == true || p - 1 < 0)
 				{
 					sub = sp;
 				}
@@ -1088,7 +1130,7 @@ var Flowtime = (function ()
 		}
 
 		/**
-		 * show a single fragment inside the specified section / sub page
+		 * show a single fragment inside the specified section / page
 		 * the fragment index parameter is optional, if passed force the specified fragment to show
 		 * otherwise the method shows the current fragment
 		 * @param	fp	Number	the section index
@@ -1109,7 +1151,7 @@ var Flowtime = (function ()
 		}
 
 		/**
-		 * hide a single fragment inside the specified section / sub page
+		 * hide a single fragment inside the specified section / page
 		 * the fragment index parameter is optional, if passed force the specified fragment to hide
 		 * otherwise the method hides the current fragment
 		 * @param	fp	Number	the section index
@@ -1132,7 +1174,7 @@ var Flowtime = (function ()
 		}
 
 		/**
-		 * show all the fragments
+		 * show all the fragments or the fragments in the specified page
 		 * adds a temporary class wich does not override the current status of fragments
 		 */
 		function _showFragments()
@@ -1144,7 +1186,7 @@ var Flowtime = (function ()
 		}
 
 		/**
-		 * hide all the fragments
+		 * hide all the fragments or the fragments in the specified page
 		 * removes a temporary class wich does not override the current status of fragments
 		 */
 		function _hideFragments()
@@ -1165,8 +1207,10 @@ var Flowtime = (function ()
 					var frsp = frp[isp];
 					if (frsp.length > 0)
 					{
+						// there are fragments
 						if (ip > p)
 						{
+							// previous section
 							for (var f = frsp.length - 1; f >= 0; f--)
 							{
 								_hideFragment(ip, isp, f);
@@ -1174,6 +1218,7 @@ var Flowtime = (function ()
 						}
 						else if (ip < p)
 						{
+							// next section
 							for (var f = 0; f < frsp.length; f++)
 							{
 								_showFragment(ip, isp, f);
@@ -1181,8 +1226,10 @@ var Flowtime = (function ()
 						}
 						else if (ip == p)
 						{
+							// same section
 							if (isp > sp)
 							{
+								// previous page
 								for (var f = frsp.length - 1; f >= 0; f--)
 								{
 									_hideFragment(ip, isp, f);
@@ -1190,6 +1237,7 @@ var Flowtime = (function ()
 							}
 							else if (isp < sp)
 							{
+								// next page
 								for (var f = 0; f < frsp.length; f++)
 								{
 									_showFragment(ip, isp, f);
@@ -1197,31 +1245,36 @@ var Flowtime = (function ()
 							}
 							else if (isp == sp)
 							{	
+								// same page
 								for (var f = 0; f < frsp.length; f++)
 								{
-									if (_showFragmentsOnBack == false)
+									if (_fragmentsOnBack == false)
 									{
+										// hide all fragments
 										_hideFragment(ip, isp, f);
 									}
 									else
 									{
-										if (pastIndex.section > NavigationMatrix.getPageIndex().section)
+										// show alla fragment only if
+										if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
 										{
+											// we are coming from a page after this
 											_showFragment(ip, isp, f);
 										}
 										else
 										{
+											// otherwise hide all fragments
 											_hideFragment(ip, isp, f);
 										}
 									}
 								}
-								if (_showFragmentsOnBack == false)
+								if (_fragmentsOnBack == false)
 								{
 									fr[ip][isp] = -1
 								}
 								else 
 								{
-									if (pastIndex.section > NavigationMatrix.getPageIndex().section)
+									if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
 									{
 										fr[ip][isp] = f - 1;	
 									}
@@ -1523,7 +1576,9 @@ var Flowtime = (function ()
 		// start navigation
 		if (document.location.hash.length > 0)
 		{
+			Brav1Toolbox.addClass(ftContainer, "no-transition");
 			onHashChange(null, true);
+			Brav1Toolbox.removeClass(ftContainer, "no-transition");
 		}
 		else
 		{
@@ -1552,12 +1607,12 @@ var Flowtime = (function ()
 	function _setFragmentsOnSide(v)
 	{
 		_fragmentsOnSide = v;
-		_setShowFragmentsOnBack(v);
+		_setFragmentsOnBack(v);
 	}
 
-	function _setShowFragmentsOnBack(v)
+	function _setFragmentsOnBack(v)
 	{
-		_showFragmentsOnBack = v;
+		_fragmentsOnBack = v;
 	}
 
 	function _setUseHistory(v)
@@ -1574,6 +1629,11 @@ var Flowtime = (function ()
 	function _setSectionsSlideToTop(v)
 	{
 		_sectionsSlideToTop = v;
+	}
+
+	function _setGridNavigation(v)
+	{
+		_sectionsSlideToTop = !v;
 	}
 
 	function _setUseOverviewVariant(v)
@@ -1626,10 +1686,11 @@ var Flowtime = (function ()
 		gotoPage: _gotoPage,
 		toggleOverview: _toggleOverview,
 		fragmentsOnSide: _setFragmentsOnSide,
-		showFragmentsOnBack: _setShowFragmentsOnBack,
+		fragmentsOnBack: _setFragmentsOnBack,
 		useHistory: _setUseHistory,
 		slideInPx: _setSlideInPx,
 		sectionsSlideToTop: _setSectionsSlideToTop,
+		gridNavigation: _setGridNavigation,
 		useOverviewVariant: _setUseOverviewVariant,
 		twoStepsSlide: _setTwoStepsSlide,
 		showProgress: _setShowProgress,
