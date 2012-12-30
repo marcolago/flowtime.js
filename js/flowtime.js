@@ -50,7 +50,7 @@ var Flowtime = (function ()
 	var body = document.querySelector("body");						// cached reference to body element
 	var useHash = false;											// if true the engine uses only the hash change logic
 	var currentHash = "";											// the hash string of the current section / page pair
-	var pastIndex = { section:0, page:0 };													// section and page indexes of the past page
+	var pastIndex = { section:0, page:0 };							// section and page indexes of the past page
 	var isOverview = false;											// Boolean status for the overview 
 	var siteName = document.title;									// cached base string for the site title
 	var overviewCachedDest;											// caches the destination before performing an overview zoom out for navigation back purposes
@@ -377,29 +377,13 @@ var Flowtime = (function ()
 			}
 			push = true;
 		}
-		var x;
-		var y;
-		var pageIndex = NavigationMatrix.getPageIndex(dest);
-		if (_slideInPx == true)
-		{
-			// calculate the coordinates of the destination
-			x = dest.offsetLeft + dest.parentNode.offsetLeft;
-			y = dest.offsetTop + dest.parentNode.offsetTop;	
-		}
-		else
-		{
-			// calculate the index of the destination page
-			x = pageIndex.section;
-			y = pageIndex.page;
-		}
 		// checks what properties use for navigation and set the style
-		navigate(x, y);
+		navigate(dest);
 		//
 		if (isOverview)
 		{
 			_toggleOverview(false, false);
 		}
-		NavigationMatrix.switchActivePage(NavigationMatrix.getCurrentPage(), true);
 		//
 		var h = NavigationMatrix.getHash(dest);
 		if (linked == true)
@@ -407,16 +391,20 @@ var Flowtime = (function ()
 			NavigationMatrix.updateFragments();
 		}
 		// set history properties
-		if (pushHistory != null && push != false && NavigationMatrix.getCurrentFragmentIndex() == -1)
+		var pageIndex = NavigationMatrix.getPageIndex(dest);
+		if (pastIndex.section != pageIndex.section || pastIndex.page != pageIndex.page)
 		{
-			var stateObj = { token: h };
-			var nextHash = "#/" + h;
-			currentHash = nextHash;
-			window.history.pushState(stateObj, null, currentHash);
-		}
-		else
-		{
-			document.location.hash = "/" + h;
+			if (pushHistory != null && push != false && NavigationMatrix.getCurrentFragmentIndex() == -1)
+			{
+				var stateObj = { token: h };
+				var nextHash = "#/" + h;
+				currentHash = nextHash;
+				window.history.pushState(stateObj, null, currentHash);
+			}
+			else
+			{
+				document.location.hash = "/" + h;
+			}
 		}
 		// set the title
 		setTitle(h);
@@ -425,6 +413,7 @@ var Flowtime = (function ()
 		fireNavigationEvent();
 		// cache the section and page index, useful to determine the direction of the next navigation
 		pastIndex = pageIndex;
+		NavigationMatrix.switchActivePage(dest, true);
 		//
 		if (_showProgress)
 		{
@@ -459,8 +448,24 @@ var Flowtime = (function ()
 	 * check the availability of transform CSS property
 	 * if transform is not available then fallbacks to position absolute behaviour
 	 */
-	function navigate(x, y)
+	function navigate(dest)
 	{
+		var x;
+		var y;
+		var pageIndex = NavigationMatrix.getPageIndex(dest);
+		if (_slideInPx == true)
+		{
+			// calculate the coordinates of the destination
+			x = dest.offsetLeft + dest.parentNode.offsetLeft;
+			y = dest.offsetTop + dest.parentNode.offsetTop;	
+		}
+		else
+		{
+			// calculate the index of the destination page
+			x = pageIndex.section;
+			y = pageIndex.page;
+		}
+		//
 		if (Brav1Toolbox.testCSS("transform"))
 		{
 			if (_slideInPx)
