@@ -2,7 +2,7 @@
 
 ### Flowtime.js is a framework for easily build HTML presentations or websites.  
 
-You can take a look at the [sample presentation](http://marcolago.com/flowtime-js/) to quick learn about the possibilities:
+You can take a look at the [sample presentation](http://flowtime-js.marcolago.com) to quick learn about the possibilities:
 
 **For more information check the [wiki](https://github.com/marcolago/flowtime.js/wiki)**
 - [Browser Support](https://github.com/marcolago/flowtime.js/wiki/Browser-Support)
@@ -81,25 +81,35 @@ Even if you have only single slides ordered in a row you have to nest the pages 
 
 ### Titles and Pages URL
 
-Flowtime.js adds automatically a `data-prog` attribute to every div marked as `ft-section` or as `ft-page` in order to manage the navigation.
-By default page title and URL will be numeric indexes.  
-If you want to customize URL and title you can add some data attributes to any section or page.
-You can add the `data-title` attribute both to `ft-section` and to `ft-page` elements; if a `data-title` attribute was found it will be used to write the title in the browser tab.
+Flowtime.js sets automatically the title in the browser's tab on navigation reading it from the first `h1` on the page. If you want to override a title or use a different string instead of the heading content you can set a `data-title` attribute to the page.
+You can add the `data-title` attribute both to `ft-section` and to `ft-page` elements; if a `data-title` attribute was found on a section it will be used to write the title in the browser tab with this schema:
+
+`<title> text content [ | data-title on ft-section ] | h1 text content or data-title on ft-page`
+
+A `data-prog` attribute is added to every div marked as `ft-section` or as `ft-page` in order to manage the navigation.
+If you want to customize the URL and the hashtag you can add some data attributes to any section or page.
 You can add the `data-id` attribute both to `ft-section` and to `ft-page` elements; if this attribute was found it will be used to build the page URL.
 To better understand the use of data attributes here it is an example:
 
 ```html
     <div class="flowtime">
-      <div class="ft-section" data-title="Section 1 Title" data-id="section-1">
-        <div class="ft-page" data-title="Page 1 Title" data-id="page-1">
-            When navigating to this page the title will be [site name] | Section 1 Title | Page 1 Title
-            and the URL will be http://[site URL]/#/section-1/page-1/
+      <div class="ft-section" data-id="section-1">
+        <div class="ft-page" data-id="page-1">
+            <h1>Heading Title</h1>
+            When navigating to this page the title will be "site name | Heading Title"
+            and the URL will be "http://site_URL/#/section-1/page-1/"
         </div>
       </div>
-      <div class="ft-section"data-id="section-2">
+      <div class="ft-section" data-title="Section 2 Title" data-id="section-2">
+        <div class="ft-page" data-title="Page 1 Title" data-id="page-1">
+            When navigating to this page the title will be "site name | Section 2 Title | Page 1 Title"
+            and the URL will be "http://site_URL/#/section-2/page-1/"
+        </div>
+      </div>
+      <div class="ft-section"data-id="section-3">
         <div class="ft-page" data-title="Page Title" data-id="page-1">
-            When navigating to this page the title will be [site name] | Page Title
-            and the URL will be http://[site URL]/#/section-2/page-1/
+            When navigating to this page the title will be "site name | Page Title"            
+            and the URL will be "http://site_URL/#/section-3/page-1/"
         </div>
       </div>
     </div>

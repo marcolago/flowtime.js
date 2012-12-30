@@ -21,27 +21,28 @@
 	<title>Flowtime.js</title>
 	<link rel="stylesheet" href="assets/css/reset.css">
 	<link rel="stylesheet" href="css/flowtime.css">
-	<link rel="stylesheet" href="css/default.css">
+	<link rel="stylesheet" href="css/themes/default.css">
 	<link rel="stylesheet" href="assets/css/prism.css">
 	<script src="assets/js/prism.js"></script>
 </head>
 <body class="">
 	
 	<div class="flowtime">
-		<div class="ft-section" data-id="section-1" data-title="Title 1">
-			<div id="/section-1/page-1" class="ft-page" data-id="page-1" data-title="Hello!">
+		<div class="ft-section" data-id="section-1">
+			<div id="/section-1/page-1" class="ft-page" data-id="page-1" data-title="A Presentation Framework by @marcolago">
 				<div class="stack-center">
-					<div class="stacked-center"><a href="javascript:Flowtime.next();"><img src="assets/img/logo-white-shadow.png"></a><p>A presentation framework by <a href="https://twitter.com/marcolago" target="_blank">@marcolago</a></p><p>Press <strong>Down Key</strong> to continue</p></div>
+					<div class="stacked-center"><a href="javascript:Flowtime.next();"><img src="assets/img/logo-white-shadow.png"></a><p class="page-title">A Presentation Framework by <a href="https://twitter.com/marcolago" target="_blank">@marcolago</a></p><p>Press <strong>Down Key</strong> to continue</p></div>
 				</div>
 			</div>
-			<div id="/section-1/page-2" class="ft-page" data-id="page-2" data-title="Description">
+			<div id="/section-1/page-2" class="ft-page" data-id="page-2">
 				<h1>What is it?</h1>
 				<p><strong>Flowtime.js</strong> is a framework for easily build HTML presentations or websites.</p>
-				<p>It's built with web standards in mind and on top of a solid full page grid layout. The animations are managed with native and accelerated CSS3 transitions.</p>
-				<p>Javascript takes care of the navigation behaviour and adds advanced functionalities and configuration options.</p>
+				<p>It's built with web standards in mind and on top of a solid full page grid layout.</p>
+				<p>The animations are managed with native and accelerated CSS3 transitions.<br>
+					Javascript takes care of the navigation behaviour and adds advanced functionalities and configuration options.</p>
 				<p>Press <strong>Down Key</strong> to continue.</p>
 			</div>
-			<div id="/section-1/page-3" class="ft-page" data-id="page-3" data-title="Description">
+			<div id="/section-1/page-3" class="ft-page" data-id="page-3">
 				<h1>Compatibility and Support</h1>
 				<p><strong>Flowtime.js</strong> is fully compatible with real moderns browsers:</p>
 				<ul>
@@ -54,9 +55,14 @@
 				<p>Internet Explorer 9 lacks the transitions and some modern Javascript features but still has full functionalities.</p>
 				<p>In older browsers degrades to a bi-directional scrolling navigation with anchor links.</p>
 			</div>
+			<div id="/section-1/page-4" class="ft-page" data-id="page-4">
+				<h1>Touch Devices Support</h1>
+				<p>Full support for touch devices is currently under development.</p>
+				<p>Stay tuned for updates.</p>
+			</div>
 		</div>
 		<div class="ft-section" data-id="section-2">
-			<div id="/section-2/page-1" class="ft-page" data-id="page-1" data-title="The Only Page in Section 2">
+			<div id="/section-2/page-1" class="ft-page" data-id="page-1">
 				<h1>Mastering the Navigation</h1>
 				<p>You can navigate in many ways. The most common way is using the keyboard.</p>
 				<h3>Navigation Keys and default behaviours:</h3>
@@ -69,7 +75,7 @@
 					<li><strong>End Key</strong> goes to the last page of the last section.</li>
 				</ul>
 			</div>
-			<div id="/section-2/page-2" class="ft-page" data-id="page-2" data-title="The Only Page in Section 2">
+			<div id="/section-2/page-2" class="ft-page" data-id="page-2">
 				<h1>Alternate Navigation Control</h1>
 				<p>Pressing the <strong>Shift Key</strong> you can alternate the the default navigation keys behaviour; let's see how:</p>
 				<ul>
@@ -109,7 +115,7 @@
 				<h1>Fragments Navigation</h1>
 				<p>The built in fragments navigation allows to advance step by step inside a page.<br>
 					Press down to try.</p>
-				<p class="ft-fragment">You can discover single elements <span class="ft-fragment">or even a single part of an element, one at time.</span></p>
+				<p class="ft-fragment">You can discover single elements <span class="ft-fragment">or even a single part of an element, <span class="ft-fragment">one <span class="ft-fragment">at <span class="ft-fragment">time.</span></span></span></p>
 				<p class="ft-fragment">Fragments navigation is deeply customizable with some configuration options<br>
 					You can learn how in the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a>.</p>
 			</div>
@@ -171,11 +177,13 @@
 				<p><cite><a href="http://html5doctor.com/blockquote-q-cite/" target="_blank">Quoting and citing with &lt;blockquote&gt;, &lt;q&gt;, &lt;cite&gt;, and the cite attribute</a>	</cite> on HTML5 Doctor.</p>
 			</div>
 			<div id="/section-3/page-6" class="ft-page" data-id="page-6">
-				<h1>Themes</h1>
+				<h1>Theme and Styling</h1>
 				<p>If you don't like the default theme and you want to build your own,<br>
 					or if you want to build a website on top of Flowtime.js,<br>
 					you can write your own theme and replace the default one.</p>
 				<p>Theme and core css are in separate files so you can't break the layout (unless you override some classes).</p>
+				<h2>Fluid Layout</h2>
+				<p>Everything can be fluid, just use <strong>em</strong>, <strong>rem</strong> and <strong>%</strong> units if you want to make an element resizable.</p>
 			</div>
 		</div>
 
@@ -188,7 +196,7 @@
 					Look at the source code to learn how to write the markup.</p>
 			</div>
 			<div id="/section-4/page-2" class="ft-page" data-id="page-2" data-title="Fluid Images">
-				<a href="http://www.genereavventura.com" target="_blank"><img src="assets/img/cane.jpg"></a>
+				<a href="http://www.genereavventura.com" target="_blank"><img src="assets/img/genereavventura.jpg"></a>
 			</div>
 			<div id="/section-4/page-3" class="ft-page" data-id="page-3">
 				<h1>Stacked Images</h1>
@@ -252,6 +260,7 @@
 				<p>Designed and coded by Marco Lago</p>
 				<p>You can find me on Twitter as <a href="https://twitter.com/marcolago" target="_blank">@marcolago</a></p>
 				<p>And you can find the project on <a href="https://github.com/marcolago/flowtime.js" target="_blank">Github</a></p>
+				<h2>Have Fun</h2>
 			</div>
 		</div>
 	</div>
@@ -274,6 +283,18 @@
 			// console.log('Completion: ' + value + '%');
 		}
 		Flowtime.start();
+	</script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-1228618-10']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
 	</script>
 </body>
 </html>
