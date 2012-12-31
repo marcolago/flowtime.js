@@ -37,7 +37,7 @@
 			<div id="/section-1/page-2" class="ft-page" data-id="page-2">
 				<h1>What is it?</h1>
 				<p><strong>Flowtime.js</strong> is a framework for easily build HTML presentations or websites.</p>
-				<p>It's built with web standards in mind and on top of a solid full page grid layout.</p>
+				<p>It’s built with web standards in mind and on top of a solid full page grid layout.</p>
 				<p>The animations are managed with native and accelerated CSS3 transitions.<br>
 					Javascript takes care of the navigation behaviour and adds advanced functionalities and configuration options.</p>
 				<p>Press <strong>Down Key</strong> to continue.</p>
@@ -52,7 +52,7 @@
 					<li>Opera</li>
 					<li>Internet Explorer 10</li>
 				</ul>
-				<p>Internet Explorer 9 and some old versions od other browsers lack the transitions and some modern Javascript features but tha main navigation and functionalities works.</p>
+				<p>Internet Explorer 9 and some old versions of other browsers lack the transitions and some modern Javascript features but the main navigation and functionalities works.</p>
 				<p>In older browsers degrades to a bi-directional scrolling navigation with anchor links.</p>
 			</div>
 			<div id="/section-1/page-4" class="ft-page" data-id="page-4">
@@ -69,15 +69,13 @@
 				<ul>
 					<li><strong>Down Key</strong> goes to the next page or shows up the next fragment (we'll see this later).</li>
 					<li><strong>Up Key</strong> goes to the previous page or hides the fragment.</li>
-					<li><strong>Right Key</strong> goes to the adjacent page in the next section <span class="small">(if available, it's like a grid, otherwise it goes to the last page in the next section).</span></li>
+					<li><strong>Right Key</strong> goes to the adjacent page in the next section <span class="small">(if available, it’s like a grid, otherwise it goes to the last page in the next section).</span></li>
 					<li><strong>Left Key</strong> goes to the adjacent page in the previous section.</li>
-					<li><strong>Home Key</strong> goes to the first page of the first section.</li>
-					<li><strong>End Key</strong> goes to the last page of the last section.</li>
 				</ul>
 			</div>
 			<div id="/section-2/page-2" class="ft-page" data-id="page-2">
 				<h1>Alternate Navigation Control</h1>
-				<p>Pressing the <strong>Shift Key</strong> you can alternate the the default navigation keys behaviour; let's see how:</p>
+				<p>Pressing the <strong>Shift Key</strong> you can alternate the the default navigation keys behaviour; let’s see how:</p>
 				<ul>
 					<li><strong>Down Key</strong> goes to the next page skipping all the fragments.</li>
 					<li><strong>Up Key</strong> goes to the previous page skipping all the fragments.</li>
@@ -86,32 +84,42 @@
 				</ul>
 			</div>
 			<div id="/section-2/page-3" class="ft-page" data-id="page-3">
+				<h1>Some Other Keys</h1>
+				<p>Because: the more, the better.</p>
+				<ul>
+					<li><strong>Page Up Key</strong> goes to the first page of the current section.</li>
+					<li><strong>Page Down Key</strong> goes to the last page of the current section.</li>
+					<li><strong>Home Key</strong> goes to the first page of the first section.</li>
+					<li><strong>End Key</strong> goes to the last page of the last section.</li>
+				</ul>
+			</div>
+			<div id="/section-2/page-4" class="ft-page" data-id="page-4">
 				<h1>Overview Mode.</h1>
-				<p>You can look at the entire presentation pressing <strong>ESC Key</strong>.<br>
+				<p>You can look at the entire presentation by pressing <strong>ESC Key</strong>.<br>
 					When in Overview Mode you can go back to the Page Mode by pressing again the ESC Key.</p>
 				<p>Try it out!</p>
 				<p><strong class="attention">WARNING! Experimental Feature.</strong> If you experience problems in webkit browser you can use the alternate Overview Mode; see the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a> for more info.</p>
 			</div>
-			<div id="/section-2/page-4" class="ft-page" data-id="page-4">
-				<h1>Navigating the Overview</h1>
-				<p>In Overview Mode the navigation keys works in the same way as in Page Mode highlighting the future destination. To navigate to the highlighted page just press <strong>Return or Enter Key</strong> or click on the desired page.</p>
-			</div>
 			<div id="/section-2/page-5" class="ft-page" data-id="page-5">
+				<h1>Navigating the Overview</h1>
+				<p>In Overview Mode the arrow keys works in the same way as in Page Mode, highlighting the future destination. To navigate to the highlighted page just press <strong>Return or Enter Key</strong> or click on the desired page.</p>
+			</div>
+			<div id="/section-2/page-6" class="ft-page" data-id="page-6">
 				<h1>Navigate via links or Javascript API</h1>
-				<p>You can links every page simply build the <code>href</code> value using this schema:</p>
+				<p>You can links every page by simply building the <code>href</code> value using this schema:</p>
 				<pre><code class="language-markup">
 &lt;a href="#/[section data-id attribute]/[page data-id attribute]"&gt;
 				</code></pre>
-				<p>Where <code>data-id</code> attribute is an optional attribute you can add to every section o page.<br>
-					If you want to go to back to the first page <a href="#/section-1/page-1">click here</a> <span class="small">(press <strong>backspace</strong> to come back to this page)</span></a>.</p>
+				<p>Where <code>data-id</code> attribute is an optional attribute you can add to every section or page.<br>
+					I.e.: if you want to go to back to the first page <a href="#/section-1/page-1">click here</a> <span class="small">(press <strong>backspace</strong> to come back to this page)</span></a>.</p>
 				<p>You can also trigger every navigation behaviour using the <strong>Flowtime.js Javascript API</strong>.<br>Take a look at the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a> if you want to learn more.</p>
 			</div>
-			<div id="/section-2/page-6" class="ft-page" data-id="page-6">
+			<div id="/section-2/page-7" class="ft-page" data-id="page-7">
 				<h1>Navigate With History</h1>
 				<p>Flowtime.js offers a full support for the HTML5 History API where available or gracefully degrades on the hashchange event.</p>
-				<p>This means that you can navigate using the browser's back and forward buttons and deeplink a page for sharing purposes.</p>
+				<p>This means that you can navigate using the browser’s back and forward buttons and deeplink a page for sharing purposes.</p>
 			</div>
-			<div id="/section-2/page-7" class="ft-page" data-id="page-7">
+			<div id="/section-2/page-8" class="ft-page" data-id="page-8">
 				<h1>Fragments Navigation</h1>
 				<p>The built in fragments navigation allows to advance step by step inside a page.<br>
 					Press down to try.</p>
@@ -119,9 +127,9 @@
 				<p class="ft-fragment">Fragments navigation is deeply customizable with some configuration options<br>
 					You can learn how in the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a>.</p>
 			</div>
-			<div id="/section-2/page-8" class="ft-page" data-id="page-8">
+			<div id="/section-2/page-9" class="ft-page" data-id="page-9">
 				<h1>Progress Indicator</h1>
-				<p>By default you can enable a progress indicator useful not only to know whats the current page you are looking, but also as a navigation tool.</p>
+				<p>You can enable a default progress indicator useful not only to know what’s the current page you are looking, but also as a navigation tool.</p>
 				<p><strong>Look at the bottom right corner</strong> and you can see a miniature of the presentation structure.</p>
 				<p>Clicking on a page thumb will navigate to that page.</p>
 			</div>
@@ -139,19 +147,19 @@
 			<div id="/section-3/page-2" class="ft-page" data-id="page-2">
 				<h1>Unordered Lists</h1>
 				<ul>
-					<li>An item</li>
-					<li>Another item</li>
-					<li>Just another item</li>
+					<li>An item.</li>
+					<li>Another item.</li>
+					<li>Just another item.</li>
 					<li>Ok, we get it!</li>
 				</ul>
 			</div>
 			<div id="/section-3/page-3" class="ft-page" data-id="page-3">
 				<h1>Ordered Lists</h1>
 				<ol>
-					<li>One</li>
-					<li>Two</li>
-					<li>Three</li>
-					<li>Four</li>
+					<li>One.</li>
+					<li>Two.</li>
+					<li>Three.</li>
+					<li>Four.</li>
 				</ol>
 			</div>
 			<div id="/section-3/page-4" class="ft-page" data-id="page-4">
@@ -178,10 +186,10 @@
 			</div>
 			<div id="/section-3/page-6" class="ft-page" data-id="page-6">
 				<h1>Theme and Styling</h1>
-				<p>If you don't like the default theme and you want to build your own,<br>
+				<p>If you don’t like the default theme or you want to build your own (or both things),<br>
 					or if you want to build a website on top of Flowtime.js,<br>
 					you can write your own theme and replace the default one.</p>
-				<p>Theme and core css are in separate files so you can't break the layout (unless you override some classes).</p>
+				<p>Theme and core css are in separate files so you can’t break the layout (unless you override some classes).</p>
 				<h2>Fluid Layout</h2>
 				<p>Everything can be fluid, just use <strong>em</strong>, <strong>rem</strong> and <strong>%</strong> units if you want to make an element resizable.</p>
 			</div>
@@ -232,7 +240,7 @@
 		<div class="ft-section" data-id="section-5">
 			<div id="/section-5/page-1" class="ft-page" data-id="page-1">
 				<h1>Code Snippets Highlight</h1>
-				<p>Code highlight is a courtesy of <a href="http://prismjs.com/" target="_blank">Lea Verou's Prism</a>.<br>Because I really didn't want to re-invent the wheel.<br><span class="small">You can use what you want, it's not a dependency (but it's very smart and cool).</span></p>
+				<p>Code highlight is a courtesy of <a href="http://prismjs.com/" target="_blank">Lea Verou’s Prism</a>.<br>Because I really didn’t want to re-invent the wheel.<br><span class="small">You can use what you want, it’s not a dependency (but it’s very smart and cool).</span></p>
 				<pre><code class="language-javascript">function saySomethingSmart()
 {
 	alert("The bad craftsman blames his tools!");
@@ -251,15 +259,17 @@
 
 		<div class="ft-section" data-id="section-6">
 			<div id="/section-6/page-1" class="ft-page" data-id="page-1">
-				<h1>Use It! It's Free</h1>
+				<h1>Use It! It’s Free</h1>
 				<p>This project is open source, feel free to contribute to the development on <a href="https://github.com/marcolago/flowtime.js" target="_blank">Github</a>.</p>
+				<p>Feedbacks, suggestions and bug reports are welcomes.</p>
 				<p>Use it as you wish and build great things.<br>And when you'll have done let me know the URL, I will appreciate it.</p>
 			</div>
 			<div id="/section-6/page-2" class="ft-page" data-id="page-2">
 				<h1>Thank You</h1>
-				<p>Designed and coded by Marco Lago</p>
+				<p>Designed and coded by Marco Lago<br>
+					Interaction/Experience/Game/Designer/Developer</p>
 				<p>You can find me on Twitter as <a href="https://twitter.com/marcolago" target="_blank">@marcolago</a></p>
-				<p>And you can find the project on <a href="https://github.com/marcolago/flowtime.js" target="_blank">Github</a></p>
+				<p>If you like this work spread the word, you know how ;)</p>
 				<h2>Have Fun</h2>
 			</div>
 		</div>
@@ -290,9 +300,9 @@
 		_gaq.push(['_trackPageview']);
 
 		(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		var ga = document.createElement(’script'); ga.type = ’text/javascript'; ga.async = true;
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		var s = document.getElementsByTagName(’script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
 </body>
