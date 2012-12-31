@@ -94,6 +94,717 @@ var Flowtime = (function ()
 	}
 
 /*
+	##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ## ##     ##    ###    ######## ########  #### ##     ## 
+	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ## ###   ###   ## ##      ##    ##     ##  ##   ##   ##  
+	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ## #### ####  ##   ##     ##    ##     ##  ##    ## ##   
+	## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ## ## ### ## ##     ##    ##    ########   ##     ###    
+	##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  #### ##     ## #########    ##    ##   ##    ##    ## ##   
+	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ### ##     ## ##     ##    ##    ##    ##   ##   ##   ##  
+	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ## ##     ## ##     ##    ##    ##     ## #### ##     ## 
+*/
+
+	/**
+	 * NavigationMatrix is the Object who store the navigation grid structure
+	 * and which expose all the methods to get and set the navigation destinations
+	 */
+	
+	var NavigationMatrix = (function ()
+	{
+		var sections;						// HTML Collection of .flowtime > .ft-section elements
+		var sectionsArray;					// multi-dimensional array containing the pages' array
+		var allPages;						// HTML Collection of .flowtime .ft-page elements
+		var fragments;						// HTML Collection of .fragment elements
+		var fragmentsArray;					// multi-dimensional array containing the per page fragments' array
+		var fr = [];						// multi-dimensional array containing the index of the current active fragment per page
+		var sectionsLength = 0;				// cached total number of .ft-section elements
+		var pagesLength = 0;				// cached max number of .page elements
+		var pagesTotalLength = 0;			// cached total number of .page elements
+		var p = 0;							// index of the current section viewved or higlighted
+		var sp = 0;							// index of the current page viewved or higlighted
+		var pCache = 0;						// cache index of the current section
+		var spCache = 0;					// cache index of the current page
+		var hilited;						// the current page higlighted, useful for overview mode
+		
+		/**
+		 * update the navigation matrix array
+		 * this is a publicy exposed method
+		 * useful for updating the matrix whne the site structure changes at runtime
+		 */
+		function _updateMatrix()
+		{
+			sectionsArray = [];
+			fragments = document.querySelectorAll(FRAGMENT_SELECTOR);
+			fragmentsArray = [];
+			sections = ftContainer.querySelectorAll(".flowtime > " + SECTION_SELECTOR);
+			allPages = ftContainer.querySelectorAll(".flowtime " + PAGE_SELECTOR);
+			//
+			for (var i = 0; i < sections.length; i++)
+			{
+				var pagesArray = [];
+				var section = sections[i];
+				fragmentsArray[i] = [];
+				fr[i] = [];
+				//
+				if (section.getAttribute("data-id"))
+				{
+					section.setAttribute("data-id", "__" + section.getAttribute("data-id")); // prevents attributes starting with a number
+				}
+				section.setAttribute("data-prog", "__" + (i + 1));
+				section.index = i;
+				section.setAttribute("id", "");
+				//
+				pages = section.querySelectorAll(PAGE_SELECTOR);
+				pagesTotalLength += pages.length;
+				pagesLength = Math.max(pagesLength, pages.length); // sets the pages max number for overview purposes
+				for (var ii = 0; ii < pages.length; ii++)
+				{
+					var _sp = pages[ii];
+					if (_sp.getAttribute("data-id"))
+					{
+						_sp.setAttribute("data-id", "__" + _sp.getAttribute("data-id")); // prevents attributes starting with a number
+					}
+					_sp.setAttribute("data-prog", "__" + (ii + 1));
+					_sp.index = ii;
+					_sp.setAttribute("id", "");
+					// set data-title attributes to pages that doesn't have one and have at least an h1 heading element inside
+					if (!_sp.getAttribute("data-title"))
+					{
+						var heading = _sp.querySelector("h1");
+						if (heading != null && heading.textContent.lenght != "")
+						{
+							_sp.setAttribute("data-title", heading.textContent);
+						}
+					}
+					pagesArray.push(_sp);
+					//
+					var subFragments = _sp.querySelectorAll(FRAGMENT_SELECTOR);
+					fragmentsArray[i][ii] = subFragments;
+					fr[i][ii] = -1;
+				}
+				sectionsArray.push(pagesArray);
+			}
+			//
+			sectionsLength = sections.length; // sets the sections max number for overview purposes
+			resetScroll();
+			_updateOffsets();
+		}
+
+		/**
+		 * cache the position for every page, useful when navigatin in pixels or when attaching a page after scrolling
+		 */
+		function _updateOffsets ()
+		{
+			for (var i = 0; i < allPages.length; i++)
+			{
+				var _sp = allPages[i];
+				_sp.x = _sp.offsetLeft + _sp.parentNode.offsetLeft;
+				_sp.y = _sp.offsetTop + _sp.parentNode.offsetTop;
+			}
+		};
+		
+		/**
+		 * returns the next section in navigation
+		 * @param	top	Boolean	if true the next page will be the first page in the next array; if false the next section will be the same index page in the next array
+		 * @param	fos	Boolean value of _fragmentsOnSide
+		 * @param	io	Boolean	value of isOverview
+		 */
+		function _getNextSection(top, fos, io)
+		{
+			var sub = sp;
+			var toTop = top === !_sectionsSlideToTop;
+			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop != true && io == false)
+			{
+				_showFragment(p, sp);
+			}
+			else
+			{
+				sub = 0;
+				if (toTop != true || _fragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
+				{
+					sub = sp;
+				}
+				p = Math.min(p + 1, sectionsArray.length - 1);
+				return _getNearestPage(sectionsArray[p], sub, io);
+			}
+			return hiliteOrNavigate(sectionsArray[p][sp], io);
+		}
+		
+		/**
+		 * returns the prev section in navigation
+		 * @param	top	Boolean	if true the next section will be the first page in the prev array; if false the prev section will be the same index page in the prev array
+		 * @param	fos	Boolean value of _fragmentsOnSide
+		 * @param	io	Boolean	value of isOverview
+		 */
+		function _getPrevSection(top, fos, io)
+		{
+			var sub = sp;
+			var toTop = top == !_sectionsSlideToTop;
+			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop != true && io == false)
+			{
+				_hideFragment(p, sp);
+			}
+			else
+			{
+				var sub = 0;
+				if (toTop != true || _fragmentsOnBack == true || p - 1 < 0)
+				{
+					sub = sp;
+				}
+				p = Math.max(p - 1, 0);
+				return _getNearestPage(sectionsArray[p], sub, io);
+			}
+			return hiliteOrNavigate(sectionsArray[p][sp], io);
+		}
+		
+		/**
+		 * checks if there is a valid page in the current section array
+		 * if the passed page is not valid thne check which is the first valid page in the array
+		 * then returns the page
+		 * @param	p	Number	the section index in the sections array
+		 * @param	sub	Number	the page index in the sections->page array
+		 * @param	io	Boolean	value of isOverview
+		 */
+		function _getNearestPage(pg, sub, io)
+		{
+			var nsp = pg[sub];
+			if (nsp == undefined)
+			{
+				for (var i = sub; i >= 0; i--)
+				{
+					if (pg[i] != undefined)
+					{
+						nsp = pg[i];
+						sub = i;
+						break;
+					}
+				}
+			}
+			sp = sub;
+			if (!isOverview)
+			{
+				_updateFragments();
+			}
+			return hiliteOrNavigate(nsp, io);
+		}
+		
+		/**
+		 * returns the next page in navigation
+		 * if the next page is not in the current section array returns the first page in the next section array
+		 * @param	jump	Boolean	if true jumps over the fragments directly to the next page
+		 * @param	io	Boolean	value of isOverview
+		 */
+		function _getNextPage(jump, io)
+		{
+			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump != true && io == false)
+			{
+				_showFragment(p, sp);
+			}
+			else
+			{
+				if (sectionsArray[p][sp + 1] == undefined && sectionsArray[p + 1] != undefined)
+				{
+					p += 1;
+					sp = 0;
+				}
+				else
+				{
+					sp = Math.min(sp + 1, sectionsArray[p].length - 1);
+				}
+			}
+			return hiliteOrNavigate(sectionsArray[p][sp], io);
+		}
+		
+		/**
+		 * returns the prev page in navigation
+		 * if the prev page is not in the current section array returns the last page in the prev section array
+		 * @param	jump	Boolean	if true jumps over the fragments directly to the prev page
+		 * @param	io	Boolean	value of isOverview
+		 */
+		function _getPrevPage(jump, io)
+		{
+			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && io == false)
+			{
+				_hideFragment(p, sp);
+			}
+			else
+			{
+				if (sp == 0 && sectionsArray[p - 1] != undefined)
+				{
+					p -= 1;
+					sp = sectionsArray[p].length - 1;
+				}
+				else
+				{
+					sp = Math.max(sp - 1, 0);
+				}
+			}
+			return hiliteOrNavigate(sectionsArray[p][sp], io);
+		}
+
+		/**
+		 * returns the destination page or
+		 * if the application is in overview mode
+		 * switch the active page without returning a destination
+		 * @param	d	HTMLElement	the candidate destination
+		 * @param	io	Boolean	value of isOverview
+		 */
+		function hiliteOrNavigate(d, io)
+		{
+			if (io == true)
+			{
+				_switchActivePage(d);
+				return;
+			}
+			else
+			{
+				return d;
+			}
+		}
+
+		/**
+		 * show a single fragment inside the specified section / page
+		 * the fragment index parameter is optional, if passed force the specified fragment to show
+		 * otherwise the method shows the current fragment
+		 * @param	fp	Number	the section index
+		 * @param	fsp	Number	the page index
+		 * @param	f	Number	the fragment index (optional)
+		 */
+		function _showFragment(fp, fsp, f)
+		{
+			if (f != undefined)
+			{
+				fr[fp][fsp] = f;
+			}
+			else
+			{
+				f = fr[fp][fsp] += 1;
+			}
+			Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_CLASS);
+		}
+
+		/**
+		 * hide a single fragment inside the specified section / page
+		 * the fragment index parameter is optional, if passed force the specified fragment to hide
+		 * otherwise the method hides the current fragment
+		 * @param	fp	Number	the section index
+		 * @param	fsp	Number	the page index
+		 * @param	f	Number	the fragment index (optional)
+		 */
+		function _hideFragment(fp, fsp, f)
+		{
+			if (f != undefined)
+			{
+				fr[fp][fsp] = f;
+			}
+			else
+			{
+				f = fr[fp][fsp];
+			}
+			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_CLASS);
+			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_TEMP_CLASS);
+			fr[fp][fsp] -= 1;
+		}
+
+		/**
+		 * show all the fragments or the fragments in the specified page
+		 * adds a temporary class wich does not override the current status of fragments
+		 */
+		function _showFragments()
+		{
+			for (var i = 0; i < fragments.length; i++)
+			{
+				Brav1Toolbox.addClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
+			}
+		}
+
+		/**
+		 * hide all the fragments or the fragments in the specified page
+		 * removes a temporary class wich does not override the current status of fragments
+		 */
+		function _hideFragments()
+		{
+			for (var i = 0; i < fragments.length; i++)
+			{
+				Brav1Toolbox.removeClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
+			}
+		}
+
+		function _updateFragments()
+		{
+			for (var ip = 0; ip < fragmentsArray.length; ip++)
+			{
+				var frp = fragmentsArray[ip];
+				for (var isp = 0; isp < frp.length; isp++)
+				{
+					var frsp = frp[isp];
+					if (frsp.length > 0)
+					{
+						// there are fragments
+						if (ip > p)
+						{
+							// previous section
+							for (var f = frsp.length - 1; f >= 0; f--)
+							{
+								_hideFragment(ip, isp, f);
+							}
+						}
+						else if (ip < p)
+						{
+							// next section
+							for (var f = 0; f < frsp.length; f++)
+							{
+								_showFragment(ip, isp, f);
+							}
+						}
+						else if (ip == p)
+						{
+							// same section
+							if (isp > sp)
+							{
+								// previous page
+								for (var f = frsp.length - 1; f >= 0; f--)
+								{
+									_hideFragment(ip, isp, f);
+								}
+							}
+							else if (isp < sp)
+							{
+								// next page
+								for (var f = 0; f < frsp.length; f++)
+								{
+									_showFragment(ip, isp, f);
+								}
+							}
+							else if (isp == sp)
+							{	
+								// same page
+								for (var f = 0; f < frsp.length; f++)
+								{
+									if (_fragmentsOnBack == false)
+									{
+										// hide all fragments
+										_hideFragment(ip, isp, f);
+									}
+									else
+									{
+										// show alla fragment only if
+										if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
+										{
+											// we are coming from a page after this
+											_showFragment(ip, isp, f);
+										}
+										else
+										{
+											// otherwise hide all fragments
+											_hideFragment(ip, isp, f);
+										}
+									}
+								}
+								if (_fragmentsOnBack == false)
+								{
+									fr[ip][isp] = -1
+								}
+								else 
+								{
+									if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
+									{
+										fr[ip][isp] = f - 1;	
+									}
+									else
+									{
+										fr[ip][isp] = -1
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		/**
+		 * returns the current section index
+		 */
+		function _getSection(h)
+		{
+			if (h)
+			{
+				// TODO return the index of the section by hash
+			}
+			return p;
+		}
+		
+		/**
+		 * returns the current page index
+		 */
+		function _getPage(h)
+		{
+			if (h)
+			{
+				// TODO return the index of the page by hash
+			}
+			return sp;
+		}
+
+		/**
+		 * returns the sections collection
+		 */
+		 function _getSections()
+		 {
+		 	return sections;
+		 }
+
+		/**
+		 * returns the pages collection inside the passed section index
+		 */
+		 function _getPages(i)
+		 {
+		 	return sectionsArray[i];
+		 }
+
+		/**
+		 * returns the pages collection of all pages in the presentation
+		 */
+		 function _getAllPages()
+		 {
+		 	return allPages;
+		 }
+
+		/**
+		 * returns the number of sections
+		 */
+		function _getSectionsLength()
+		{
+			return sectionsLength;
+		}
+
+		/**
+		 * returns the max number of pages
+		 */
+		function _getPagesLength()
+		{
+			return pagesLength;
+		}
+
+		/**
+		 * returns the total number of pages
+		 */
+		function _getPagesTotalLength()
+		{
+			return pagesTotalLength;
+		}
+
+		/**
+		 * returns a object with the index of the current section and page
+		 */
+		function _getPageIndex(d)
+		{
+			var pIndex = p;
+			var spIndex = sp;
+			if (d != undefined)
+			{
+				pIndex = d.parentNode.index; //parseInt(d.parentNode.getAttribute("data-prog").replace(/__/, "")) - 1;
+				spIndex = d.index; //parseInt(d.getAttribute("data-prog").replace(/__/, "")) - 1;
+			}
+			return { section: pIndex, page: spIndex };
+		}
+
+		function _getSectionByIndex(i)
+		{
+			return sections[i];
+		}
+
+		function _getPageByIndex(i, pi)
+		{
+			return sectionsArray[pi][i];
+		}
+
+		function _getCurrentSection()
+		{
+			return sections[p];
+		}
+
+		function _getCurrentPage()
+		{
+			return sectionsArray[p][sp];
+		}
+
+		function _getCurrentFragment()
+		{
+			return fragmentsArray[p][sp][_getCurrentFragmentIndex()];
+		}
+
+		function _getCurrentFragmentIndex()
+		{
+			return fr[p][sp];
+		}
+
+		function _hasNextSection()
+		{
+			return p < sections.length - 1;
+		}
+
+		function _hasPrevSection()
+		{
+			return p > 0;
+		}
+
+		function _hasNextPage()
+		{
+			return sp < sectionsArray[p].length - 1;
+		}
+
+		function _hasPrevPage()
+		{
+			return sp > 0;
+		}
+
+		/**
+		 * get a progress value calculated on the total number of pages
+		 */
+		function _getProgress()
+		{
+			if (p == 0 && sp == 0)
+			{
+				return 0;
+			}
+			var c = 0;
+			for (var i = 0; i < p; i++)
+			{
+				c += sectionsArray[i].length;
+			}
+			c += sectionsArray[p][sp].index + 1;
+			return c;
+		}
+
+		/**
+		 * get a composed hash based on current section and page
+		 */
+		function _getHash(d)
+		{
+			if (d != undefined)
+			{
+				sp = _getPageIndex(d).page;
+				p = _getPageIndex(d).section;
+			}
+			var h = "";
+			// append to h the value of data-id attribute or, if data-id is not defined, the data-prog attribute
+			var _p = sections[p];
+			h += getPageId(_p);
+			if (sectionsArray[p].length > 1)
+			{
+				var _sp = sectionsArray[p][sp];
+				h += "/" + getPageId(_sp);
+			}
+			return h;
+		}
+		
+		/**
+		 * expose the method to set the page from a hash
+		 */
+		function _setPage(h)
+		{
+			var elem = getElementByHash(h);
+			if (elem)
+			{
+				var pElem = elem.parentNode;
+				for (var i = 0; i < sectionsArray.length; i++)
+				{
+					var pa = sectionsArray[i];
+					if (sections[i] === pElem)
+					{
+						p = i;
+						for (var ii = 0; ii < pa.length; ii++)
+						{
+							if (pa[ii] === elem)
+							{
+								sp = ii;
+								break;
+							}
+						}
+					}
+				}
+				_updateFragments();
+			}
+			return elem;
+		}
+
+		function _switchActivePage(d, navigate)
+		{
+			for (var i = 0; i < sectionsArray.length; i++)
+			{
+				var pa = sectionsArray[i];
+				for (var ii = 0; ii < pa.length; ii++)
+				{
+					var spa = sectionsArray[i][ii];
+					if (spa !== d)
+					{
+						Brav1Toolbox.removeClass(spa, "hilite");
+						if (isOverview == false && spa !== _getCurrentPage())
+						{
+							Brav1Toolbox.removeClass(spa, "actual");
+						}
+					}
+				}
+			}
+			Brav1Toolbox.addClass(d, "hilite");
+			if (navigate)
+			{
+				setActual(d);
+			}
+			hilited = d;
+		}
+
+		function _getCurrentHilited()
+		{
+			return hilited;
+		}
+
+		function setActual(d)
+		{
+			Brav1Toolbox.addClass(d, "actual");
+		}
+		
+		_updateMatrix(); // update the navigation matrix on the first run
+		
+		return {
+			update: _updateMatrix,
+			updateFragments: _updateFragments,
+			showFragments: _showFragments,
+			hideFragments: _hideFragments,
+			getSection: _getSection,
+			getPage: _getPage,
+			getSections: _getSections,
+			getPages: _getPages,
+			getAllPages: _getAllPages,
+			getNextSection: _getNextSection,
+			getPrevSection: _getPrevSection,
+			getNextPage: _getNextPage,
+			getPrevPage: _getPrevPage,
+			getSectionsLength: _getSectionsLength,
+			getPagesLength: _getPagesLength,
+			getPagesTotalLength: _getPagesTotalLength,
+			getPageIndex: _getPageIndex,
+			getSectionByIndex: _getSectionByIndex,
+			getPageByIndex: _getPageByIndex,
+			getCurrentSection: _getCurrentSection,
+			getCurrentPage: _getCurrentPage,
+			getCurrentFragment: _getCurrentFragment,
+			getCurrentFragmentIndex: _getCurrentFragmentIndex,
+			getProgress: _getProgress,
+			getHash: _getHash,
+			setPage: _setPage,
+			switchActivePage: _switchActivePage,
+			getCurrentHilited: _getCurrentHilited,
+			hasNextSection: _hasNextSection,
+			hasPrevSection: _hasPrevSection,
+			hasNextPage: _hasNextPage,
+			hasPrevPage: _hasPrevPage,
+			updateOffsets: _updateOffsets
+		}
+	})();
+
+/*
 	##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ##    ######## ##     ## ######## ##    ## ########  ######  
 	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ##    ##       ##     ## ##       ###   ##    ##    ##    ## 
 	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ##    ##       ##     ## ##       ####  ##    ##    ##       
@@ -188,13 +899,74 @@ var Flowtime = (function ()
 		}
 	}
 
+/*
+	 ######   ######  ########   #######  ##       ##       
+	##    ## ##    ## ##     ## ##     ## ##       ##       
+	##       ##       ##     ## ##     ## ##       ##       
+	 ######  ##       ########  ##     ## ##       ##       
+	      ## ##       ##   ##   ##     ## ##       ##       
+	##    ## ##    ## ##    ##  ##     ## ##       ##       
+	 ######   ######  ##     ##  #######  ######## ######## 
+*/
+
+	/**
+	 * native scroll management
+	 */
+	var scrollEventEnabled = true;
+
 	Brav1Toolbox.addListener(window, "scroll", onNativeScroll);
 
 	function onNativeScroll(e)
 	{
-		e.preventDefault();
-		resetScroll();
+		if (!isTouchDevice)
+		{
+			e.preventDefault();
+			resetScroll();	
+		}
+		else if (isTouchDevice)
+		{
+			if (scrollEventEnabled == true)
+			{
+				var scrollPoint = { x:window.pageXOffset, y:window.pageYOffset }
+				var nearestPage;
+				var dist;
+				var sps = NavigationMatrix.getAllPages();
+				for (var i = 0; i < sps.length; i++)
+				{
+					var point = { x:sps[i].x, y:sps[i].y };
+					if (i == 0)
+					{
+						nearestPage = sps[i];
+						dist = Brav1Toolbox.distance(scrollPoint, point);
+					}
+					else
+					{
+						if (Brav1Toolbox.distance(scrollPoint, point) < dist)
+						{
+							nearestPage = sps[i];
+							dist = Brav1Toolbox.distance(scrollPoint, point);
+						}
+					}
+				}
+				scrollEventEnabled = false;
+				window.scrollTo(nearestPage.x, nearestPage.y);
+			}
+			else
+			{
+				scrollEventEnabled = true;	
+			}
+		}
 	}
+
+/*
+	########  ########  ######  #### ######## ######## 
+	##     ## ##       ##    ##  ##       ##  ##       
+	##     ## ##       ##        ##      ##   ##       
+	########  ######    ######   ##     ##    ######   
+	##   ##   ##             ##  ##    ##     ##       
+	##    ##  ##       ##    ##  ##   ##      ##       
+	##     ## ########  ######  #### ######## ######## 
+*/
 
 	/**
 	 * monitoring function that triggers hashChange when resizing window
@@ -218,6 +990,7 @@ var Flowtime = (function ()
 		
 		function doResizeHandler()
 		{
+			NavigationMatrix.updateOffsets();
 			navigateTo();
 		}
 		
@@ -456,8 +1229,8 @@ var Flowtime = (function ()
 		if (_slideInPx == true)
 		{
 			// calculate the coordinates of the destination
-			x = dest.offsetLeft + dest.parentNode.offsetLeft;
-			y = dest.offsetTop + dest.parentNode.offsetTop;	
+			x = dest.x;
+			y = dest.y;
 		}
 		else
 		{
@@ -495,7 +1268,10 @@ var Flowtime = (function ()
 
 	function resetScroll()
 	{
-		window.scrollTo(0,0); // fix the eventually occurred page scrolling resetting the scroll values to 0
+		if (!isTouchDevice)
+		{
+			window.scrollTo(0,0); // fix the eventually occurred page scrolling resetting the scroll values to 0
+		}
 	}
 
 /*
@@ -881,691 +1657,6 @@ var Flowtime = (function ()
 			}
 		}
 	}
-
-/*
-	##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ## ##     ##    ###    ######## ########  #### ##     ## 
-	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ## ###   ###   ## ##      ##    ##     ##  ##   ##   ##  
-	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ## #### ####  ##   ##     ##    ##     ##  ##    ## ##   
-	## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ## ## ### ## ##     ##    ##    ########   ##     ###    
-	##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  #### ##     ## #########    ##    ##   ##    ##    ## ##   
-	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ### ##     ## ##     ##    ##    ##    ##   ##   ##   ##  
-	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ## ##     ## ##     ##    ##    ##     ## #### ##     ## 
-*/
-
-	/**
-	 * NavigationMatrix is the Object who store the navigation grid structure
-	 * and which expose all the methods to get and set the navigation destinations
-	 */
-	
-	var NavigationMatrix = (function ()
-	{
-		var sections;						// HTML Collection of .flowtime > .ft-section elements
-		var sectionsArray;					// multi-dimensional array containing the pages' array
-		var fragments;						// HTML Collection of .fragment elements 
-		var fragmentsArray;					// multi-dimensional array containing the per page fragments' array
-		var fr = [];						// multi-dimensional array containing the index of the current active fragment per page
-		var sectionsLength = 0;				// cached total number of .ft-section elements
-		var pagesLength = 0;				// cached max number of .page elements
-		var pagesTotalLength = 0;			// cached total number of .page elements
-		var p = 0;							// index of the current section viewved or higlighted
-		var sp = 0;							// index of the current page viewved or higlighted
-		var pCache = 0;						// cache index of the current section
-		var spCache = 0;					// cache index of the current page
-		var hilited;						// the current page higlighted, useful for overview mode
-		
-		/**
-		 * update the navigation matrix array
-		 * this is a publicy exposed method
-		 * useful for updating the matrix whne the site structure changes at runtime
-		 */
-		function _updateMatrix()
-		{
-			sectionsArray = [];
-			fragments = document.querySelectorAll(FRAGMENT_SELECTOR);
-			fragmentsArray = [];
-			sections = ftContainer.querySelectorAll(".flowtime > " + SECTION_SELECTOR);
-			//
-			for (var i = 0; i < sections.length; i++)
-			{
-				var pagesArray = [];
-				var section = sections[i];
-				fragmentsArray[i] = [];
-				fr[i] = [];
-				//
-				if (section.getAttribute("data-id"))
-				{
-					section.setAttribute("data-id", "__" + section.getAttribute("data-id")); // prevents attributes starting with a number
-				}
-				section.setAttribute("data-prog", "__" + (i + 1));
-				section.index = i;
-				section.setAttribute("id", "");
-				//
-				var pages = section.querySelectorAll(PAGE_SELECTOR);
-				pagesTotalLength += pages.length;
-				pagesLength = Math.max(pagesLength, pages.length); // sets the pages max number for overview purposes
-				for (var ii = 0; ii < pages.length; ii++)
-				{
-					var _sp = pages[ii];
-					if (_sp.getAttribute("data-id"))
-					{
-						_sp.setAttribute("data-id", "__" + _sp.getAttribute("data-id")); // prevents attributes starting with a number
-					}
-					_sp.setAttribute("data-prog", "__" + (ii + 1));
-					_sp.index = ii;
-					_sp.setAttribute("id", "");
-					// set data-title attributes to pages that doesn't have one and have at least an h1 heading element inside
-					if (!_sp.getAttribute("data-title"))
-					{
-						var heading = _sp.querySelector("h1");
-						if (heading != null && heading.textContent.lenght != "")
-						{
-							_sp.setAttribute("data-title", heading.textContent);
-						}
-					}
-					pagesArray.push(_sp);
-					//
-					var subFragments = _sp.querySelectorAll(FRAGMENT_SELECTOR);
-					fragmentsArray[i][ii] = subFragments;
-					fr[i][ii] = -1;
-				}
-				sectionsArray.push(pagesArray);
-			}
-			//
-			sectionsLength = sections.length; // sets the sections max number for overview purposes
-			resetScroll();
-		}
-		
-		/**
-		 * returns the next section in navigation
-		 * @param	top	Boolean	if true the next page will be the first page in the next array; if false the next section will be the same index page in the next array
-		 * @param	fos	Boolean value of _fragmentsOnSide
-		 * @param	io	Boolean	value of isOverview
-		 */
-		function _getNextSection(top, fos, io)
-		{
-			var sub = sp;
-			var toTop = top === !_sectionsSlideToTop;
-			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop != true && io == false)
-			{
-				_showFragment(p, sp);
-			}
-			else
-			{
-				sub = 0;
-				if (toTop != true || _fragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
-				{
-					sub = sp;
-				}
-				p = Math.min(p + 1, sectionsArray.length - 1);
-				return _getNearestPage(sectionsArray[p], sub, io);
-			}
-			return hiliteOrNavigate(sectionsArray[p][sp], io);
-		}
-		
-		/**
-		 * returns the prev section in navigation
-		 * @param	top	Boolean	if true the next section will be the first page in the prev array; if false the prev section will be the same index page in the prev array
-		 * @param	fos	Boolean value of _fragmentsOnSide
-		 * @param	io	Boolean	value of isOverview
-		 */
-		function _getPrevSection(top, fos, io)
-		{
-			var sub = sp;
-			var toTop = top == !_sectionsSlideToTop;
-			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop != true && io == false)
-			{
-				_hideFragment(p, sp);
-			}
-			else
-			{
-				var sub = 0;
-				if (toTop != true || _fragmentsOnBack == true || p - 1 < 0)
-				{
-					sub = sp;
-				}
-				p = Math.max(p - 1, 0);
-				return _getNearestPage(sectionsArray[p], sub, io);
-			}
-			return hiliteOrNavigate(sectionsArray[p][sp], io);
-		}
-		
-		/**
-		 * checks if there is a valid page in the current section array
-		 * if the passed page is not valid thne check which is the first valid page in the array
-		 * then returns the page
-		 * @param	p	Number	the section index in the sections array
-		 * @param	sub	Number	the page index in the sections->page array
-		 * @param	io	Boolean	value of isOverview
-		 */
-		function _getNearestPage(pg, sub, io)
-		{
-			var nsp = pg[sub];
-			if (nsp == undefined)
-			{
-				for (var i = sub; i >= 0; i--)
-				{
-					if (pg[i] != undefined)
-					{
-						nsp = pg[i];
-						sub = i;
-						break;
-					}
-				}
-			}
-			sp = sub;
-			if (!isOverview)
-			{
-				_updateFragments();
-			}
-			return hiliteOrNavigate(nsp, io);
-		}
-		
-		/**
-		 * returns the next page in navigation
-		 * if the next page is not in the current section array returns the first page in the next section array
-		 * @param	jump	Boolean	if true jumps over the fragments directly to the next page
-		 * @param	io	Boolean	value of isOverview
-		 */
-		function _getNextPage(jump, io)
-		{
-			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump != true && io == false)
-			{
-				_showFragment(p, sp);
-			}
-			else
-			{
-				if (sectionsArray[p][sp + 1] == undefined && sectionsArray[p + 1] != undefined)
-				{
-					p += 1;
-					sp = 0;
-				}
-				else
-				{
-					sp = Math.min(sp + 1, sectionsArray[p].length - 1);
-				}
-			}
-			return hiliteOrNavigate(sectionsArray[p][sp], io);
-		}
-		
-		/**
-		 * returns the prev page in navigation
-		 * if the prev page is not in the current section array returns the last page in the prev section array
-		 * @param	jump	Boolean	if true jumps over the fragments directly to the prev page
-		 * @param	io	Boolean	value of isOverview
-		 */
-		function _getPrevPage(jump, io)
-		{
-			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && io == false)
-			{
-				_hideFragment(p, sp);
-			}
-			else
-			{
-				if (sp == 0 && sectionsArray[p - 1] != undefined)
-				{
-					p -= 1;
-					sp = sectionsArray[p].length - 1;
-				}
-				else
-				{
-					sp = Math.max(sp - 1, 0);
-				}
-			}
-			return hiliteOrNavigate(sectionsArray[p][sp], io);
-		}
-
-		/**
-		 * returns the destination page or
-		 * if the application is in overview mode
-		 * switch the active page without returning a destination
-		 * @param	d	HTMLElement	the candidate destination
-		 * @param	io	Boolean	value of isOverview
-		 */
-		function hiliteOrNavigate(d, io)
-		{
-			if (io == true)
-			{
-				_switchActivePage(d);
-				return;
-			}
-			else
-			{
-				return d;
-			}
-		}
-
-		/**
-		 * show a single fragment inside the specified section / page
-		 * the fragment index parameter is optional, if passed force the specified fragment to show
-		 * otherwise the method shows the current fragment
-		 * @param	fp	Number	the section index
-		 * @param	fsp	Number	the page index
-		 * @param	f	Number	the fragment index (optional)
-		 */
-		function _showFragment(fp, fsp, f)
-		{
-			if (f != undefined)
-			{
-				fr[fp][fsp] = f;
-			}
-			else
-			{
-				f = fr[fp][fsp] += 1;
-			}
-			Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_CLASS);
-		}
-
-		/**
-		 * hide a single fragment inside the specified section / page
-		 * the fragment index parameter is optional, if passed force the specified fragment to hide
-		 * otherwise the method hides the current fragment
-		 * @param	fp	Number	the section index
-		 * @param	fsp	Number	the page index
-		 * @param	f	Number	the fragment index (optional)
-		 */
-		function _hideFragment(fp, fsp, f)
-		{
-			if (f != undefined)
-			{
-				fr[fp][fsp] = f;
-			}
-			else
-			{
-				f = fr[fp][fsp];
-			}
-			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_CLASS);
-			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_TEMP_CLASS);
-			fr[fp][fsp] -= 1;
-		}
-
-		/**
-		 * show all the fragments or the fragments in the specified page
-		 * adds a temporary class wich does not override the current status of fragments
-		 */
-		function _showFragments()
-		{
-			for (var i = 0; i < fragments.length; i++)
-			{
-				Brav1Toolbox.addClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
-			}
-		}
-
-		/**
-		 * hide all the fragments or the fragments in the specified page
-		 * removes a temporary class wich does not override the current status of fragments
-		 */
-		function _hideFragments()
-		{
-			for (var i = 0; i < fragments.length; i++)
-			{
-				Brav1Toolbox.removeClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
-			}
-		}
-
-		function _updateFragments()
-		{
-			for (var ip = 0; ip < fragmentsArray.length; ip++)
-			{
-				var frp = fragmentsArray[ip];
-				for (var isp = 0; isp < frp.length; isp++)
-				{
-					var frsp = frp[isp];
-					if (frsp.length > 0)
-					{
-						// there are fragments
-						if (ip > p)
-						{
-							// previous section
-							for (var f = frsp.length - 1; f >= 0; f--)
-							{
-								_hideFragment(ip, isp, f);
-							}
-						}
-						else if (ip < p)
-						{
-							// next section
-							for (var f = 0; f < frsp.length; f++)
-							{
-								_showFragment(ip, isp, f);
-							}
-						}
-						else if (ip == p)
-						{
-							// same section
-							if (isp > sp)
-							{
-								// previous page
-								for (var f = frsp.length - 1; f >= 0; f--)
-								{
-									_hideFragment(ip, isp, f);
-								}
-							}
-							else if (isp < sp)
-							{
-								// next page
-								for (var f = 0; f < frsp.length; f++)
-								{
-									_showFragment(ip, isp, f);
-								}
-							}
-							else if (isp == sp)
-							{	
-								// same page
-								for (var f = 0; f < frsp.length; f++)
-								{
-									if (_fragmentsOnBack == false)
-									{
-										// hide all fragments
-										_hideFragment(ip, isp, f);
-									}
-									else
-									{
-										// show alla fragment only if
-										if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
-										{
-											// we are coming from a page after this
-											_showFragment(ip, isp, f);
-										}
-										else
-										{
-											// otherwise hide all fragments
-											_hideFragment(ip, isp, f);
-										}
-									}
-								}
-								if (_fragmentsOnBack == false)
-								{
-									fr[ip][isp] = -1
-								}
-								else 
-								{
-									if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
-									{
-										fr[ip][isp] = f - 1;	
-									}
-									else
-									{
-										fr[ip][isp] = -1
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		/**
-		 * returns the current section index
-		 */
-		function _getSection(h)
-		{
-			if (h)
-			{
-				// TODO return the index of the section by hash
-			}
-			return p;
-		}
-		
-		/**
-		 * returns the current page index
-		 */
-		function _getPage(h)
-		{
-			if (h)
-			{
-				// TODO return the index of the page by hash
-			}
-			return sp;
-		}
-
-		/**
-		 * returns the sections collection
-		 */
-		 function _getSections()
-		 {
-		 	return sections;
-		 }
-
-		/**
-		 * returns the pages collection inside the passed section index
-		 */
-		 function _getPages(i)
-		 {
-		 	return sectionsArray[i];
-		 }
-
-		/**
-		 * returns the number of sections
-		 */
-		function _getSectionsLength()
-		{
-			return sectionsLength;
-		}
-
-		/**
-		 * returns the max number of pages
-		 */
-		function _getPagesLength()
-		{
-			return pagesLength;
-		}
-
-		/**
-		 * returns the total number of pages
-		 */
-		function _getPagesTotalLength()
-		{
-			return pagesTotalLength;
-		}
-
-		/**
-		 * returns a object with the index of the current section and page
-		 */
-		function _getPageIndex(d)
-		{
-			var pIndex = p;
-			var spIndex = sp;
-			if (d != undefined)
-			{
-				pIndex = d.parentNode.index; //parseInt(d.parentNode.getAttribute("data-prog").replace(/__/, "")) - 1;
-				spIndex = d.index; //parseInt(d.getAttribute("data-prog").replace(/__/, "")) - 1;
-			}
-			return { section: pIndex, page: spIndex };
-		}
-
-		function _getSectionByIndex(i)
-		{
-			return sections[i];
-		}
-
-		function _getPageByIndex(i, pi)
-		{
-			return sectionsArray[pi][i];
-		}
-
-		function _getCurrentSection()
-		{
-			return sections[p];
-		}
-
-		function _getCurrentPage()
-		{
-			return sectionsArray[p][sp];
-		}
-
-		function _getCurrentFragment()
-		{
-			return fragmentsArray[p][sp][_getCurrentFragmentIndex()];
-		}
-
-		function _getCurrentFragmentIndex()
-		{
-			return fr[p][sp];
-		}
-
-		function _hasNextSection()
-		{
-			return p < sections.length - 1;
-		}
-
-		function _hasPrevSection()
-		{
-			return p > 0;
-		}
-
-		function _hasNextPage()
-		{
-			return sp < sectionsArray[p].length - 1;
-		}
-
-		function _hasPrevPage()
-		{
-			return sp > 0;
-		}
-
-		/**
-		 * get a progress value calculated on the total number of pages
-		 */
-		function _getProgress()
-		{
-			if (p == 0 && sp == 0)
-			{
-				return 0;
-			}
-			var c = 0;
-			for (var i = 0; i < p; i++)
-			{
-				c += sectionsArray[i].length;
-			}
-			c += sectionsArray[p][sp].index + 1;
-			return c;
-		}
-
-		/**
-		 * get a composed hash based on current section and page
-		 */
-		function _getHash(d)
-		{
-			if (d != undefined)
-			{
-				sp = _getPageIndex(d).page;
-				p = _getPageIndex(d).section;
-			}
-			var h = "";
-			// append to h the value of data-id attribute or, if data-id is not defined, the data-prog attribute
-			var _p = sections[p];
-			h += getPageId(_p);
-			if (sectionsArray[p].length > 1)
-			{
-				var _sp = sectionsArray[p][sp];
-				h += "/" + getPageId(_sp);
-			}
-			return h;
-		}
-		
-		/**
-		 * expose the method to set the page from a hash
-		 */
-		function _setPage(h)
-		{
-			var elem = getElementByHash(h);
-			if (elem)
-			{
-				var pElem = elem.parentNode;
-				for (var i = 0; i < sectionsArray.length; i++)
-				{
-					var pa = sectionsArray[i];
-					if (sections[i] === pElem)
-					{
-						p = i;
-						for (var ii = 0; ii < pa.length; ii++)
-						{
-							if (pa[ii] === elem)
-							{
-								sp = ii;
-								break;
-							}
-						}
-					}
-				}
-				_updateFragments();
-			}
-			return elem;
-		}
-
-		function _switchActivePage(d, navigate)
-		{
-			for (var i = 0; i < sectionsArray.length; i++)
-			{
-				var pa = sectionsArray[i];
-				for (var ii = 0; ii < pa.length; ii++)
-				{
-					var spa = sectionsArray[i][ii];
-					if (spa !== d)
-					{
-						Brav1Toolbox.removeClass(spa, "hilite");
-						if (isOverview == false && spa !== _getCurrentPage())
-						{
-							Brav1Toolbox.removeClass(spa, "actual");
-						}
-					}
-				}
-			}
-			Brav1Toolbox.addClass(d, "hilite");
-			if (navigate)
-			{
-				setActual(d);
-			}
-			hilited = d;
-		}
-
-		function _getCurrentHilited()
-		{
-			return hilited;
-		}
-
-		function setActual(d)
-		{
-			Brav1Toolbox.addClass(d, "actual");
-		}
-		
-		_updateMatrix(); // update the navigation matrix on the first run
-		
-		return {
-			update: _updateMatrix,
-			updateFragments: _updateFragments,
-			showFragments: _showFragments,
-			hideFragments: _hideFragments,
-			getSection: _getSection,
-			getPage: _getPage,
-			getSections: _getSections,
-			getPages: _getPages,
-			getNextSection: _getNextSection,
-			getPrevSection: _getPrevSection,
-			getNextPage: _getNextPage,
-			getPrevPage: _getPrevPage,
-			getSectionsLength: _getSectionsLength,
-			getPagesLength: _getPagesLength,
-			getPagesTotalLength: _getPagesTotalLength,
-			getPageIndex: _getPageIndex,
-			getSectionByIndex: _getSectionByIndex,
-			getPageByIndex: _getPageByIndex,
-			getCurrentSection: _getCurrentSection,
-			getCurrentPage: _getCurrentPage,
-			getCurrentFragment: _getCurrentFragment,
-			getCurrentFragmentIndex: _getCurrentFragmentIndex,
-			getProgress: _getProgress,
-			getHash: _getHash,
-			setPage: _setPage,
-			switchActivePage: _switchActivePage,
-			getCurrentHilited: _getCurrentHilited,
-			hasNextSection: _hasNextSection,
-			hasPrevSection: _hasPrevSection,
-			hasNextPage: _hasNextPage,
-			hasPrevPage: _hasPrevPage
-		}
-	})();
 	
 	/**
 	 * triggers the first animation when visiting the site
@@ -1653,7 +1744,14 @@ var Flowtime = (function ()
 
 	function _setShowProgress(v)
 	{
-		_showProgress = v;
+		if (isTouchDevice)
+		{
+			_showProgress = false;
+		}
+		else
+		{
+			_showProgress = v;
+		}
 		if (_showProgress)
 		{
 			if (defaultProgress == null)

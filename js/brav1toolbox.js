@@ -166,6 +166,21 @@ var Brav1Toolbox = (function()
 			document.dispatchEvent(e);
 		}
 	}
+
+	/**
+	 * returns the absolute distance from two points
+	 */
+	 function _distance(pA, pB)
+	 {
+	 	var cX;
+		var cY;
+		cX = pB.x - pA.x;
+		cX *= cX;
+		cY = pB.y - pA.y;
+		cY *= cY;
+		 
+		return Math.abs(Math.sqrt( cX + cY ));
+	 }
 	
 	return {
 		addListener: _addListener,
@@ -175,7 +190,8 @@ var Brav1Toolbox = (function()
 		typeOf: _typeOf,
 		addClass: _addClass,
 		removeClass: _removeClass,
-		hasClass: _hasClass
+		hasClass: _hasClass,
+		distance: _distance
 	}
 })();
 
