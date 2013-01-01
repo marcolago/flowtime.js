@@ -211,7 +211,7 @@ var Flowtime = (function ()
 		function _getNextSection(top, fos, io)
 		{
 			var sub = sp;
-			var toTop = top === !_sectionsSlideToTop;
+			var toTop = top == !_sectionsSlideToTop;
 			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop != true && io == false)
 			{
 				_showFragment(p, sp);
@@ -219,7 +219,11 @@ var Flowtime = (function ()
 			else
 			{
 				sub = 0;
-				if (toTop != true || _fragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
+				if (toTop == true && p + 1 < sectionsArray.length - 1)
+				{
+					sub = 0;
+				}
+				else if (toTop != true || _fragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
 				{
 					sub = sp;
 				}
@@ -246,7 +250,12 @@ var Flowtime = (function ()
 			else
 			{
 				var sub = 0;
-				if (toTop != true || _fragmentsOnBack == true || p - 1 < 0)
+				sub = 0;
+				if (toTop == true && p - 1 >= 0)
+				{
+					sub = 0;
+				}
+				else if (toTop != true || _fragmentsOnBack == true || p - 1 < 0)
 				{
 					sub = sp;
 				}
