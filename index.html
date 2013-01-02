@@ -67,7 +67,7 @@
 				<p>You can navigate in many ways. The most common way is using the keyboard.</p>
 				<h3>Navigation Keys and default behaviours:</h3>
 				<ul>
-					<li><strong>Down Key</strong> goes to the next page or shows up the next fragment (we'll see this later).</li>
+					<li><strong>Down Key</strong> goes to the next page or shows up the next fragment (we’ll see this later).</li>
 					<li><strong>Up Key</strong> goes to the previous page or hides the fragment.</li>
 					<li><strong>Right Key</strong> goes to the adjacent page in the next section <span class="small">(if available, it’s like a grid, otherwise it goes to the last page in the next section).</span></li>
 					<li><strong>Left Key</strong> goes to the adjacent page in the previous section.</li>
@@ -111,7 +111,7 @@
 &lt;a href="#/[section data-id attribute]/[page data-id attribute]"&gt;
 				</code></pre>
 				<p>Where <code>data-id</code> attribute is an optional attribute you can add to every section or page.<br>
-					I.e.: if you want to go to back to the first page <a href="#/section-1/page-1">click here</a> <span class="small">(press <strong>backspace</strong> to come back to this page)</span></a>.</p>
+					I.e.: if you want to go to back to the first page <a href="#/section-1/page-1">click here</a> <span class="small">(press <strong>backspace</strong> to come back to this page)</span>.</p>
 				<p>You can also trigger every navigation behaviour using the <strong>Flowtime.js Javascript API</strong>.<br>Take a look at the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a> if you want to learn more.</p>
 			</div>
 			<div id="/section-2/page-7" class="ft-page" data-id="page-7">
@@ -123,7 +123,7 @@
 				<h1>Fragments Navigation</h1>
 				<p>The built in fragments navigation allows to advance step by step inside a page.<br>
 					Press down to try.</p>
-				<p class="ft-fragment">You can discover single elements <span class="ft-fragment">or even a single part of an element, <span class="ft-fragment">one <span class="ft-fragment">at <span class="ft-fragment">time.</span></span></span></p>
+				<p class="ft-fragment">You can discover single elements <span class="ft-fragment">or even a single part of an element, <span class="ft-fragment">one <span class="ft-fragment">at <span class="ft-fragment">time.</span></span></span></span></p>
 				<p class="ft-fragment">Fragments navigation is deeply customizable with some configuration options<br>
 					You can learn how in the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a>.</p>
 			</div>
@@ -161,6 +161,25 @@
 					<li>Three.</li>
 					<li>Four.</li>
 				</ol>
+
+				<div class="stack-center parallax" data-parallax="60,70">
+					<div class="stacked-center">
+						<h1>Parallax Stinks</h1>
+					</div>
+				</div>
+
+				<div class="stack-center parallax">
+					<div class="stacked-center">
+						<h1>Parallax Automatic Auto Auto Matic Matic</h1>
+					</div>
+				</div>
+
+				<div class="stack-center parallax" data-parallax="100">
+					<div class="stacked-center">
+						<h1>Parallax Stinks at Square</h1>
+					</div>
+				</div>
+
 			</div>
 			<div id="/section-3/page-4" class="ft-page" data-id="page-4">
 				<h1>Definition Lists</h1>
@@ -237,8 +256,38 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="ft-section" data-id="section-5">
 			<div id="/section-5/page-1" class="ft-page" data-id="page-1">
+				<h1>Native Parallax Support</h1>
+				<p>By popular demand Flowtime.js includes native parallax support*.</p>
+				<p>Simply add a <code>parallax</code> class to anything you want to have parallax enabled and configure the amount of distance for all elements or for a single element using <code>data-parallax</code> attribute.</p>
+				<p>For an example go to the <a href="#/section-5/page-2">next page</a>; for more info read the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a>.</p>
+				<p><span class="small">* By the way: I’m not a parallax fan; but ehi… this is the "web 3.0".</span></p>
+			</div>
+			<div id="/section-5/page-2" class="ft-page parallax-demo" data-id="page-2">
+				<h1>The Invaders from Audiogalaxy</h1>
+				<img class="kingmix parallax" src="assets/img/kingmix.png" data-parallax="1500,1500">
+				<img class="sax parallax" src="assets/img/sax.png" data-parallax="750,750">
+				<img class="tone parallax" src="assets/img/tone.png" data-parallax="500,500">
+			</div>
+			<div id="/section-5/page-3" class="ft-page" data-id="page-3">
+				<h1>This Page Is Just for Testing the Parallax</h1>
+				<p>In the previous page, from left to right:</p>
+				<dl>
+					<dt>Sax:</dt>
+						<dd>King Mix’s most trusted servant. After a diploma in the music conservatory in the…</dd>
+					<dt>King Mix:</dt>
+						<dd>son of the noble dynasty of the Mix of Censor, he soon shows his…</dd>
+					<dt>Tone:</dt>
+						<dd>the most feared space intruder on Mixer. He flunked the musical exam…</dd>
+				</dl>
+				<p>More info about this villains on <a href="http://www.genereavventura.com" target="_blank">www.genereavventura.com</a>.
+			</div>
+		</div>
+
+		<div class="ft-section" data-id="section-6">
+			<div id="/section-6/page-1" class="ft-page" data-id="page-1">
 				<h1>Code Snippets Highlight</h1>
 				<p>Code highlight is a courtesy of <a href="http://prismjs.com/" target="_blank">Lea Verou’s Prism</a>.<br>Because I really didn’t want to re-invent the wheel.<br><span class="small">You can use what you want, it’s not a dependency (but it’s very smart and cool).</span></p>
 				<pre><code class="language-javascript">function saySomethingSmart()
@@ -250,21 +299,25 @@
 }</code></pre>
 				<pre><code class="language-markup">&lt;h1&gt;The Bad Craftsman Blames His Tools!&lt;/h1&gt;</code></pre>
 			</div>
-			<div id="/section-5/page-2" class="ft-page" data-id="page-2">
+
+			<div id="/section-6/page-2" class="ft-page" data-id="page-2">
 				<h1>Events and Custom Implementations</h1>
 				<p>When navigated to a page Flowtime.js fires a custom <code>flowtimenavigation</code> event full of useful properties to customize or build your components or behaviours.</p>
 				<p>Read the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a> to learn more about this event and its properties.</p>
 			</div>
 		</div>
 
-		<div class="ft-section" data-id="section-6">
-			<div id="/section-6/page-1" class="ft-page" data-id="page-1">
+
+
+		<div class="ft-section" data-id="section-7">
+			<div id="/section-7/page-1" class="ft-page" data-id="page-1">
 				<h1>Use It! It’s Free</h1>
 				<p>This project is open source, feel free to contribute to the development on <a href="https://github.com/marcolago/flowtime.js" target="_blank">Github</a>.</p>
 				<p>Feedbacks, suggestions and bug reports are welcomes.</p>
-				<p>Use it as you wish and build great things.<br>And when you'll have done let me know the URL, I will appreciate it.</p>
+				<p>Use it as you wish and build great things.<br>And when you’ll have done let me know the URL, I will appreciate it.</p>
 			</div>
-			<div id="/section-6/page-2" class="ft-page" data-id="page-2">
+
+			<div id="/section-7/page-2" class="ft-page" data-id="page-2">
 				<h1>Thank You</h1>
 				<p>Designed and coded by Marco Lago<br>
 					Interaction/Experience/Game/Designer/Developer</p>
@@ -279,9 +332,8 @@
 	
 	<script src="js/brav1toolbox.js"></script>
 	<script src="js/flowtime.js"></script>
-
+	
 	<script>
-		var cacheTitle = document.title.replace("Flowtime.js | ", "");
 		// Configuration API test
 		Flowtime.showProgress(true);
 		// Flowtime.fragmentsOnSide(true);
@@ -291,12 +343,14 @@
 		// Flowtime.sectionsSlideToTop(true);
 		// Flowtime.gridNavigation(false);
 		// Flowtime.useOverviewVariant(true);
+		Flowtime.parallaxInPx(true);
 		//
 		// event management
+		var cacheTitle = document.title.replace("Flowtime.js | ", "");
 		Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
 		function onNavigation(e)
 		{
-			_gaq.push(['_trackEvent', 'Flowtime', 'Navigation', cacheTitle + ' > ' + document.title]);
+			_gaq.push(['_trackEvent', 'Flowtime', 'Navigation', cacheTitle + ' > ' + document.title.replace("Flowtime.js | ", "")]);
 			// console.log(cacheTitle + ' > ' + document.title.replace("Flowtime.js | ", ""));
 			cacheTitle = document.title.replace("Flowtime.js | ", "");
 			//console.log('section', e.section, 'sectionIndex', e.sectionIndex);

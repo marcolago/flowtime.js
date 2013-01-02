@@ -98,7 +98,6 @@ body {
 .flowtime dd {
 	display: block;
 	     -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-	    -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 	   -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 	-webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 			transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
@@ -287,7 +286,6 @@ body {
 	color: #32affc;
 	text-shadow: 1px 1px 0 #000000;
 	     -o-transition: all 0.3s;
-	    -ms-transition: all 0.3s;
 	   -moz-transition: all 0.3s;
 	-webkit-transition: all 0.3s;
 			transition: all 0.3s;
@@ -385,4 +383,31 @@ body {
 	.ft-page {
 		
 	}
+}
+
+/* parallax demo */
+
+.parallax-demo {
+	overflow: hidden;
+}
+
+.parallax-demo .kingmix {
+	position: absolute;
+	left: 20%;
+	bottom: -10%;
+	z-index: 50;
+}
+
+.parallax-demo .sax {
+	position: absolute;
+	left: 6%;
+	bottom: -18%;
+	z-index: 40;
+}
+
+.parallax-demo .tone {
+	position: absolute;
+	left: 49%;
+	bottom: -32%;
+	z-index: 30;
 }

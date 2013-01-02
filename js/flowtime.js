@@ -64,6 +64,12 @@ var Flowtime = (function ()
 	var _useOverviewVariant = false;								// use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
 	var _twoStepsSlide = false;										// not yet implemented! slides up or down before, then slides to the page
 	var _showProgress = false;										// show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
+	var _parallaxInPx = false;										// if false the parallax movement is calulated in % values, if true in pixels
+	var defaultParallaxX = 50;										// the default parallax horizontal value used when no data-parallax value were specified
+	var defaultParallaxY = 50;										// the default parallax vertical value used when no data-parallax value were specified
+	
+	var parallaxEnabled = document.querySelector(".parallax") != null; // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
+
 
 	/**
 	 * test the base support
@@ -116,6 +122,7 @@ var Flowtime = (function ()
 		var fragments;						// HTML Collection of .fragment elements
 		var fragmentsArray;					// multi-dimensional array containing the per page fragments' array
 		var fr = [];						// multi-dimensional array containing the index of the current active fragment per page
+		var parallaxElements = [];			// array containing all elements with parrallax
 		var sectionsLength = 0;				// cached total number of .ft-section elements
 		var pagesLength = 0;				// cached max number of .page elements
 		var pagesTotalLength = 0;			// cached total number of .page elements
@@ -133,6 +140,7 @@ var Flowtime = (function ()
 		function _updateMatrix()
 		{
 			sectionsArray = [];
+			parallaxElements = [];
 			fragments = document.querySelectorAll(FRAGMENT_SELECTOR);
 			fragmentsArray = [];
 			sections = ftContainer.querySelectorAll(".flowtime > " + SECTION_SELECTOR);
@@ -147,7 +155,7 @@ var Flowtime = (function ()
 				//
 				if (section.getAttribute("data-id"))
 				{
-					section.setAttribute("data-id", "__" + section.getAttribute("data-id")); // prevents attributes starting with a number
+					section.setAttribute("data-id", "__" + unsafeAttr(section.getAttribute("data-id"))); // prevents attributes starting with a number
 				}
 				section.setAttribute("data-prog", "__" + (i + 1));
 				section.index = i;
@@ -161,7 +169,7 @@ var Flowtime = (function ()
 					var _sp = pages[ii];
 					if (_sp.getAttribute("data-id"))
 					{
-						_sp.setAttribute("data-id", "__" + _sp.getAttribute("data-id")); // prevents attributes starting with a number
+						_sp.setAttribute("data-id", "__" + unsafeAttr(_sp.getAttribute("data-id"))); // prevents attributes starting with a number
 					}
 					_sp.setAttribute("data-prog", "__" + (ii + 1));
 					_sp.index = ii;
@@ -175,6 +183,9 @@ var Flowtime = (function ()
 							_sp.setAttribute("data-title", heading.textContent);
 						}
 					}
+					// store parallax data on elements
+					setParallax(_sp, i, ii);
+					//
 					pagesArray.push(_sp);
 					//
 					var subFragments = _sp.querySelectorAll(FRAGMENT_SELECTOR);
@@ -187,6 +198,53 @@ var Flowtime = (function ()
 			sectionsLength = sections.length; // sets the sections max number for overview purposes
 			resetScroll();
 			_updateOffsets();
+		}
+
+		/**
+		 * stores parallax data directly on the dome elements with a data-parallax attribute
+		 * data are stored on a multi dimensional array ordered per section and per page to easily manage the position
+		 */
+		function setParallax(page, sectionIndex, pageIndex)
+		{
+			if (parallaxEnabled)
+			{
+				if (parallaxElements[sectionIndex] == undefined)
+				{
+					parallaxElements[sectionIndex] = [];
+				}
+				if (parallaxElements[sectionIndex][pageIndex] == undefined)
+				{
+					parallaxElements[sectionIndex][pageIndex] = [];
+				}
+				//
+				var pxs = page.querySelectorAll(".parallax");
+				if (pxs.length > 0)
+				{
+					for (var i = 0; i < pxs.length; i++)
+					{
+						var el = pxs[i];
+						var pX = defaultParallaxX;
+						var pY = defaultParallaxY;
+						if (el.getAttribute("data-parallax") != null)
+						{
+							var pValues = el.getAttribute("data-parallax").split(",");
+							pX = pY = pValues[0];
+							if (pValues.length > 1)
+							{
+								pY = pValues[1];
+							}
+						}
+						el.pX = pX;
+						el.pY = pY;
+						parallaxElements[sectionIndex][pageIndex].push(el);
+					}
+				}
+			}
+		}
+
+		function _getParallaxElements()
+		{
+			return parallaxElements;
 		}
 
 		/**
@@ -740,18 +798,41 @@ var Flowtime = (function ()
 
 		function _switchActivePage(d, navigate)
 		{
+			var sIndex = d.parentNode.index;
 			for (var i = 0; i < sectionsArray.length; i++)
 			{
 				var pa = sectionsArray[i];
 				for (var ii = 0; ii < pa.length; ii++)
 				{
-					var spa = sectionsArray[i][ii];
+					var spa = pa[ii];
+					//
+					Brav1Toolbox.removeClass(spa, "past-section");
+					Brav1Toolbox.removeClass(spa, "future-section");
+					Brav1Toolbox.removeClass(spa, "past-page");
+					Brav1Toolbox.removeClass(spa, "future-page");
+					//
 					if (spa !== d)
 					{
 						Brav1Toolbox.removeClass(spa, "hilite");
 						if (isOverview == false && spa !== _getCurrentPage())
 						{
 							Brav1Toolbox.removeClass(spa, "actual");
+						}
+						if (i < sIndex)
+						{
+							Brav1Toolbox.addClass(spa, "past-section");
+						}
+						else if (i > sIndex)
+						{
+							Brav1Toolbox.addClass(spa, "future-section");
+						}
+						if (spa.index < d.index)
+						{
+							Brav1Toolbox.addClass(spa, "past-page");
+						}
+						else if (spa.index > d.index)
+						{
+							Brav1Toolbox.addClass(spa, "future-page");	
 						}
 					}
 				}
@@ -809,7 +890,8 @@ var Flowtime = (function ()
 			hasPrevSection: _hasPrevSection,
 			hasNextPage: _hasNextPage,
 			hasPrevPage: _hasPrevPage,
-			updateOffsets: _updateOffsets
+			updateOffsets: _updateOffsets,
+			getParallaxElements: _getParallaxElements
 		}
 	})();
 
@@ -1162,6 +1244,8 @@ var Flowtime = (function ()
 		// checks what properties use for navigation and set the style
 		navigate(dest);
 		//
+		moveParallax(dest);
+		//
 		if (isOverview)
 		{
 			_toggleOverview(false, false);
@@ -1273,6 +1357,63 @@ var Flowtime = (function ()
 			}
 		}
 		resetScroll();
+	}
+
+	function moveParallax(dest)
+	{
+		if (parallaxEnabled)
+		{
+			var pageIndex = NavigationMatrix.getPageIndex(dest);
+
+			var pxElements = NavigationMatrix.getParallaxElements();
+			for (var i = 0; i < pxElements.length; i++)
+			{
+				var pxSection = pxElements[i];
+				if (pxSection != undefined)
+				{
+					for (var ii = 0; ii < pxSection.length; ii++)
+					{
+						var pxPage = pxSection[ii];
+						if (pxPage != undefined)
+						{
+							for (var iii = 0; iii < pxPage.length; iii++)
+							{
+								var pxElement = pxPage[iii]
+								var pX = 0;
+								var pY = 0;
+								// sections
+								if (pageIndex.section < i)
+								{
+									pX = pxElement.pX;
+								}
+								else if (pageIndex.section > i)
+								{
+									pX = -pxElement.pX;	
+								}
+								// pages
+								if (pageIndex.page < ii)
+								{
+									pY = pxElement.pY;
+								}
+								else if (pageIndex.page > ii)
+								{
+									pY = -pxElement.pY;	
+								}
+								// animation
+								if (_parallaxInPx)
+								{
+									pxElement.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + pX + "px) translateY(" + pY + "px)";
+								}
+								else
+								{
+									pxElement.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + pX + "%) translateY(" + pY + "%)";
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	function resetScroll()
@@ -1539,6 +1680,39 @@ var Flowtime = (function ()
 	##         #######  ########  ######## ####  ######     ##     ## ##        #### 
 */
 
+	
+	/**
+	 * triggers the first animation when visiting the site
+	 * if the hash is not empty
+	 */
+	function _start()
+	{
+		// init and configuration
+		if (_showProgress && defaultProgress == null)
+		{
+			buildProgressIndicator();
+		}
+		// start navigation
+		if (document.location.hash.length > 0)
+		{
+			Brav1Toolbox.addClass(ftContainer, "no-transition");
+			onHashChange(null, true);
+			Brav1Toolbox.removeClass(ftContainer, "no-transition");
+		}
+		else
+		{
+			if (_start.arguments.length > 0)
+			{
+				_gotoPage.apply(this, _start.arguments);
+			}
+			else
+			{
+				_gotoPage(0,0);
+				updateProgress();
+			}
+		}
+	}	
+
 	/*
 	 * Public API to go to the next section
 	 * @param	top	Boolean	if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
@@ -1666,38 +1840,11 @@ var Flowtime = (function ()
 			}
 		}
 	}
-	
-	/**
-	 * triggers the first animation when visiting the site
-	 * if the hash is not empty
-	 */
-	function _start()
+
+	function _addEventListener(type, handler, useCapture)
 	{
-		// init and configuration
-		if (_showProgress && defaultProgress == null)
-		{
-			buildProgressIndicator();
-		}
-		// start navigation
-		if (document.location.hash.length > 0)
-		{
-			Brav1Toolbox.addClass(ftContainer, "no-transition");
-			onHashChange(null, true);
-			Brav1Toolbox.removeClass(ftContainer, "no-transition");
-		}
-		else
-		{
-			if (_start.arguments.length > 0)
-			{
-				_gotoPage.apply(this, _start.arguments);
-			}
-			else
-			{
-				_gotoPage(0,0);
-				updateProgress();
-			}
-		}
-	}	
+		Brav1Toolbox.addListener(document, type, handler, useCapture);
+	}
 
 /*
 	 ######  ######## ######## ######## ######## ########   ######  
@@ -1778,9 +1925,16 @@ var Flowtime = (function ()
 		}
 	}
 
-	function _addEventListener(type, handler, useCapture)
+	function _setDefaultParallaxValues(x, y)
 	{
-		Brav1Toolbox.addListener(document, type, handler, useCapture);
+		defaultParallaxX = x;
+		defaultParallaxY = y == undefined ? defaultParallaxX : y;
+		NavigationMatrix.update();
+	}
+
+	function _setParallaxInPx(v)
+	{
+		_parallaxInPx = v;
 	}
 	
 	/**
@@ -1806,7 +1960,9 @@ var Flowtime = (function ()
 		useOverviewVariant: _setUseOverviewVariant,
 		twoStepsSlide: _setTwoStepsSlide,
 		showProgress: _setShowProgress,
-		addEventListener: _addEventListener
+		addEventListener: _addEventListener,
+		defaultParallaxValues: _setDefaultParallaxValues,
+		parallaxInPx: _setParallaxInPx
 	};
 	
 })();

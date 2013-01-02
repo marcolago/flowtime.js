@@ -32,7 +32,6 @@
 		-webkit-backface-visibility: hidden;
 				backface-visibility: hidden;
 		     -o-transition:      -o-transform 0.5s cubic-bezier(.77, .10, .22, 1);
-		    -ms-transition:     -ms-transform 0.5s cubic-bezier(.77, .10, .22, 1);
 		   -moz-transition:    -moz-transform 0.5s cubic-bezier(.77, .10, .22, 1);
 		-webkit-transition: -webkit-transform 0.5s cubic-bezier(.77, .10, .22, 1);
 				transition:         transform 0.5s cubic-bezier(.77, .10, .22, 1);
@@ -40,7 +39,6 @@
 
 	.flowtime.no-transition {
 		     -o-transition:      -o-transform 0s;
-		    -ms-transition:     -ms-transform 0s;
 		   -moz-transition:    -moz-transform 0s;
 		-webkit-transition: -webkit-transform 0s;
 				transition:         transform 0s;
@@ -83,6 +81,7 @@
 		width: 100%;
 		height: 100%;
 		position: relative;
+		z-index: auto;
 		     -o-transform: translateZ(0);
 		    -ms-transform: translateZ(0);
 		   -moz-transform: translateZ(0);
@@ -90,12 +89,15 @@
 				transform: translateZ(0);
 	}
 
+	.ft-page.actual {
+		z-index: 100;
+	}
+
 	/* pages in overview mode */
 	.ft-overview .ft-page {
 		opacity: 0.7;
 		cursor: pointer;
 		     -o-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
-		    -ms-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 		   -moz-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 		-webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 				transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
@@ -133,7 +135,6 @@
 	.ft-fragment {
 		opacity: 0;
 		     -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-		    -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 		   -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 		-webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 				transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
@@ -154,7 +155,6 @@
 		z-index: 1000;
 		opacity: 0.3;
 		     -o-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
-		    -ms-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 		   -moz-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 		-webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 				transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
@@ -182,7 +182,6 @@
 		background-color: rgba(0,0,0,0.7);
 		cursor: pointer;
 		     -o-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
-		    -ms-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 		   -moz-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 		-webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
 				transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
@@ -209,4 +208,18 @@
 
 	.ft-overview .ft-page:hover {
 		opacity: 1;
+	}
+
+/* PARALLAX MANAGEMENT */
+
+ 	.parallax {
+ 		position: relative;
+		     -o-transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
+		   -moz-transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
+		-webkit-transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
+				transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
+	}
+ 	
+	.ft-overview .parallax {
+		transform: translate3d(0, 0, 0) !important;
 	}

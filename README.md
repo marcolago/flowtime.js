@@ -46,6 +46,9 @@ If the History APIs were not available the framework degrades well using the has
 **Transitions**.  
 Flowtime.js animate the page transition using **native CSS3 transitions**. Where transitions were not available (IE9) the page change is immediate but works.
 
+**Parallax Support**
+Integrated native parallax support based on CSS3 transformations and configurable by data- attributes.
+
 **Browser Support**
 Flowtime.js is tested and works on **every modern desktop browser and IE9 and above**.  
 Where the basic support is not available the framework degrades to a native scrolling with anchor links but the full page fluid layouts remains intact.
@@ -130,6 +133,22 @@ If you want to delay the showing and navigate single parts in a page just put th
     </div>
 ```
 
+### Parallax
+
+If you want to enable the parallax effect on some elements add a `parallax` class to these elements and, optionally, sets the parallax distance value adding a `data-parallax` attribute specifieng the `x` and `y` values separated by a comma. If you doesn't specify a `data-parallax` attribute will be used the default lengths.
+
+```html
+    <div class="flowtime">
+      <div class="ft-section" data-id="section-1">
+        <div class="ft-page" data-id="page-1">
+            <p class="parallax">Parallaxed element. Will use the default lengths.</p>
+            <p class="parallax" data-parallax="100,150">Parallaxed element. Will use the data-parallax attribute values.</p>
+            <p class="parallax" data-parallax="200">Parallaxed element. Will use the data-parallax attribute value; x and y will be the same length.</p>
+        </div>
+      </div>
+    </div>
+```
+
 ## Javascript API
 
 Flowtime.js comes with configuration APIs useful for customizing the experience and the installation and with navigation APIs for controlling navigation and get the state of the application.
@@ -206,6 +225,19 @@ Flowtime.useOverviewVariant(Boolean true);
 
 Default `false`. Uses a built in overview variant which does not show all the pages in a single view but center the current page in the available space scroualtirlling the view when navigating with the arrows.
 In Webkit browsers the default overview mode can cause rendering problems if the pages are too much; using the variant you can minimize the problem.
+
+```javascript
+Flowtime.defaultParallaxValues(Number x, [Number y]);
+```
+
+Sets the default values for parallax elements so you doesn't have to set the values for every single element.  
+If you only pass the `x` value the `y` value will be the same.
+
+```javascript
+Flowtime.parallaxInPx(Boolean usePx);
+```
+
+Default `false`. By default all the parallax length are computed in % units. If true the lenght expressed in `defaultParallaxValues` and in `data-parallax` attributes will be computed in pixels.
 
 ### Navigation API
 
