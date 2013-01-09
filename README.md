@@ -263,6 +263,30 @@ Flowtime.prevFragment();` and `Flowtime.nextFragment();
 Navigate to the previous or the next fragment.
 
 ```javascript
+Flowtime.gotoHome()
+```
+
+Navigate to the first page of the presentation.
+
+```javascript
+Flowtime.gotoEnd()
+```
+
+Navigate to the last page of the presentation.
+
+```javascript
+Flowtime.gotoTop()
+```
+
+Navigate to the first page of the current section.
+
+```javascript
+Flowtime.gotoBottom()
+```
+
+Navigate to the last page of the current section.
+
+```javascript
 Flowtime.gotoPage(Number sectionIndex, Number pageIndex)
 ```
 
