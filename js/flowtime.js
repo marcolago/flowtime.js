@@ -933,8 +933,8 @@ var Flowtime = (function ()
 		// thumbs in the default progress indicator
 		if (Brav1Toolbox.hasClass(e.target, PAGE_THUMB_CLASS))
 		{
-			var pTo = Number(unsafeAttr(e.target.getAttribute("data-p")));
-			var spTo = Number(unsafeAttr(e.target.getAttribute("data-sp")));
+			var pTo = Number(unsafeAttr(e.target.getAttribute("data-section")));
+			var spTo = Number(unsafeAttr(e.target.getAttribute("data-page")));
 			_gotoPage(pTo, spTo);
 		}
 	}
@@ -1447,15 +1447,18 @@ var Flowtime = (function ()
 		for (var i = 0; i < NavigationMatrix.getSectionsLength(); i++)
 		{
 			var pDiv = document.createElement("div");
-			pDiv.className = SECTION_THUMB_CLASS;
+				pDiv.setAttribute("data-section", "__" + i);
+				pDiv.className = SECTION_THUMB_CLASS;
+				Brav1Toolbox.addClass(pDiv, "thumb-section-" + i);
 			// loop through pages
 			var spArray = NavigationMatrix.getPages(i)
 			for (var ii = 0; ii < spArray.length; ii++) {
 				var spDiv = document.createElement("div");
-				spDiv.className = PAGE_THUMB_CLASS;
-				spDiv.setAttribute("data-p", "__" + i);
-				spDiv.setAttribute("data-sp", "__" + ii);
-				pDiv.appendChild(spDiv);
+					spDiv.className = PAGE_THUMB_CLASS;
+					spDiv.setAttribute("data-section", "__" + i);
+					spDiv.setAttribute("data-page", "__" + ii);
+					Brav1Toolbox.addClass(spDiv, "thumb-page-" + ii);
+					pDiv.appendChild(spDiv);
 			};
 			defaultProgress.appendChild(pDiv);
 		};
@@ -1479,8 +1482,8 @@ var Flowtime = (function ()
 			for (var i = 0; i < spts.length; i++)
 			{
 				var spt = spts[i];
-				var pTo = Number(unsafeAttr(spt.getAttribute("data-p")));
-				var spTo = Number(unsafeAttr(spt.getAttribute("data-sp")));
+				var pTo = Number(unsafeAttr(spt.getAttribute("data-section")));
+				var spTo = Number(unsafeAttr(spt.getAttribute("data-page")));
 				if (pTo == NavigationMatrix.getPageIndex().section && spTo == NavigationMatrix.getPageIndex().page)
 				{
 					Brav1Toolbox.addClass(spts[i], "actual");
@@ -1492,6 +1495,11 @@ var Flowtime = (function ()
 			}
 
 		}
+	}
+
+	function _getDefaultProgress()
+	{
+		return defaultProgress;
 	}
 
 /*
@@ -1630,19 +1638,16 @@ var Flowtime = (function ()
 					_toggleOverview(true);
 					break;
 				case 33 : // pag up
-					var pageIndex = NavigationMatrix.getPageIndex();
-					_gotoPage(pageIndex.section, 0);
+					_gotoTop();
 					break;
 				case 34 : // pag down
-					var pageIndex = NavigationMatrix.getPageIndex();
-					_gotoPage(pageIndex.section, NavigationMatrix.getPages(pageIndex.section).length - 1);
+					_gotoBottom();
 					break;
 				case 35 : // end
-					var sl = NavigationMatrix.getSectionsLength() - 1;
-					_gotoPage(sl, NavigationMatrix.getPages(sl).length - 1);
+					_gotoEnd();
 					break;
 				case 36 : // home
-					_gotoPage(0, 0);
+					_gotoHome();
 					break;
 				case 37 : // left
 					_prevSection(e.shiftKey);
@@ -1805,6 +1810,7 @@ var Flowtime = (function ()
 		{
 			if (args.length == 1)
 			{
+				
 				if (Brav1Toolbox.typeOf(args[0]) === "Object")
 				{
 					var o = args[0];
@@ -1829,16 +1835,36 @@ var Flowtime = (function ()
 					navigateTo(args[0], null, true);
 				}
 			}
-			else 
+			if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0)
 			{
-				if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0)
-				{
-					var spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
-					navigateTo(spd);
-					return;
-				}
+				var spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
+				navigateTo(spd);
+				return;
 			}
 		}
+	}
+
+	function _gotoHome()
+	{
+		_gotoPage(0,0);
+	}
+
+	function _gotoEnd()
+	{
+		var sl = NavigationMatrix.getSectionsLength() - 1;
+		_gotoPage(sl, NavigationMatrix.getPages(sl).length - 1);
+	}
+
+	function _gotoTop()
+	{
+		var pageIndex = NavigationMatrix.getPageIndex();
+		_gotoPage(pageIndex.section, 0);
+	}
+
+	function _gotoBottom()
+	{
+		var pageIndex = NavigationMatrix.getPageIndex();
+		_gotoPage(pageIndex.section, NavigationMatrix.getPages(pageIndex.section).length - 1);
 	}
 
 	function _addEventListener(type, handler, useCapture)
@@ -1950,6 +1976,10 @@ var Flowtime = (function ()
 		nextFragment: _nextPage,
 		prevFragment: _prevPage,
 		gotoPage: _gotoPage,
+		gotoHome: _gotoHome,
+		gotoTop: _gotoTop,
+		gotoBottom: _gotoBottom,
+		gotoEnd: _gotoEnd,
 		toggleOverview: _toggleOverview,
 		fragmentsOnSide: _setFragmentsOnSide,
 		fragmentsOnBack: _setFragmentsOnBack,
@@ -1962,7 +1992,8 @@ var Flowtime = (function ()
 		showProgress: _setShowProgress,
 		addEventListener: _addEventListener,
 		defaultParallaxValues: _setDefaultParallaxValues,
-		parallaxInPx: _setParallaxInPx
+		parallaxInPx: _setParallaxInPx,
+		getDefaultProgress: _getDefaultProgress
 	};
 	
 })();
