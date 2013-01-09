@@ -160,7 +160,8 @@ Flowtime.start();
 ```
 
 Starts the application logic. This method is optional but is required if you change some configuration parameters.
-If you does'n call the `start()` method Flowtime.js starts itself but some configuration parameters will be applied only after the first navigation action.
+If you does'n call the `start()` method Flowtime.js starts itself but some configuration parameters will be applied only after the first navigation action.  
+You can pass as optional parameters the same parameters that are accepted by the `gotoPage` method (see below) to let the presentation navigating to a specific page at start.
 
 ```javascript
 Flowtime.updateNavigation();
