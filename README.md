@@ -76,7 +76,7 @@ Even if you have only single slides ordered in a row you have to nest the pages 
       <div class="ft-section">
         <div class="ft-page">Section 1 / Page 1</div>
       </div>
-      <div class="ft-page">
+      <div class="ft-section">
         <div class="ft-page">Section 2 / Page 1</div>
       </div>
     </div>
