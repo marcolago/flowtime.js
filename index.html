@@ -139,7 +139,11 @@
 				<h1>Fragments Navigation</h1>
 				<p>The built in fragments navigation allows to advance step by step inside a page.<br>
 					Press down to try.</p>
+<<<<<<< HEAD
+				<p class="ft-fragment">You can discover single elements <span class="ft-fragment">or even a single part of an element, <span class="ft-fragment">one <span class="ft-fragment">at <span class="ft-fragment">a <span class="ft-fragment">time.</span></span></span></span></span></p>
+=======
 				<p class="ft-fragment">You can discover single elements <span class="ft-fragment">or even a single part of an element, <span class="ft-fragment">one <span class="ft-fragment">at <span class="ft-fragment"> a <span class="ft-fragment">time.</span></span></span></span></span></p>
+>>>>>>> e485679589f59f2771111812cce15162dee10ae5
 				<p class="ft-fragment">Fragments navigation is deeply customizable with some configuration options<br>
 					You can learn how in the <a href="https://github.com/marcolago/flowtime.js" target="_blank">documentation</a>.</p>
 			</div>
@@ -330,8 +334,19 @@
 	<script src="js/brav1toolbox.js"></script>
 	<script src="js/flowtime.js"></script>
 	<script src="assets/js/prism.js"></script>
-	
-	<script>
+
+	<script type="text/javascript">
+		var cacheTitle = document.title.replace("Flowtime.js | ", "");
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-1228618-10']);
+		_gaq.push(['_trackPageview']);
+		_gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		
 		// Configuration API test
 		Flowtime.showProgress(true);
 		// Flowtime.fragmentsOnSide(true);
@@ -344,7 +359,6 @@
 		Flowtime.parallaxInPx(true);
 		//
 		// event management
-		var cacheTitle = document.title.replace("Flowtime.js | ", "");
 		Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
 		function onNavigation(e)
 		{
@@ -366,18 +380,6 @@
 		}
 		// starts the application with configuration options
 		Flowtime.start();
-	</script>
-
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-1228618-10']);
-		_gaq.push(['_trackPageview']);
-		_gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
-		(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
 	</script>
 </body>
 </html>
