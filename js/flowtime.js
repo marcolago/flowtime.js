@@ -47,6 +47,7 @@ var Flowtime = (function ()
 	 * application variables
 	 */
 	var ftContainer = document.querySelector(".flowtime");			// cached reference to .flowtime element
+	var html = document.querySelector("html");						// cached reference to html element
 	var body = document.querySelector("body");						// cached reference to body element
 	var useHash = false;											// if true the engine uses only the hash change logic
 	var currentHash = "";											// the hash string of the current section / page pair
@@ -991,6 +992,128 @@ var Flowtime = (function ()
 	}
 
 /*
+	########  #######  ##     ##  ######  ##     ## 
+	   ##    ##     ## ##     ## ##    ## ##     ## 
+	   ##    ##     ## ##     ## ##       ##     ## 
+	   ##    ##     ## ##     ## ##       ######### 
+	   ##    ##     ## ##     ## ##       ##     ## 
+	   ##    ##     ## ##     ## ##    ## ##     ## 
+	   ##     #######   #######   ######  ##     ## 
+*/
+
+	var _ftX = ftContainer.offsetX;
+	var _ftY = 0;
+	var _touchStartX = 0;
+	var _touchStartY = 0;
+	var _deltaX = 0;
+	var _deltaY = 0;
+	var _dragging = 0;
+	var _dragAxis = "x";
+	var _swipeLimit = 100;
+
+	html.addEventListener("touchstart", onTouchStart, false);
+	html.addEventListener("touchmove",  onTouchMove, false);
+	html.addEventListener("touchend",   onTouchEnd, false);
+
+	function onTouchStart(e)
+	{
+		e.preventDefault();
+		e = getTouchEvent(e);
+		_touchStartX = e.clientX;
+		_touchStartY = e.clientY;
+		_dragging = 1;
+		var initOffset = getInitOffset();
+		_ftX = initOffset.x;
+		_ftY = initOffset.y;
+	}
+
+	function onTouchMove(e)
+	{
+		e.preventDefault();
+		e = getTouchEvent(e);
+		_deltaX = e.clientX - _touchStartX;
+		_deltaY = e.clientY - _touchStartY;
+	}
+
+	function onTouchEnd(e)
+	{
+		// e.preventDefault();
+		e = getTouchEvent(e);
+		_dragging = 0;
+		_dragAxis = Math.abs(_deltaX) >= Math.abs(_deltaY) ? "x" : "y";
+		if (_dragAxis == "x" && Math.abs(_deltaX) >= _swipeLimit)
+		{
+			if (_deltaX > 0)
+			{
+				_prevSection();
+			}
+			else if (_deltaX < 0)
+			{
+				_nextSection();
+			}
+			else
+			{
+				navigateTo();
+			}
+		}
+		else
+		{
+			if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit)
+			{
+				_prevPage();
+			}
+			else if (_deltaY < 0)
+			{
+				_nextPage();
+			}
+			else
+			{
+				navigateTo();
+			}
+		}
+
+	}
+
+	function getTouchEvent(e)
+	{
+		if (e.touches)
+		{
+      		e = e.touches[0];
+      	}
+      	return e;
+    }
+
+    function getInitOffset()
+    {
+    	var off = ftContainer.style[Brav1Toolbox.getPrefixed("transform")];
+    	// X
+    	var indexX = off.indexOf("translateX(") + 11;
+    	var offX = off.substring(indexX, off.indexOf(")", indexX));
+    	if (offX.indexOf("%") != -1)
+    	{
+    		offX = offX.replace("%", "");
+    		offX = (parseInt(offX) / 100) * window.innerWidth;
+    	}
+    	else if (offX.indexOf("px") != -1)
+    	{
+    		offX = parseInt(offX.replace("px", ""));
+    	}
+    	// Y
+    	var indexY = off.indexOf("translateY(") + 11;
+    	var offY = off.substring(indexY, off.indexOf(")", indexY));
+    	if (offY.indexOf("%") != -1)
+    	{
+    		offY = offY.replace("%", "");
+    		offY = (parseInt(offY) / 100) * window.innerHeight;
+    	}
+    	else if (offY.indexOf("px") != -1)
+    	{
+    		offY = parseInt(offY.replace("px", ""));
+    	}
+    	return { x:offX, y:offY };
+    }
+
+/*
 	 ######   ######  ########   #######  ##       ##       
 	##    ## ##    ## ##     ## ##     ## ##       ##       
 	##       ##       ##     ## ##     ## ##       ##       
@@ -1009,12 +1132,11 @@ var Flowtime = (function ()
 
 	function onNativeScroll(e)
 	{
-		if (!isTouchDevice)
-		{
-			e.preventDefault();
-			resetScroll();	
-		}
-		else if (isTouchDevice)
+		e.preventDefault();
+		resetScroll();
+
+
+		if (isTouchDevice == "tapioca")
 		{
 			if (scrollEventEnabled == true)
 			{
@@ -1086,6 +1208,7 @@ var Flowtime = (function ()
 		}
 		
 		Brav1Toolbox.addListener(window, "resize", _enable);
+		window.addEventListener("orientationchange", _enable, false);
 		
 		return {
 			enable: _enable,
@@ -1418,10 +1541,7 @@ var Flowtime = (function ()
 
 	function resetScroll()
 	{
-		if (!isTouchDevice)
-		{
-			window.scrollTo(0,0); // fix the eventually occurred page scrolling resetting the scroll values to 0
-		}
+		window.scrollTo(0,0); // fix the eventually occurred page scrolling resetting the scroll values to 0
 	}
 
 /*
@@ -1926,14 +2046,7 @@ var Flowtime = (function ()
 
 	function _setShowProgress(v)
 	{
-		if (isTouchDevice)
-		{
-			_showProgress = false;
-		}
-		else
-		{
-			_showProgress = v;
-		}
+		_showProgress = v;
 		if (_showProgress)
 		{
 			if (defaultProgress == null)

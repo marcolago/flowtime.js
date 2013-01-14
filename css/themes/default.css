@@ -322,7 +322,6 @@ body {
 
 .flowtime .stacked {
 	width: 100%;
-	max-height: 50%;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -363,7 +362,7 @@ body {
 
 /* media queries */
 
-@media screen and (min-height: 40em) and (min-width: 80em)
+@media screen and (min-height: 41em) and (min-width: 80em)
 {
 	html {
 		font-size: 120%;
@@ -385,6 +384,16 @@ body {
 	}
 }
 
+@media screen and (max-device-height: 578px)
+{
+	html {
+		font-size: 50%;
+	}
+
+	.ft-page {
+		
+	}
+}
 /* parallax demo */
 
 .parallax-demo {
