@@ -139,6 +139,11 @@
 		   -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 		-webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 				transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+		     -o-transform: translateZ(0);
+		    -ms-transform: translateZ(0);
+		   -moz-transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+				transform: translateZ(0);
 	}
 
 	.ft-fragment.revealed.step {
