@@ -141,7 +141,17 @@
 				transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
 	}
 
-	.ft-fragment.revealed, .ft-fragment.revealed-temp {
+	.ft-fragment.revealed.step {
+		opacity: 0.3;
+	}
+
+	.ft-fragment.revealed.shy {
+		opacity: 0;
+	}
+
+	.ft-fragment.revealed,
+	.ft-fragment.revealed-temp,
+	.ft-fragment.revealed.actual {
 		opacity: 1;
 	}
 

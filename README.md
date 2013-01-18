@@ -32,7 +32,8 @@ Keyboard navigation is based on arrow keys with the Shift key as a modifier to j
 - **ESC**: toggles the overview mode.
 
 **Fragments Support**.  
-Navigate step by step in a page or jump directly to the next or previous page.
+Navigate step by step in a page or jump directly to the next or previous page.  
+You can hide or show every single fragment with special behaviour managed and styled by CSS classes and you can even nest fragments.
 
 **Overview Mode**.  
 Overview mode allows you to look at the entire site/presentation structure in a single view or from a distant point of view (alternate version).

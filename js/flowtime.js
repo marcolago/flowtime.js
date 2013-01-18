@@ -30,6 +30,7 @@ var Flowtime = (function ()
 	var FRAGMENT_CLASS = "ft-fragment";
 	var FRAGMENT_SELECTOR = "." + FRAGMENT_CLASS;
 	var FRAGMENT_REVEALED_CLASS = "revealed";
+	var FRAGMENT_ACTUAL_CLASS = "actual";
 	var FRAGMENT_REVEALED_TEMP_CLASS = "revealed-temp";
 	var DEFAULT_PROGRESS_CLASS = "ft-default-progress";
 	var DEFAULT_PROGRESS_SELECTOR = "." + DEFAULT_PROGRESS_CLASS;
@@ -447,7 +448,12 @@ var Flowtime = (function ()
 			{
 				f = fr[fp][fsp] += 1;
 			}
-			Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_CLASS);
+			for (var i = 0; i <= f; i++)
+			{
+				Brav1Toolbox.addClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_CLASS);
+				Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_ACTUAL_CLASS);
+			}
+			Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], FRAGMENT_ACTUAL_CLASS);
 		}
 
 		/**
@@ -468,14 +474,26 @@ var Flowtime = (function ()
 			{
 				f = fr[fp][fsp];
 			}
-			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_CLASS);
-			Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][f], FRAGMENT_REVEALED_TEMP_CLASS);
-			fr[fp][fsp] -= 1;
+			for (var i = 0; i < fragmentsArray[fp][fsp].length; i++)
+			{
+				if (i >= f)
+				{
+					Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_CLASS);
+					Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_TEMP_CLASS);
+				}
+				Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_ACTUAL_CLASS);
+			}
+			f -= 1;
+			if (f >= 0)
+			{
+				Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], FRAGMENT_ACTUAL_CLASS);
+			}
+			fr[fp][fsp] = f;
 		}
 
 		/**
 		 * show all the fragments or the fragments in the specified page
-		 * adds a temporary class wich does not override the current status of fragments
+		 * adds a temporary class which does not override the current status of fragments
 		 */
 		function _showFragments()
 		{
@@ -487,7 +505,7 @@ var Flowtime = (function ()
 
 		/**
 		 * hide all the fragments or the fragments in the specified page
-		 * removes a temporary class wich does not override the current status of fragments
+		 * removes a temporary class which does not override the current status of fragments
 		 */
 		function _hideFragments()
 		{
@@ -546,26 +564,18 @@ var Flowtime = (function ()
 							else if (isp == sp)
 							{	
 								// same page
-								for (var f = 0; f < frsp.length; f++)
+								if (_fragmentsOnBack == true && (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page))
 								{
-									if (_fragmentsOnBack == false)
+									for (var f = 0; f < frsp.length; f++)
 									{
-										// hide all fragments
-										_hideFragment(ip, isp, f);
+										_showFragment(ip, isp, f);
 									}
-									else
+								}
+								else
+								{
+									for (var f = frsp.length - 1; f >= 0; f--)
 									{
-										// show alla fragment only if
-										if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
-										{
-											// we are coming from a page after this
-											_showFragment(ip, isp, f);
-										}
-										else
-										{
-											// otherwise hide all fragments
-											_hideFragment(ip, isp, f);
-										}
+										_hideFragment(ip, isp, f);
 									}
 								}
 								if (_fragmentsOnBack == false)
@@ -576,7 +586,7 @@ var Flowtime = (function ()
 								{
 									if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
 									{
-										fr[ip][isp] = f - 1;	
+										fr[ip][isp] = frsp.length - 1;	
 									}
 									else
 									{
