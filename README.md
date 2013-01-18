@@ -135,8 +135,8 @@ If you want to delay the showing and navigate single parts in a page just put th
 ```
 
 You can also add some classes to trigger special behaviours for fragments.  
-The `step` class partially fades out a fragment when the next one was selected; i.e. `<p class="ft-fragment step">`  
-The `shy` class completely hides a fragment when it lose the focus; i.e. `<p class="ft-fragment shy">`
+The `step` class partially fades out a fragment when the next one was selected; for example: `<p class="ft-fragment step">`  
+The `shy` class completely hides a fragment when it lose the focus; for example: `<p class="ft-fragment shy">`
 
 ### Parallax
 
