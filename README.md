@@ -134,9 +134,13 @@ If you want to delay the showing and navigate single parts in a page just put th
     </div>
 ```
 
+You can also add some classes to trigger special behaviours for fragments.  
+The `step` class partially fades out a fragment when the next one was selected; i.e. `<p class="ft-fragment step">`  
+The `shy` class completely hides a fragment when it lose the focus; i.e. `<p class="ft-fragment shy">`
+
 ### Parallax
 
-If you want to enable the parallax effect on some elements add a `parallax` class to these elements and, optionally, sets the parallax distance value adding a `data-parallax` attribute specifieng the `x` and `y` values separated by a comma. If you doesn't specify a `data-parallax` attribute will be used the default lengths.
+If you want to enable the parallax effect on some elements add a `parallax` class to these elements and, optionally, sets the parallax distance value adding a `data-parallax` attribute specifying the `x` and `y` values separated by a comma. If you doesn't specify a `data-parallax` attribute will be used the default lengths.
 
 ```html
     <div class="flowtime">
