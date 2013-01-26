@@ -3,7 +3,7 @@
  * http://marcolago.com/flowtime-js/
  * MIT licensed
  *
- * Copyright (C) 2012 Marco Lago, http://marcolago.com
+ * Copyright (C) 2012-2013 Marco Lago, http://marcolago.com
  */
 
 var Flowtime = (function ()
@@ -937,13 +937,23 @@ var Flowtime = (function ()
 			navigateTo(dest, true, true);
 		}
 		// pages in oveview mode
-		if (isOverview && Brav1Toolbox.hasClass(e.target, PAGE_CLASS))
+		if (isOverview)
 		{
-			navigateTo(e.target, null, true);
+			e.preventDefault();
+			var dest = e.target;
+			while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+			{
+				dest = dest.parentNode;
+			}
+			if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+			{
+				navigateTo(dest, null, true);
+			}
 		}
 		// thumbs in the default progress indicator
 		if (Brav1Toolbox.hasClass(e.target, PAGE_THUMB_CLASS))
 		{
+			e.preventDefault();
 			var pTo = Number(unsafeAttr(e.target.getAttribute("data-section")));
 			var spTo = Number(unsafeAttr(e.target.getAttribute("data-page")));
 			_gotoPage(pTo, spTo);

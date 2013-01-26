@@ -3,7 +3,7 @@
  * http://marcolago.com/
  * MIT licensed
  *
- * Copyright (C) 2012 Marco Lago, http://marcolago.com
+ * Copyright (C) 2012-2013 Marco Lago, http://marcolago.com
  */
 var Brav1Toolbox = (function()
 {

@@ -36,6 +36,7 @@
 		   -moz-transition:    -moz-transform 0.5s cubic-bezier(.77, .10, .22, 1);
 		-webkit-transition: -webkit-transform 0.5s cubic-bezier(.77, .10, .22, 1);
 				transition:         transform 0.5s cubic-bezier(.77, .10, .22, 1);
+				
 	}
 
 	.flowtime.no-transition {
