@@ -939,7 +939,6 @@ var Flowtime = (function ()
 		// pages in oveview mode
 		if (isOverview)
 		{
-			e.preventDefault();
 			var dest = e.target;
 			while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
 			{
@@ -947,6 +946,7 @@ var Flowtime = (function ()
 			}
 			if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
 			{
+				e.preventDefault();
 				navigateTo(dest, null, true);
 			}
 		}

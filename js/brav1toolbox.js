@@ -140,14 +140,18 @@ var Brav1Toolbox = (function()
 	 */
 	function _hasClass(el, c)
 	{
-		if (el.classList)
+		if (el)
 		{
-			return el.classList.contains(c);
+			if (el.classList)
+			{
+				return el.classList.contains(c);
+			}
+			else if (el.className)
+			{
+				return el.className.indexOf(c) != -1;
+			}
 		}
-		else
-		{
-			return el.className.indexOf(c) != -1;
-		}
+		return false;
 	}
 
 	/**
