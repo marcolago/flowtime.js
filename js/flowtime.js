@@ -921,7 +921,14 @@ var Flowtime = (function ()
 	 */
 	if (browserSupport)
 	{
-		Brav1Toolbox.addListener(document, "click", onNavClick, false);
+		if (isTouchDevice)
+		{
+			Brav1Toolbox.addListener(document, "touchend", onNavClick, false);
+		}
+		else
+		{
+			Brav1Toolbox.addListener(document, "click", onNavClick, false);
+		}
 	}
 
 	function onNavClick(e)
@@ -1152,41 +1159,6 @@ var Flowtime = (function ()
 	{
 		e.preventDefault();
 		resetScroll();
-
-
-		if (isTouchDevice == "tapioca")
-		{
-			if (scrollEventEnabled == true)
-			{
-				var scrollPoint = { x:window.pageXOffset, y:window.pageYOffset }
-				var nearestPage;
-				var dist;
-				var sps = NavigationMatrix.getAllPages();
-				for (var i = 0; i < sps.length; i++)
-				{
-					var point = { x:sps[i].x, y:sps[i].y };
-					if (i == 0)
-					{
-						nearestPage = sps[i];
-						dist = Brav1Toolbox.distance(scrollPoint, point);
-					}
-					else
-					{
-						if (Brav1Toolbox.distance(scrollPoint, point) < dist)
-						{
-							nearestPage = sps[i];
-							dist = Brav1Toolbox.distance(scrollPoint, point);
-						}
-					}
-				}
-				scrollEventEnabled = false;
-				window.scrollTo(nearestPage.x, nearestPage.y);
-			}
-			else
-			{
-				scrollEventEnabled = true;	
-			}
-		}
 	}
 
 /*
