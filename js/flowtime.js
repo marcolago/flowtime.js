@@ -1037,6 +1037,8 @@ var Flowtime = (function ()
 
 	function onTouchStart(e)
 	{
+		_deltaX = 0;
+		_deltaY = 0;
 		e.preventDefault();
 		e = getTouchEvent(e);
 		_touchStartX = e.clientX;
@@ -1066,14 +1068,12 @@ var Flowtime = (function ()
 			if (_deltaX > 0)
 			{
 				_prevSection();
+				return;
 			}
 			else if (_deltaX < 0)
 			{
 				_nextSection();
-			}
-			else
-			{
-				navigateTo();
+				return;
 			}
 		}
 		else
@@ -1081,14 +1081,12 @@ var Flowtime = (function ()
 			if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit)
 			{
 				_prevPage();
+				return;
 			}
 			else if (_deltaY < 0)
 			{
 				_nextPage();
-			}
-			else
-			{
-				navigateTo();
+				return;
 			}
 		}
 
