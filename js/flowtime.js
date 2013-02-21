@@ -13,13 +13,13 @@ var Flowtime = (function ()
 	 * test if the device is touch enbled
 	 */
 	var isTouchDevice = 'ontouchstart' in document.documentElement;
-	
+
 	/**
 	 * test if the HTML History API's where available
 	 * this value can be overridden to disable the History API
 	 */
 	var pushHistory = window.history.pushState;
-	
+
 	/**
 	 * application constants
 	 */
@@ -53,7 +53,7 @@ var Flowtime = (function ()
 	var useHash = false;											// if true the engine uses only the hash change logic
 	var currentHash = "";											// the hash string of the current section / page pair
 	var pastIndex = { section:0, page:0 };							// section and page indexes of the past page
-	var isOverview = false;											// Boolean status for the overview 
+	var isOverview = false;											// Boolean status for the overview
 	var siteName = document.title;									// cached base string for the site title
 	var overviewCachedDest;											// caches the destination before performing an overview zoom out for navigation back purposes
 	var overviewFixedScaleFactor = 22;								// fixed scale factor for overview variant
@@ -69,7 +69,7 @@ var Flowtime = (function ()
 	var _parallaxInPx = false;										// if false the parallax movement is calulated in % values, if true in pixels
 	var defaultParallaxX = 50;										// the default parallax horizontal value used when no data-parallax value were specified
 	var defaultParallaxY = 50;										// the default parallax vertical value used when no data-parallax value were specified
-	
+
 	var parallaxEnabled = document.querySelector(".parallax") != null; // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
 
 
@@ -102,20 +102,20 @@ var Flowtime = (function ()
 	}
 
 /*
-	##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ## ##     ##    ###    ######## ########  #### ##     ## 
-	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ## ###   ###   ## ##      ##    ##     ##  ##   ##   ##  
-	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ## #### ####  ##   ##     ##    ##     ##  ##    ## ##   
-	## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ## ## ### ## ##     ##    ##    ########   ##     ###    
-	##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  #### ##     ## #########    ##    ##   ##    ##    ## ##   
-	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ### ##     ## ##     ##    ##    ##    ##   ##   ##   ##  
-	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ## ##     ## ##     ##    ##    ##     ## #### ##     ## 
+	##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ## ##     ##    ###    ######## ########  #### ##     ##
+	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ## ###   ###   ## ##      ##    ##     ##  ##   ##   ##
+	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ## #### ####  ##   ##     ##    ##     ##  ##    ## ##
+	## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ## ## ### ## ##     ##    ##    ########   ##     ###
+	##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  #### ##     ## #########    ##    ##   ##    ##    ## ##
+	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ### ##     ## ##     ##    ##    ##    ##   ##   ##   ##
+	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ## ##     ## ##     ##    ##    ##     ## #### ##     ##
 */
 
 	/**
 	 * NavigationMatrix is the Object who store the navigation grid structure
 	 * and which expose all the methods to get and set the navigation destinations
 	 */
-	
+
 	var NavigationMatrix = (function ()
 	{
 		var sections;						// HTML Collection of .flowtime > .ft-section elements
@@ -133,7 +133,7 @@ var Flowtime = (function ()
 		var pCache = 0;						// cache index of the current section
 		var spCache = 0;					// cache index of the current page
 		var hilited;						// the current page higlighted, useful for overview mode
-		
+
 		/**
 		 * update the navigation matrix array
 		 * this is a publicy exposed method
@@ -261,7 +261,7 @@ var Flowtime = (function ()
 				_sp.y = _sp.offsetTop + _sp.parentNode.offsetTop;
 			}
 		};
-		
+
 		/**
 		 * returns the next section in navigation
 		 * @param	top	Boolean	if true the next page will be the first page in the next array; if false the next section will be the same index page in the next array
@@ -292,7 +292,7 @@ var Flowtime = (function ()
 			}
 			return hiliteOrNavigate(sectionsArray[p][sp], io);
 		}
-		
+
 		/**
 		 * returns the prev section in navigation
 		 * @param	top	Boolean	if true the next section will be the first page in the prev array; if false the prev section will be the same index page in the prev array
@@ -324,7 +324,7 @@ var Flowtime = (function ()
 			}
 			return hiliteOrNavigate(sectionsArray[p][sp], io);
 		}
-		
+
 		/**
 		 * checks if there is a valid page in the current section array
 		 * if the passed page is not valid thne check which is the first valid page in the array
@@ -355,7 +355,7 @@ var Flowtime = (function ()
 			}
 			return hiliteOrNavigate(nsp, io);
 		}
-		
+
 		/**
 		 * returns the next page in navigation
 		 * if the next page is not in the current section array returns the first page in the next section array
@@ -382,7 +382,7 @@ var Flowtime = (function ()
 			}
 			return hiliteOrNavigate(sectionsArray[p][sp], io);
 		}
-		
+
 		/**
 		 * returns the prev page in navigation
 		 * if the prev page is not in the current section array returns the last page in the prev section array
@@ -562,7 +562,7 @@ var Flowtime = (function ()
 								}
 							}
 							else if (isp == sp)
-							{	
+							{
 								// same page
 								if (_fragmentsOnBack == true && (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page))
 								{
@@ -582,11 +582,11 @@ var Flowtime = (function ()
 								{
 									fr[ip][isp] = -1
 								}
-								else 
+								else
 								{
 									if (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page)
 									{
-										fr[ip][isp] = frsp.length - 1;	
+										fr[ip][isp] = frsp.length - 1;
 									}
 									else
 									{
@@ -599,7 +599,7 @@ var Flowtime = (function ()
 				}
 			}
 		}
-		
+
 		/**
 		 * returns the current section index
 		 */
@@ -611,7 +611,7 @@ var Flowtime = (function ()
 			}
 			return p;
 		}
-		
+
 		/**
 		 * returns the current page index
 		 */
@@ -776,7 +776,7 @@ var Flowtime = (function ()
 			}
 			return h;
 		}
-		
+
 		/**
 		 * expose the method to set the page from a hash
 		 */
@@ -843,7 +843,7 @@ var Flowtime = (function ()
 						}
 						else if (spa.index > d.index)
 						{
-							Brav1Toolbox.addClass(spa, "future-page");	
+							Brav1Toolbox.addClass(spa, "future-page");
 						}
 					}
 				}
@@ -865,9 +865,9 @@ var Flowtime = (function ()
 		{
 			Brav1Toolbox.addClass(d, "actual");
 		}
-		
+
 		_updateMatrix(); // update the navigation matrix on the first run
-		
+
 		return {
 			update: _updateMatrix,
 			updateFragments: _updateFragments,
@@ -907,13 +907,13 @@ var Flowtime = (function ()
 	})();
 
 /*
-	##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ##    ######## ##     ## ######## ##    ## ########  ######  
-	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ##    ##       ##     ## ##       ###   ##    ##    ##    ## 
-	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ##    ##       ##     ## ##       ####  ##    ##    ##       
-	## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ##    ######   ##     ## ######   ## ## ##    ##     ######  
-	##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  ####    ##        ##   ##  ##       ##  ####    ##          ## 
-	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ###    ##         ## ##   ##       ##   ###    ##    ##    ## 
-	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ##    ########    ###    ######## ##    ##    ##     ######  
+	##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ##    ######## ##     ## ######## ##    ## ########  ######
+	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ##    ##       ##     ## ##       ###   ##    ##    ##    ##
+	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ##    ##       ##     ## ##       ####  ##    ##    ##
+	## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ##    ######   ##     ## ######   ## ## ##    ##     ######
+	##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  ####    ##        ##   ##  ##       ##  ####    ##          ##
+	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ###    ##         ## ##   ##       ##   ###    ##    ##    ##
+	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ##    ########    ###    ######## ##    ##    ##     ######
 */
 	/**
 	 * add a listener for event delegation
@@ -922,6 +922,7 @@ var Flowtime = (function ()
 	if (browserSupport)
 	{
 		Brav1Toolbox.addListener(document, "click", onNavClick, false);
+		Brav1Toolbox.addListener(document, "touchend", onNavClick, false);
 	}
 
 	function onNavClick(e)
@@ -1012,13 +1013,13 @@ var Flowtime = (function ()
 	}
 
 /*
-	########  #######  ##     ##  ######  ##     ## 
-	   ##    ##     ## ##     ## ##    ## ##     ## 
-	   ##    ##     ## ##     ## ##       ##     ## 
-	   ##    ##     ## ##     ## ##       ######### 
-	   ##    ##     ## ##     ## ##       ##     ## 
-	   ##    ##     ## ##     ## ##    ## ##     ## 
-	   ##     #######   #######   ######  ##     ## 
+	########  #######  ##     ##  ######  ##     ##
+	   ##    ##     ## ##     ## ##    ## ##     ##
+	   ##    ##     ## ##     ## ##       ##     ##
+	   ##    ##     ## ##     ## ##       #########
+	   ##    ##     ## ##     ## ##       ##     ##
+	   ##    ##     ## ##     ## ##    ## ##     ##
+	   ##     #######   #######   ######  ##     ##
 */
 
 	var _ftX = ftContainer.offsetX;
@@ -1134,13 +1135,13 @@ var Flowtime = (function ()
     }
 
 /*
-	 ######   ######  ########   #######  ##       ##       
-	##    ## ##    ## ##     ## ##     ## ##       ##       
-	##       ##       ##     ## ##     ## ##       ##       
-	 ######  ##       ########  ##     ## ##       ##       
-	      ## ##       ##   ##   ##     ## ##       ##       
-	##    ## ##    ## ##    ##  ##     ## ##       ##       
-	 ######   ######  ##     ##  #######  ######## ######## 
+	 ######   ######  ########   #######  ##       ##
+	##    ## ##    ## ##     ## ##     ## ##       ##
+	##       ##       ##     ## ##     ## ##       ##
+	 ######  ##       ########  ##     ## ##       ##
+	      ## ##       ##   ##   ##     ## ##       ##
+	##    ## ##    ## ##    ##  ##     ## ##       ##
+	 ######   ######  ##     ##  #######  ######## ########
 */
 
 	/**
@@ -1186,19 +1187,19 @@ var Flowtime = (function ()
 			}
 			else
 			{
-				scrollEventEnabled = true;	
+				scrollEventEnabled = true;
 			}
 		}
 	}
 
 /*
-	########  ########  ######  #### ######## ######## 
-	##     ## ##       ##    ##  ##       ##  ##       
-	##     ## ##       ##        ##      ##   ##       
-	########  ######    ######   ##     ##    ######   
-	##   ##   ##             ##  ##    ##     ##       
-	##    ##  ##       ##    ##  ##   ##      ##       
-	##     ## ########  ######  #### ######## ######## 
+	########  ########  ######  #### ######## ########
+	##     ## ##       ##    ##  ##       ##  ##
+	##     ## ##       ##        ##      ##   ##
+	########  ######    ######   ##     ##    ######
+	##   ##   ##             ##  ##    ##     ##
+	##    ##  ##       ##    ##  ##   ##      ##
+	##     ## ########  ######  #### ######## ########
 */
 
 	/**
@@ -1215,21 +1216,21 @@ var Flowtime = (function ()
 				ticker = setTimeout(doResizeHandler, 300);
 			}
 		}
-		
+
 		function _disable()
 		{
 			clearTimeout(ticker);
 		}
-		
+
 		function doResizeHandler()
 		{
 			NavigationMatrix.updateOffsets();
 			navigateTo();
 		}
-		
+
 		Brav1Toolbox.addListener(window, "resize", _enable);
 		window.addEventListener("orientationchange", _enable, false);
-		
+
 		return {
 			enable: _enable,
 			disable: _disable,
@@ -1237,13 +1238,13 @@ var Flowtime = (function ()
 	})();
 
 /*
-	##     ## ######## #### ##        ######  
-	##     ##    ##     ##  ##       ##    ## 
-	##     ##    ##     ##  ##       ##       
-	##     ##    ##     ##  ##        ######  
-	##     ##    ##     ##  ##             ## 
-	##     ##    ##     ##  ##       ##    ## 
-	 #######     ##    #### ########  ######  
+	##     ## ######## #### ##        ######
+	##     ##    ##     ##  ##       ##    ##
+	##     ##    ##     ##  ##       ##
+	##     ##    ##     ##  ##        ######
+	##     ##    ##     ##  ##             ##
+	##     ##    ##     ##  ##       ##    ##
+	 #######     ##    #### ########  ######
 */
 
 	/**
@@ -1272,7 +1273,7 @@ var Flowtime = (function ()
 		}
 		return;
 	}
-	
+
 	/**
 	 * public method to force navigation updates
 	 */
@@ -1353,13 +1354,13 @@ var Flowtime = (function ()
 	}
 
 /*
-	##    ##    ###    ##     ## ####  ######      ###    ######## ######## ########  #######  
-	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##    ##          ##    ##     ## 
-	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##    ##          ##    ##     ## 
-	## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##    ######      ##    ##     ## 
-	##  #### #########  ##   ##   ##  ##    ##  #########    ##    ##          ##    ##     ## 
-	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##    ##          ##    ##     ## 
-	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ########    ##     #######  
+	##    ##    ###    ##     ## ####  ######      ###    ######## ######## ########  #######
+	###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##    ##          ##    ##     ##
+	####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##    ##          ##    ##     ##
+	## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##    ######      ##    ##     ##
+	##  #### #########  ##   ##   ##  ##    ##  #########    ##    ##          ##    ##     ##
+	##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##    ##          ##    ##     ##
+	##    ## ##     ##    ###    ####  ######   ##     ##    ##    ########    ##     #######
 */
 
 	/**
@@ -1437,17 +1438,17 @@ var Flowtime = (function ()
 		Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT,	{
 													section: 			NavigationMatrix.getCurrentSection(),
 													page: 				NavigationMatrix.getCurrentPage(),
-													sectionIndex: 		pageIndex.section, 
+													sectionIndex: 		pageIndex.section,
 													pageIndex: 			pageIndex.page,
-													pastSectionIndex: 	pastIndex.section,  
-													pastPageIndex: 		pastIndex.page,  
+													pastSectionIndex: 	pastIndex.section,
+													pastPageIndex: 		pastIndex.page,
 													prevSection: 		NavigationMatrix.hasPrevSection(),
 													nextSection: 		NavigationMatrix.hasNextSection(),
 													prevPage: 			NavigationMatrix.hasPrevPage(),
 													nextPage: 			NavigationMatrix.hasNextPage(),
 													fragment: 			NavigationMatrix.getCurrentFragment(),
 													fragmentIndex: 		NavigationMatrix.getCurrentFragmentIndex(),
-													isOverview: 		isOverview, 
+													isOverview: 		isOverview,
 													progress: 			NavigationMatrix.getProgress(),
 													total: 				NavigationMatrix.getPagesTotalLength()
 												} );
@@ -1479,7 +1480,7 @@ var Flowtime = (function ()
 		{
 			if (_slideInPx)
 			{
-				ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";	
+				ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";
 			}
 			else
 			{
@@ -1531,7 +1532,7 @@ var Flowtime = (function ()
 								}
 								else if (pageIndex.section > i)
 								{
-									pX = -pxElement.pX;	
+									pX = -pxElement.pX;
 								}
 								// pages
 								if (pageIndex.page < ii)
@@ -1540,7 +1541,7 @@ var Flowtime = (function ()
 								}
 								else if (pageIndex.page > ii)
 								{
-									pY = -pxElement.pY;	
+									pY = -pxElement.pY;
 								}
 								// animation
 								if (_parallaxInPx)
@@ -1565,13 +1566,13 @@ var Flowtime = (function ()
 	}
 
 /*
-	########  ########   #######   ######   ########  ########  ######   ######  
-	##     ## ##     ## ##     ## ##    ##  ##     ## ##       ##    ## ##    ## 
-	##     ## ##     ## ##     ## ##        ##     ## ##       ##       ##       
-	########  ########  ##     ## ##   #### ########  ######    ######   ######  
-	##        ##   ##   ##     ## ##    ##  ##   ##   ##             ##       ## 
-	##        ##    ##  ##     ## ##    ##  ##    ##  ##       ##    ## ##    ## 
-	##        ##     ##  #######   ######   ##     ## ########  ######   ######  
+	########  ########   #######   ######   ########  ########  ######   ######
+	##     ## ##     ## ##     ## ##    ##  ##     ## ##       ##    ## ##    ##
+	##     ## ##     ## ##     ## ##        ##     ## ##       ##       ##
+	########  ########  ##     ## ##   #### ########  ######    ######   ######
+	##        ##   ##   ##     ## ##    ##  ##   ##   ##             ##       ##
+	##        ##    ##  ##     ## ##    ##  ##    ##  ##       ##    ## ##    ##
+	##        ##     ##  #######   ######   ##     ## ########  ######   ######
 */
 	var defaultProgress = null;
 	var progressFill = null;
@@ -1643,15 +1644,15 @@ var Flowtime = (function ()
 	}
 
 /*
-	 #######  ##     ## ######## ########  ##     ## #### ######## ##      ##    ##     ##    ###    ##    ##    ###     ######   ######## ##     ## ######## ##    ## ######## 
-	##     ## ##     ## ##       ##     ## ##     ##  ##  ##       ##  ##  ##    ###   ###   ## ##   ###   ##   ## ##   ##    ##  ##       ###   ### ##       ###   ##    ##    
-	##     ## ##     ## ##       ##     ## ##     ##  ##  ##       ##  ##  ##    #### ####  ##   ##  ####  ##  ##   ##  ##        ##       #### #### ##       ####  ##    ##    
-	##     ## ##     ## ######   ########  ##     ##  ##  ######   ##  ##  ##    ## ### ## ##     ## ## ## ## ##     ## ##   #### ######   ## ### ## ######   ## ## ##    ##    
-	##     ##  ##   ##  ##       ##   ##    ##   ##   ##  ##       ##  ##  ##    ##     ## ######### ##  #### ######### ##    ##  ##       ##     ## ##       ##  ####    ##    
-	##     ##   ## ##   ##       ##    ##    ## ##    ##  ##       ##  ##  ##    ##     ## ##     ## ##   ### ##     ## ##    ##  ##       ##     ## ##       ##   ###    ##    
-	 #######     ###    ######## ##     ##    ###    #### ########  ###  ###     ##     ## ##     ## ##    ## ##     ##  ######   ######## ##     ## ######## ##    ##    ##    
+	 #######  ##     ## ######## ########  ##     ## #### ######## ##      ##    ##     ##    ###    ##    ##    ###     ######   ######## ##     ## ######## ##    ## ########
+	##     ## ##     ## ##       ##     ## ##     ##  ##  ##       ##  ##  ##    ###   ###   ## ##   ###   ##   ## ##   ##    ##  ##       ###   ### ##       ###   ##    ##
+	##     ## ##     ## ##       ##     ## ##     ##  ##  ##       ##  ##  ##    #### ####  ##   ##  ####  ##  ##   ##  ##        ##       #### #### ##       ####  ##    ##
+	##     ## ##     ## ######   ########  ##     ##  ##  ######   ##  ##  ##    ## ### ## ##     ## ## ## ## ##     ## ##   #### ######   ## ### ## ######   ## ## ##    ##
+	##     ##  ##   ##  ##       ##   ##    ##   ##   ##  ##       ##  ##  ##    ##     ## ######### ##  #### ######### ##    ##  ##       ##     ## ##       ##  ####    ##
+	##     ##   ## ##   ##       ##    ##    ## ##    ##  ##       ##  ##  ##    ##     ## ##     ## ##   ### ##     ## ##    ##  ##       ##     ## ##       ##   ###    ##
+	 #######     ###    ######## ##     ##    ###    #### ########  ###  ###     ##     ## ##     ## ##    ## ##     ##  ######   ######## ##     ## ######## ##    ##    ##
 */
-	
+
 	/**
 	 * switch from the overview states
 	 */
@@ -1711,7 +1712,7 @@ var Flowtime = (function ()
 	}
 
 	function overviewZoomTypeA(out)
-	{	
+	{
 		// ftContainer scale version
 		if (out)
 		{
@@ -1738,13 +1739,13 @@ var Flowtime = (function ()
 	}
 
 /*
-	##    ## ######## ##    ## ########   #######     ###    ########  ########     ##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ## 
-	##   ##  ##        ##  ##  ##     ## ##     ##   ## ##   ##     ## ##     ##    ###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ## 
-	##  ##   ##         ####   ##     ## ##     ##  ##   ##  ##     ## ##     ##    ####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ## 
-	#####    ######      ##    ########  ##     ## ##     ## ########  ##     ##    ## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ## 
-	##  ##   ##          ##    ##     ## ##     ## ######### ##   ##   ##     ##    ##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  #### 
-	##   ##  ##          ##    ##     ## ##     ## ##     ## ##    ##  ##     ##    ##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ### 
-	##    ## ########    ##    ########   #######  ##     ## ##     ## ########     ##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ## 
+	##    ## ######## ##    ## ########   #######     ###    ########  ########     ##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ##
+	##   ##  ##        ##  ##  ##     ## ##     ##   ## ##   ##     ## ##     ##    ###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ##
+	##  ##   ##         ####   ##     ## ##     ##  ##   ##  ##     ## ##     ##    ####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ##
+	#####    ######      ##    ########  ##     ## ##     ## ########  ##     ##    ## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ##
+	##  ##   ##          ##    ##     ## ##     ## ######### ##   ##   ##     ##    ##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  ####
+	##   ##  ##          ##    ##     ## ##     ## ##     ## ##    ##  ##     ##    ##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ###
+	##    ## ########    ##    ########   #######  ##     ## ##     ## ########     ##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ##
 */
 
 	/**
@@ -1752,7 +1753,7 @@ var Flowtime = (function ()
 	 */
 	Brav1Toolbox.addListener(window, "keydown", onKeyDown);
 	Brav1Toolbox.addListener(window, "keyup", onKeyUp);
-	
+
 	function onKeyDown(e)
 	{
 		var tag = e.target.tagName;
@@ -1764,7 +1765,7 @@ var Flowtime = (function ()
 			}
 		}
 	}
-	
+
 	function onKeyUp(e)
 	{
 		var tag = e.target.tagName;
@@ -1816,16 +1817,16 @@ var Flowtime = (function ()
 	}
 
 /*
-	########  ##     ## ########  ##       ####  ######        ###    ########  #### 
-	##     ## ##     ## ##     ## ##        ##  ##    ##      ## ##   ##     ##  ##  
-	##     ## ##     ## ##     ## ##        ##  ##           ##   ##  ##     ##  ##  
-	########  ##     ## ########  ##        ##  ##          ##     ## ########   ##  
-	##        ##     ## ##     ## ##        ##  ##          ######### ##         ##  
-	##        ##     ## ##     ## ##        ##  ##    ##    ##     ## ##         ##  
-	##         #######  ########  ######## ####  ######     ##     ## ##        #### 
+	########  ##     ## ########  ##       ####  ######        ###    ########  ####
+	##     ## ##     ## ##     ## ##        ##  ##    ##      ## ##   ##     ##  ##
+	##     ## ##     ## ##     ## ##        ##  ##           ##   ##  ##     ##  ##
+	########  ##     ## ########  ##        ##  ##          ##     ## ########   ##
+	##        ##     ## ##     ## ##        ##  ##          ######### ##         ##
+	##        ##     ## ##     ## ##        ##  ##    ##    ##     ## ##         ##
+	##         #######  ########  ######## ####  ######     ##     ## ##        ####
 */
 
-	
+
 	/**
 	 * triggers the first animation when visiting the site
 	 * if the hash is not empty
@@ -1856,7 +1857,7 @@ var Flowtime = (function ()
 				updateProgress();
 			}
 		}
-	}	
+	}
 
 	/*
 	 * Public API to go to the next section
@@ -1880,7 +1881,7 @@ var Flowtime = (function ()
 
 	/*
 	 * Public API to go to the prev section
-	 * 
+	 *
 	 */
 	function _prevSection(top)
 	{
@@ -1941,7 +1942,7 @@ var Flowtime = (function ()
 	 * the method accepts vary parameters:
 	 * if two numbers were passed it assumes that the first is the section index and the second is the page index;
 	 * if an object is passed it assumes that the object has a section property and a page property to get the indexes to navigate;
-	 * if an HTMLElement is passed it assumes the element is a destination page 
+	 * if an HTMLElement is passed it assumes the element is a destination page
 	 */
 	function _gotoPage()
 	{
@@ -1950,7 +1951,7 @@ var Flowtime = (function ()
 		{
 			if (args.length == 1)
 			{
-				
+
 				if (Brav1Toolbox.typeOf(args[0]) === "Object")
 				{
 					var o = args[0];
@@ -2013,13 +2014,13 @@ var Flowtime = (function ()
 	}
 
 /*
-	 ######  ######## ######## ######## ######## ########   ######  
-	##    ## ##          ##       ##    ##       ##     ## ##    ## 
-	##       ##          ##       ##    ##       ##     ## ##       
-	 ######  ######      ##       ##    ######   ########   ######  
-	      ## ##          ##       ##    ##       ##   ##         ## 
-	##    ## ##          ##       ##    ##       ##    ##  ##    ## 
-	 ######  ########    ##       ##    ######## ##     ##  ######  
+	 ######  ######## ######## ######## ######## ########   ######
+	##    ## ##          ##       ##    ##       ##     ## ##    ##
+	##       ##          ##       ##    ##       ##     ## ##
+	 ######  ######      ##       ##    ######   ########   ######
+	      ## ##          ##       ##    ##       ##   ##         ##
+	##    ## ##          ##       ##    ##       ##    ##  ##    ##
+	 ######  ########    ##       ##    ######## ##     ##  ######
 */
 
 	function _setFragmentsOnSide(v)
@@ -2095,7 +2096,7 @@ var Flowtime = (function ()
 	{
 		_parallaxInPx = v;
 	}
-	
+
 	/**
 	 * return object for public methods
 	 */
@@ -2128,5 +2129,5 @@ var Flowtime = (function ()
 		parallaxInPx: _setParallaxInPx,
 		getDefaultProgress: _getDefaultProgress
 	};
-	
+
 })();
