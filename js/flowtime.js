@@ -1183,24 +1183,66 @@ var Flowtime = (function ()
 		clearTimeout(scrollTimeout);
 		if (e.wheelDelta)
 		{
-			if (e.wheelDelta < 0)
+			if (e.wheelDeltaX != undefined)
 			{
-				_nextPage();
+				if (e.wheelDeltaX == 0)
+				{
+					if (e.wheelDeltaY < 0)
+					{
+						_nextPage();
+					}
+					else if (e.wheelDeltaY > 0)
+					{
+						_prevPage();
+					}
+				}
+				else if (e.wheelDeltaY == 0)
+				{
+					if (e.wheelDeltaX < 0)
+					{
+						_nextSection();
+					}
+					else if (e.wheelDeltaX > 0)
+					{
+						_prevSection();
+					}
+				}
 			}
-			else if (e.wheelDelta > 0)
+			else
 			{
-				_prevPage();
+				if (e.wheelDelta < 0)
+				{
+					_nextPage();
+				}
+				else if (e.wheelDelta > 0)
+				{
+					_prevPage();
+				}
 			}
 		}
 		else if (e.detail)
 		{
 			if (e.detail > 0)
 			{
-				_nextPage();
+				if (e.axis == 1)
+				{
+					_nextSection();
+				}
+				else
+				{
+					_nextPage();
+				}
 			}
 			else if (e.detail < 0)
 			{
-				_prevPage();
+				if (e.axis == 1)
+				{
+					_prevSection();
+				}
+				else
+				{
+					_prevPage();
+				}
 			}
 		}
 	}
