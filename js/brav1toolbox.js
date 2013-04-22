@@ -161,7 +161,7 @@ var Brav1Toolbox = (function()
 	 {
 	 	if (document.createEvent)
 	 	{
-			var e = document.createEvent( "HTMLEvents");
+			var e = document.createEvent("HTMLEvents");
 			e.initEvent(t, true, true);
 			for (var p in ps)
 			{

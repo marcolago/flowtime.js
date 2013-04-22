@@ -1160,6 +1160,50 @@ var Flowtime = (function ()
 		e.preventDefault();
 		resetScroll();
 	}
+	
+	/**
+	 * Mouse Wheel Scroll Navigation
+	 */
+
+	ftContainer.addEventListener("mousewheel", onMouseScroll, false);
+	// Firefox
+	ftContainer.addEventListener("DOMMouseScroll", onMouseScroll, false);
+
+	var scrollTimeout = NaN;
+
+	function onMouseScroll(e)
+	{
+		e.preventDefault();
+		clearTimeout(scrollTimeout);
+		scrollTimeout = setTimeout(doScrollTimeout, 100, e);
+	}
+
+	function doScrollTimeout(e)
+	{
+		clearTimeout(scrollTimeout);
+		if (e.wheelDelta)
+		{
+			if (e.wheelDelta < 0)
+			{
+				_nextPage();
+			}
+			else if (e.wheelDelta > 0)
+			{
+				_prevPage();
+			}
+		}
+		else if (e.detail)
+		{
+			if (e.detail > 0)
+			{
+				_nextPage();
+			}
+			else if (e.detail < 0)
+			{
+				_prevPage();
+			}
+		}
+	}
 
 /*
 	########  ########  ######  #### ######## ######## 
@@ -1224,7 +1268,7 @@ var Flowtime = (function ()
 	{
 		if (h.length > 0)
 		{
-			var aHash = h.replace("#/", "").split("/"); // TODO considerare l'ultimo slash come nullo
+			var aHash = h.replace("#/", "").split("/");
 			var p = document.querySelector(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]") || document.querySelector(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
 			if (p != null)
 			{
