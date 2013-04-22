@@ -1165,7 +1165,7 @@ var Flowtime = (function ()
 	 * Mouse Wheel Scroll Navigation
 	 */
 
-	ftContainer.addEventListener("mousewheel", onMouseScroll, false);
+	Brav1Toolbox.addListener(ftContainer, "mousewheel", onMouseScroll, false);
 	// Firefox
 	ftContainer.addEventListener("DOMMouseScroll", onMouseScroll, false);
 
