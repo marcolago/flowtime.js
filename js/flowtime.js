@@ -1175,7 +1175,7 @@ var Flowtime = (function ()
 	{
 		e.preventDefault();
 		clearTimeout(scrollTimeout);
-		scrollTimeout = setTimeout(doScrollTimeout, 100, e);
+		scrollTimeout = setTimeout(function(){doScrollTimeout(e);}, 100);
 	}
 
 	function doScrollTimeout(e)
