@@ -54,11 +54,16 @@
 		height: 100%;
 
 		position: relative;
-		     -o-transform: translateZ(0);
+		/**
+		 * GPU acceleration disabled to drop down memory consuption on tablet and smartphones
+		 */
+		/*
+		      -o-transform: translateZ(0);
 		    -ms-transform: translateZ(0);
 		   -moz-transform: translateZ(0);
 		-webkit-transform: translateZ(0);
 				transform: translateZ(0);
+		*/
 	}
 
 	/* section and section thumb alignment */
@@ -84,15 +89,29 @@
 		height: 100%;
 		position: relative;
 		z-index: auto;
+		/**
+		 * GPU acceleration disabled to drop down memory consuption on tablet and smartphones
+		 */
+		/*
+			 -o-transform: translateZ(0);
+		    -ms-transform: translateZ(0);
+		   -moz-transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+				transform: translateZ(0);
+		*/
+	}
+	
+	/**
+	 * GPU acceleration enabled only on the pages involved in the slide animation to ensure no glitches on transition
+	 */
+	.ft-page.actual,
+	.ft-page.actual-out {
+		z-index: 100;
 		     -o-transform: translateZ(0);
 		    -ms-transform: translateZ(0);
 		   -moz-transform: translateZ(0);
 		-webkit-transform: translateZ(0);
 				transform: translateZ(0);
-	}
-
-	.ft-page.actual {
-		z-index: 100;
 	}
 
 	/* pages in overview mode */
@@ -231,11 +250,11 @@
 /* I've not used * because causes issues with current Chrome */
 
 	img {
-		     -o-transform: translate3d(0, 0, 0);
-		    -ms-transform: translate3d(0, 0, 0);
-		   -moz-transform: translate3d(0, 0, 0);
-		-webkit-transform: translate3d(0, 0, 0);
-				transform: translate3d(0, 0, 0);
+			 -o-transform: translateZ(0);
+		    -ms-transform: translateZ(0);
+		   -moz-transform: translateZ(0);
+		-webkit-transform: translateZ(0);
+				transform: translateZ(0);
 		     -o-backface-visibility: hidden;
 		    -ms-backface-visibility: hidden;
 		   -moz-backface-visibility: hidden;
@@ -254,9 +273,9 @@
 	}
  	
 	.ft-overview .parallax {
-		     -o-transform: translate3d(0, 0, 0) !important;
-		    -ms-transform: translate3d(0, 0, 0) !important;
-		   -moz-transform: translate3d(0, 0, 0) !important;
-		-webkit-transform: translate3d(0, 0, 0) !important;
-				transform: translate3d(0, 0, 0) !important;
+		     -o-transform: translateZ(0) !important;
+		    -ms-transform: translateZ(0) !important;
+		   -moz-transform: translateZ(0) !important;
+		-webkit-transform: translateZ(0) !important;
+				transform: translateZ(0) !important;
 	}
