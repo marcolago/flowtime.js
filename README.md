@@ -316,6 +316,20 @@ Flowtime.toggleOverview([Boolean back]);
 Toggles the overview mode switching between overview and page mode.
 If the optional `back` paramerter is `true` toggling the overview mode when in overview does not navigate to the highlighted page but will returns to the active page; default `false`.
 
+### Data API
+
+```javascript
+Flowtime.getSection();
+```
+
+Gets a reference to the current section HTML Element.
+
+```javascript
+Flowtime.getPage();
+```
+
+Gets a reference to the current page HTML Element.
+
 ### Events
 
 When navigating Flowtime.js dispatches a `flowtimenavigation` event useful for create custom behaviours and callbacks.  
