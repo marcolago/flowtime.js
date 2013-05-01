@@ -330,6 +330,18 @@ Flowtime.getPage();
 
 Gets a reference to the current page HTML Element.
 
+```javascript
+Flowtime.getSectionIndex();
+```
+
+Gets the index starting at `0` of the current section.
+
+```javascript
+Flowtime.getPageIndex();
+```
+
+Gets the index starting at `0` of the current page.
+
 ### Events
 
 When navigating Flowtime.js dispatches a `flowtimenavigation` event useful for create custom behaviours and callbacks.  

@@ -2158,6 +2158,16 @@ var Flowtime = (function ()
 	{
 		_parallaxInPx = v;
 	}
+
+	function _getSectionIndex()
+	{
+		return NavigationMatrix.getPageIndex().section;
+	}
+
+	function _getPageIndex()
+	{
+		return NavigationMatrix.getPageIndex().page;
+	}
 	
 	/**
 	 * return object for public methods
@@ -2191,7 +2201,9 @@ var Flowtime = (function ()
 		parallaxInPx: _setParallaxInPx,
 		getDefaultProgress: _getDefaultProgress,
 		getSection: NavigationMatrix.getCurrentSection,
-		getPage: NavigationMatrix.getCurrentPage
+		getPage: NavigationMatrix.getCurrentPage,
+		getSectionIndex: _getSectionIndex,
+		getPageIndex: _getPageIndex
 	};
 	
 })();

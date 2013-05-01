@@ -110,6 +110,7 @@
 		{
 			// use e.preventDefault to disable the hash change
 			e.preventDefault();
+			console.log(Flowtime.getSectionIndex(), Flowtime.getPageIndex());
 			// caching of the current page and of the sub page
 			var p = Flowtime.getPage();
 			var subPage = p.querySelector(".sub-page");
