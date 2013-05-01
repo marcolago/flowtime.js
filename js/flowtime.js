@@ -934,6 +934,10 @@ var Flowtime = (function ()
 	function onNavClick(e)
 	{
 		var href = e.target.getAttribute("href");
+		if (href === "#")
+		{
+			return;
+		}
 		// links with href starting with #
 		if (href && href.substr(0,1) == "#")
 		{
@@ -1311,19 +1315,22 @@ var Flowtime = (function ()
 		if (h.length > 0)
 		{
 			var aHash = h.replace("#/", "").split("/");
-			var p = document.querySelector(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]") || document.querySelector(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
-			if (p != null)
+			if (aHash.length > 0)
 			{
-				var sp = null;
-				if (aHash.length > 1)
+				var p = document.querySelector(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]") || document.querySelector(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
+				if (p != null)
 				{
-					sp = p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
+					var sp = null;
+					if (aHash.length > 1)
+					{
+						sp = p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
+					}
+					if (sp == null)
+					{
+						sp = p.querySelector(PAGE_SELECTOR);
+					}
+					return sp;
 				}
-				if (sp == null)
-				{
-					sp = p.querySelector(PAGE_SELECTOR);
-				}
-				return sp;
 			}
 		}
 		return;
@@ -2182,7 +2189,9 @@ var Flowtime = (function ()
 		addEventListener: _addEventListener,
 		defaultParallaxValues: _setDefaultParallaxValues,
 		parallaxInPx: _setParallaxInPx,
-		getDefaultProgress: _getDefaultProgress
+		getDefaultProgress: _getDefaultProgress,
+		getSection: NavigationMatrix.getCurrentSection,
+		getPage: NavigationMatrix.getCurrentPage
 	};
 	
 })();
