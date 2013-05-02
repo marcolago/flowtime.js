@@ -8,20 +8,20 @@
 var Brav1Toolbox = (function()
 {
 	var cssPrefixes = ["", "-webkit-", "-moz-", "-ms-", "-o-"];
-	var styleObject;
-	
+
 	/**
-	 * cache a Style Collection Object for future use
+	 * returns the Style Collection Object
 	 */
-	if (window.getComputedStyle)
-	{
-		styleObject = window.getComputedStyle(document.body);
+	function _getStyleObject() {
+		if (window.getComputedStyle) {
+			return window.getComputedStyle(document.body);
+		} else {
+			return document.documentElement.style;
+		}
 	}
-	else
-	{
-		styleObject = document.documentElement.style;
-	}
-	
+	// cache a Style Collection Object for future use
+	var styleObject = _getStyleObject();
+
 	/**
 	 * shortcut to add a listener for modern browsers and IE8-
 	 */
@@ -45,13 +45,14 @@ var Brav1Toolbox = (function()
 	{
 		return _getPrefixed(prop) != "";
 	}
-	
+
 	/**
 	 * returns the standard or the prefixed CSS property
 	 * use: element[Brav1Toolbox.getPrefixed(CSSProperty)];
 	 */
 	function _getPrefixed(prop)
 	{
+		var o = styleObject || _getStyleObject();
 		for (var i = 0; i < cssPrefixes.length; i++)
 		{
 			var pre = cssPrefixes[i].replace(/-/g, "");
@@ -61,14 +62,14 @@ var Brav1Toolbox = (function()
 				p = p.charAt(0).toUpperCase() + p.substr(1);
 			}
 			p = pre + p;
-			if (p in styleObject == true)
+			if (p in o == true)
 			{
 				return p;
 			}
 		}
 		return "";
 	}
-	
+
 	/**
 	 * returns the type of the object passed
 	 */
@@ -182,10 +183,10 @@ var Brav1Toolbox = (function()
 		cX *= cX;
 		cY = pB.y - pA.y;
 		cY *= cY;
-		 
+
 		return Math.abs(Math.sqrt( cX + cY ));
 	 }
-	
+
 	return {
 		addListener: _addListener,
 		dispatchEvent: _dispatchEvent,
