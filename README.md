@@ -9,6 +9,12 @@ You can take a look at the [sample presentation](http://flowtime-js.marcolago.co
 - [Made with Flowtime.js](https://github.com/marcolago/flowtime.js/wiki/Made-With-Flowtime.js)
 - [Credits and Thanks](https://github.com/marcolago/flowtime.js/wiki/Credits-and-Thanks)
 
+## UPDATES
+
+- **May 12 2013**
+  - Added the autoplay function and start() and pause() methods. (#18)
+  - Now the presentations is loopable both for page and section navigation. (#18) 
+
 ## Main Features
 
 **Full Page Fluid Layout Boilerplate**.  
@@ -226,7 +232,7 @@ Flowtime.gridNavigation(Boolean useGrid);
 Default `false`. Just a proxy for `Flowtime.sectionsSlideToTop` but with reversed value; if `true` sets `Flowtime.sectionsSlideToTop` to `False`. Implemented just because the more semantic and easy to understand naming.
 
 ```javascript
-Flowtime.useOverviewVariant(Boolean true);
+Flowtime.useOverviewVariant(Boolean use);
 ```
 
 Default `false`. Uses a built in overview variant which does not show all the pages in a single view but center the current page in the available space scroualtirlling the view when navigating with the arrows.
@@ -244,6 +250,22 @@ Flowtime.parallaxInPx(Boolean usePx);
 ```
 
 Default `false`. By default all the parallax length are computed in % units. If true the lenght expressed in `defaultParallaxValues` and in `data-parallax` attributes will be computed in pixels.
+
+```javascript
+Flowtime.autoplay(Boolean status, [Number delay], [Boolean autostart], [Boolean skipFragments]);
+```
+
+Sets the status of the autoplay feature.
+`status` parameter sets the autoplay flag to `true` or `false`, if `true` you can use `play()` and `pause()` functions to start and stop the autoplay.
+`delay` sets the time between the page navigation in milliseconds; the default value is 10 seconds (10000 milliseconds).
+If `autostart` is `true` the autoplay feature starts just right after this call (default `true`).
+`skipFragments` allows to go to the next page skipping all the fragments on the page (default `false`).
+
+```javascript
+Flowtime.loop(Boolean loop);
+```
+
+Default `false`. If true you can loop the navigation both for the sections and for the pages so you can back to the start of the presentation navigating forward from the last page.
 
 ### Navigation API
 
@@ -315,6 +337,24 @@ Flowtime.toggleOverview([Boolean back]);
 
 Toggles the overview mode switching between overview and page mode.
 If the optional `back` paramerter is `true` toggling the overview mode when in overview does not navigate to the highlighted page but will returns to the active page; default `false`.
+
+```javascript
+Flowtime.play();
+```
+
+Starts the autoplay timer with the configured values (see `Flowtime.autoplay()` method) or with the default ones.
+
+```javascript
+Flowtime.pause();
+```
+
+Pauses the autoplay timer without resetting the delay.
+
+```javascript
+Flowtime.stop();
+```
+
+Stops the autoplay timer resetting the delay.
 
 ### Data API
 
@@ -438,6 +478,18 @@ e.total
 ```
 
 The last page sequential index.
+
+```javascript
+e.isAutoplay
+```
+
+The status of the autoplay feature.
+
+```javascript
+e.isLoopable
+```
+
+`true` if Flowtime.js is configured for looping.
 
 ## Customizing and Styling Default Components and Behaviours
 

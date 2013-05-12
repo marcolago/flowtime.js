@@ -65,6 +65,7 @@ var Flowtime = (function ()
 	var _sectionsSlideToTop = false;								// if true navigation with right or left arrow go to the first page of the section
 	var _useOverviewVariant = false;								// use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
 	var _twoStepsSlide = false;										// not yet implemented! slides up or down before, then slides to the page
+	var _isLoopable = false;
 	var _showProgress = false;										// show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
 	var _parallaxInPx = false;										// if false the parallax movement is calulated in % values, if true in pixels
 	var defaultParallaxX = 50;										// the default parallax horizontal value used when no data-parallax value were specified
@@ -266,9 +267,8 @@ var Flowtime = (function ()
 		 * returns the next section in navigation
 		 * @param	top	Boolean	if true the next page will be the first page in the next array; if false the next section will be the same index page in the next array
 		 * @param	fos	Boolean value of _fragmentsOnSide
-		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getNextSection(top, fos, io)
+		function _getNextSection(top, fos)
 		{
 			var sub = sp;
 			var toTop = top == !_sectionsSlideToTop;
@@ -287,23 +287,30 @@ var Flowtime = (function ()
 				{
 					sub = sp;
 				}
-				p = Math.min(p + 1, sectionsArray.length - 1);
-				return _getNearestPage(sectionsArray[p], sub, io);
+				var pTemp = Math.min(p + 1, sectionsArray.length - 1);
+				if (_isLoopable == true && pTemp === p)
+				{
+					p = 0;
+				}
+				else
+				{
+					p = pTemp;
+				}
+				return _getNearestPage(sectionsArray[p], sub);
 			}
-			return hiliteOrNavigate(sectionsArray[p][sp], io);
+			return hiliteOrNavigate(sectionsArray[p][sp]);
 		}
 		
 		/**
 		 * returns the prev section in navigation
 		 * @param	top	Boolean	if true the next section will be the first page in the prev array; if false the prev section will be the same index page in the prev array
 		 * @param	fos	Boolean value of _fragmentsOnSide
-		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getPrevSection(top, fos, io)
+		function _getPrevSection(top, fos)
 		{
 			var sub = sp;
 			var toTop = top == !_sectionsSlideToTop;
-			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop != true && io == false)
+			if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop != true && isOverview == false)
 			{
 				_hideFragment(p, sp);
 			}
@@ -319,10 +326,18 @@ var Flowtime = (function ()
 				{
 					sub = sp;
 				}
-				p = Math.max(p - 1, 0);
-				return _getNearestPage(sectionsArray[p], sub, io);
+				var pTemp = Math.max(p - 1, 0);
+				if (_isLoopable == true && pTemp === p)
+				{
+					p = sectionsArray.length - 1;
+				}
+				else
+				{
+					p = pTemp;
+				}
+				return _getNearestPage(sectionsArray[p], sub);
 			}
-			return hiliteOrNavigate(sectionsArray[p][sp], io);
+			return hiliteOrNavigate(sectionsArray[p][sp]);
 		}
 		
 		/**
@@ -331,9 +346,8 @@ var Flowtime = (function ()
 		 * then returns the page
 		 * @param	p	Number	the section index in the sections array
 		 * @param	sub	Number	the page index in the sections->page array
-		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getNearestPage(pg, sub, io)
+		function _getNearestPage(pg, sub)
 		{
 			var nsp = pg[sub];
 			if (nsp == undefined)
@@ -353,61 +367,75 @@ var Flowtime = (function ()
 			{
 				_updateFragments();
 			}
-			return hiliteOrNavigate(nsp, io);
+			return hiliteOrNavigate(nsp);
 		}
 		
 		/**
 		 * returns the next page in navigation
 		 * if the next page is not in the current section array returns the first page in the next section array
 		 * @param	jump	Boolean	if true jumps over the fragments directly to the next page
-		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getNextPage(jump, io)
+		function _getNextPage(jump)
 		{
-			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump != true && io == false)
+			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump != true && isOverview == false)
 			{
 				_showFragment(p, sp);
 			}
 			else
 			{
-				if (sectionsArray[p][sp + 1] == undefined && sectionsArray[p + 1] != undefined)
+				if (sectionsArray[p][sp + 1] == undefined)
 				{
-					p += 1;
-					sp = 0;
+					if (sectionsArray[p + 1] != undefined)
+					{
+						p += 1;
+						sp = 0;
+					}
+					else if (sectionsArray[p + 1] == undefined && _isLoopable == true)
+					{
+						p = 0;
+						sp = 0;
+					}
 				}
 				else
 				{
 					sp = Math.min(sp + 1, sectionsArray[p].length - 1);
 				}
 			}
-			return hiliteOrNavigate(sectionsArray[p][sp], io);
+			return hiliteOrNavigate(sectionsArray[p][sp]);
 		}
 		
 		/**
 		 * returns the prev page in navigation
 		 * if the prev page is not in the current section array returns the last page in the prev section array
 		 * @param	jump	Boolean	if true jumps over the fragments directly to the prev page
-		 * @param	io	Boolean	value of isOverview
 		 */
-		function _getPrevPage(jump, io)
+		function _getPrevPage(jump)
 		{
-			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && io == false)
+			if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && isOverview == false)
 			{
 				_hideFragment(p, sp);
 			}
 			else
 			{
-				if (sp == 0 && sectionsArray[p - 1] != undefined)
+				if (sp == 0)
 				{
-					p -= 1;
-					sp = sectionsArray[p].length - 1;
+					if (sectionsArray[p - 1] != undefined)
+					{
+						p -= 1;
+						sp = sectionsArray[p].length - 1;
+					}
+					else if (sectionsArray[p - 1] == undefined && _isLoopable == true)
+					{
+						p = sectionsArray.length - 1;
+						sp = sectionsArray[p].length - 1;
+					}
 				}
 				else
 				{
 					sp = Math.max(sp - 1, 0);
 				}
 			}
-			return hiliteOrNavigate(sectionsArray[p][sp], io);
+			return hiliteOrNavigate(sectionsArray[p][sp]);
 		}
 
 		/**
@@ -415,11 +443,10 @@ var Flowtime = (function ()
 		 * if the application is in overview mode
 		 * switch the active page without returning a destination
 		 * @param	d	HTMLElement	the candidate destination
-		 * @param	io	Boolean	value of isOverview
 		 */
-		function hiliteOrNavigate(d, io)
+		function hiliteOrNavigate(d)
 		{
-			if (io == true)
+			if (isOverview == true)
 			{
 				_switchActivePage(d);
 				return;
@@ -1512,7 +1539,9 @@ var Flowtime = (function ()
 													fragmentIndex: 		NavigationMatrix.getCurrentFragmentIndex(),
 													isOverview: 		isOverview, 
 													progress: 			NavigationMatrix.getProgress(),
-													total: 				NavigationMatrix.getPagesTotalLength()
+													total: 				NavigationMatrix.getPagesTotalLength(),
+													isLoopable: 		_isLoopable, 
+													isAutoplay: 		_isAutoplay, 
 												} );
 	}
 
@@ -1878,6 +1907,66 @@ var Flowtime = (function ()
 		}
 	}
 
+/**
+	   ###    ##     ## ########  #######  ########  ##          ###    ##    ## 
+	  ## ##   ##     ##    ##    ##     ## ##     ## ##         ## ##    ##  ##  
+	 ##   ##  ##     ##    ##    ##     ## ##     ## ##        ##   ##    ####   
+	##     ## ##     ##    ##    ##     ## ########  ##       ##     ##    ##    
+	######### ##     ##    ##    ##     ## ##        ##       #########    ##    
+	##     ## ##     ##    ##    ##     ## ##        ##       ##     ##    ##    
+	##     ##  #######     ##     #######  ##        ######## ##     ##    ##    
+*/
+
+	var _isAutoplay = false;
+	var autoplayTimer = 0;
+	var autoplayDelay = 10000;
+	var autoplaySkipFragments = false;
+	var autoplayTimerStartedAt = 0;
+	var autoplayTimerPausedAt = 0;
+	/**
+	 * sets the autoplay status
+	 * @param	status	Boolean if true configure the presentation for auto playing
+	 * @param 	delay 	Number sets the delay for the autoplay timeout in milliseconds (default 10 seconds)
+	 * @param 	autostart 	Boolean if true the autoplay starts right now (default true)
+	 * @param 	skipFragments 	Boolean if true goes to the next page skipping all the fragments (default false)
+	 */
+	function _autoplay(status, delay, autostart, skipFragments)
+	{
+		autoplayDelay = isNaN(parseInt(delay)) ? autoplayDelay : delay;
+		autoplaySkipFragments = skipFragments === true || false
+		if (status == true && autostart !== false)
+		{
+			_play();
+		}
+	}
+
+	function _play()
+	{
+		_isAutoplay = true;
+		clearTimeout(autoplayTimer);
+		autoplayTimerStartedAt = Date.now();
+		autoplayTimer = setTimeout(function(){
+			_nextPage(autoplaySkipFragments);
+			_play();
+		}, autoplayDelay - autoplayTimerPausedAt);
+		autoplayTimerPausedAt = 0;
+	}
+
+	function _pause()
+	{
+		_isAutoplay = false;
+		autoplayTimerPausedAt = Date.now() - autoplayTimerStartedAt;
+		clearTimeout(autoplayTimer);
+	}
+
+	function _stop()
+	{
+		_isAutoplay = false;
+		clearTimeout(autoplayTimer);
+		autoplayTimerStartedAt = 0;
+		autoplayTimerPausedAt = 0;
+	}
+
 /*
 	########  ##     ## ########  ##       ####  ######        ###    ########  #### 
 	##     ## ##     ## ##     ## ##        ##  ##    ##      ## ##   ##     ##  ##  
@@ -1927,7 +2016,7 @@ var Flowtime = (function ()
 	 */
 	function _nextSection(top)
 	{
-		var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide, isOverview);
+		var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide);
 		if (d != undefined)
 		{
 			navigateTo(d);
@@ -1947,7 +2036,7 @@ var Flowtime = (function ()
 	 */
 	function _prevSection(top)
 	{
-		var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide, isOverview);
+		var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide);
 		if (d != undefined)
 		{
 			navigateTo(d);
@@ -1966,7 +2055,7 @@ var Flowtime = (function ()
 	 */
 	function _nextPage(jump)
 	{
-		var d = NavigationMatrix.getNextPage(jump, isOverview);
+		var d = NavigationMatrix.getNextPage(jump);
 		if (d != undefined)
 		{
 			navigateTo(d);
@@ -1985,7 +2074,7 @@ var Flowtime = (function ()
 	 */
 	function _prevPage(jump)
 	{
-		var d = NavigationMatrix.getPrevPage(jump, isOverview);
+		var d = NavigationMatrix.getPrevPage(jump);
 		if (d != undefined)
 		{
 			navigateTo(d);
@@ -2168,6 +2257,11 @@ var Flowtime = (function ()
 	{
 		return NavigationMatrix.getPageIndex().page;
 	}
+
+	function _loop(value)
+	{
+		_isLoopable = value;
+	}
 	
 	/**
 	 * return object for public methods
@@ -2203,7 +2297,12 @@ var Flowtime = (function ()
 		getSection: NavigationMatrix.getCurrentSection,
 		getPage: NavigationMatrix.getCurrentPage,
 		getSectionIndex: _getSectionIndex,
-		getPageIndex: _getPageIndex
+		getPageIndex: _getPageIndex,
+		autoplay: _autoplay,
+		play: _play,
+		pause: _pause,
+		stop: _stop,
+		loop: _loop
 	};
 	
 })();
