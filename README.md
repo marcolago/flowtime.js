@@ -12,7 +12,7 @@ You can take a look at the [sample presentation](http://flowtime-js.marcolago.co
 ## UPDATES
 
 - **May 12 2013**
-  - Added the autoplay function and start() and pause() methods. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
+  - Added the autoplay configuration functions and `start()`, `pause()` and `stop()` methods. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
   - Now the presentations is loopable both for page and section navigation. ([#18](https://github.com/marcolago/flowtime.js/issues/18)) 
 
 ## Main Features
