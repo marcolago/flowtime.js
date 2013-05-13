@@ -960,32 +960,37 @@ var Flowtime = (function ()
 
 	function onNavClick(e)
 	{
-		var href = e.target.getAttribute("href");
-		if (href === "#")
+		if (e.target.nodeName === "A" || e.target.parentNode.nodeName === "A")
 		{
-			return;
-		}
-		// links with href starting with #
-		if (href && href.substr(0,1) == "#")
-		{
-			e.target.blur();
-			e.preventDefault();
-			var h = href;
-			var dest = NavigationMatrix.setPage(h);
-			navigateTo(dest, true, true);
-		}
-		// pages in oveview mode
-		if (isOverview)
-		{
-			var dest = e.target;
-			while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+			var href = e.target.getAttribute("href") || e.target.parentNode.getAttribute("href");
+			if (href === "#")
 			{
-				dest = dest.parentNode;
+				return;
 			}
-			if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+			// links with href starting with #
+			if (href)
 			{
-				e.preventDefault();
-				navigateTo(dest, null, true);
+				e.target.blur();
+				if (href.substr(0,1) == "#")
+				{
+					e.preventDefault();
+					var dest = NavigationMatrix.setPage(href);
+					navigateTo(dest, true, true);
+				}
+			}
+			// pages in oveview mode
+			if (isOverview)
+			{
+				var dest = e.target;
+				while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+				{
+					dest = dest.parentNode;
+				}
+				if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+				{
+					e.preventDefault();
+					navigateTo(dest, null, true);
+				}
 			}
 		}
 		// thumbs in the default progress indicator
@@ -1069,15 +1074,15 @@ var Flowtime = (function ()
 	var _dragAxis = "x";
 	var _swipeLimit = 100;
 
-	html.addEventListener("touchstart", onTouchStart, false);
-	html.addEventListener("touchmove",  onTouchMove, false);
-	html.addEventListener("touchend",   onTouchEnd, false);
+	ftContainer.addEventListener("touchstart", onTouchStart, false);
+	ftContainer.addEventListener("touchmove",  onTouchMove, false);
+	ftContainer.addEventListener("touchend",   onTouchEnd, false);
 
 	function onTouchStart(e)
 	{
 		_deltaX = 0;
 		_deltaY = 0;
-		e.preventDefault();
+		//e.preventDefault(); // preventing the defaul event behaviour breaks external links
 		e = getTouchEvent(e);
 		_touchStartX = e.clientX;
 		_touchStartY = e.clientY;
@@ -1097,37 +1102,38 @@ var Flowtime = (function ()
 
 	function onTouchEnd(e)
 	{
-		// e.preventDefault();
-		e = getTouchEvent(e);
-		_dragging = 0;
-		_dragAxis = Math.abs(_deltaX) >= Math.abs(_deltaY) ? "x" : "y";
-		if (_dragAxis == "x" && Math.abs(_deltaX) >= _swipeLimit)
+		if (Math.abs(_deltaX) >= _swipeLimit || Math.abs(_deltaY) >= _swipeLimit)
 		{
-			if (_deltaX > 0)
+			e = getTouchEvent(e);
+			_dragging = 0;
+			_dragAxis = Math.abs(_deltaX) >= Math.abs(_deltaY) ? "x" : "y";
+			if (_dragAxis == "x" && Math.abs(_deltaX) >= _swipeLimit)
 			{
-				_prevSection();
-				return;
+				if (_deltaX > 0)
+				{
+					_prevSection();
+					return;
+				}
+				else if (_deltaX < 0)
+				{
+					_nextSection();
+					return;
+				}
 			}
-			else if (_deltaX < 0)
+			else
 			{
-				_nextSection();
-				return;
+				if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit)
+				{
+					_prevPage();
+					return;
+				}
+				else if (_deltaY < 0)
+				{
+					_nextPage();
+					return;
+				}
 			}
 		}
-		else
-		{
-			if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit)
-			{
-				_prevPage();
-				return;
-			}
-			else if (_deltaY < 0)
-			{
-				_nextPage();
-				return;
-			}
-		}
-
 	}
 
 	function getTouchEvent(e)

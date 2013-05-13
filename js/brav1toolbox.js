@@ -158,10 +158,10 @@ var Brav1Toolbox = (function()
 	/**
 	 * creates and dispatch a custom event
 	 */
-	 function _dispatchEvent(t, ps)
-	 {
-	 	if (document.createEvent)
-	 	{
+	function _dispatchEvent(t, ps)
+	{
+		if (document.createEvent)
+		{
 			var e = document.createEvent("HTMLEvents");
 			e.initEvent(t, true, true);
 			for (var p in ps)
@@ -175,9 +175,9 @@ var Brav1Toolbox = (function()
 	/**
 	 * returns the absolute distance from two points
 	 */
-	 function _distance(pA, pB)
-	 {
-	 	var cX;
+	function _distance(pA, pB)
+	{
+		var cX;
 		var cY;
 		cX = pB.x - pA.x;
 		cX *= cX;

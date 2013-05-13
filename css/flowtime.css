@@ -54,16 +54,13 @@
 		height: 100%;
 
 		position: relative;
-		/**
-		 * GPU acceleration disabled to drop down memory consuption on tablet and smartphones
-		 */
-		/*
-		      -o-transform: translateZ(0);
+		
+		     -o-transform: translateZ(0);
 		    -ms-transform: translateZ(0);
 		   -moz-transform: translateZ(0);
 		-webkit-transform: translateZ(0);
 				transform: translateZ(0);
-		*/
+		
 	}
 
 	/* section and section thumb alignment */
