@@ -33,7 +33,7 @@ var Brav1Toolbox = (function()
 		}
 		else if (element.attachEvent)
 		{
-			element.attachEvent(type, handler);
+			element.attachEvent("on" + type, handler);
 		}
 	}
 
