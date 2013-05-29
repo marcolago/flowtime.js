@@ -978,19 +978,19 @@ var Flowtime = (function ()
 					navigateTo(dest, true, true);
 				}
 			}
-			// pages in oveview mode
-			if (isOverview)
+		}
+		// pages in oveview mode
+		if (isOverview)
+		{
+			var dest = e.target;
+			while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
 			{
-				var dest = e.target;
-				while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
-				{
-					dest = dest.parentNode;
-				}
-				if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
-				{
-					e.preventDefault();
-					navigateTo(dest, null, true);
-				}
+				dest = dest.parentNode;
+			}
+			if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+			{
+				e.preventDefault();
+				navigateTo(dest, null, true);
 			}
 		}
 		// thumbs in the default progress indicator
