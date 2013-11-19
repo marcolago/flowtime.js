@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US" class="ie ie6 lt-ie9">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US" class="ie ie7 lt-ie9">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US" class="ie ie8 lt-ie9">
+<![endif]-->
+<!--[if gte IE 9]>
+<html lang="en-US" class="ie ie9">
+<![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="en-US" class="">
+<!--<![endif]-->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="author" content="marcolago">
+
+	<meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
+
+	<title>Flowtime.js</title>
+	<link rel="stylesheet" href="../../assets/css/reset.css">
+	<link rel="stylesheet" href="../../css/flowtime.css">
+	<link rel="stylesheet" href="../../css/themes/default.css">
+	
+</head>
+<body class="">
+	
+	<div class="flowtime">
+		<div class="ft-section" data-id="section-1">
+			<div id="/section-1/page-1" class="ft-page" data-id="page-1">
+				<h1>Video embedding Demo</h1>
+				<p>This presentation is a test for video embedding from You Tube and Vimeo.</p>
+			</div>
+			<div id="/section-1/page-2" class="ft-page" data-id="page-2">
+				<h1>You Tube Video</h1>
+				<iframe id="yt-player" class="youtube-player" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/maNClwlCWRk?enablejsapi=1&html5=1" frameborder="0" allowfullscreen></iframe>
+			</div>
+			<div id="/section-1/page-3" class="ft-page" data-id="page-3">
+				<h1>Vimeo Video</h1>
+				<iframe src="http://player.vimeo.com/video/66599774" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> <p><a href="http://vimeo.com/66599774">"LOAD"</a> from <a href="http://vimeo.com/briansoerensen">Brian S&oslash;rensen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+			</div>
+	
+	<script src="../../js/brav1toolbox.js"></script>
+	<script src="../../js/flowtime.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-1228618-10']);
+		_gaq.push(['_trackPageview']);
+		_gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		//
+		//
+		// Configuration API test
+		Flowtime.showProgress(true);
+		// Flowtime.fragmentsOnSide(true);
+		// Flowtime.fragmentsOnBack(true);
+		// Flowtime.useHistory(false);
+		// Flowtime.slideInPx(true);
+		// Flowtime.sectionsSlideToTop(true);
+		// Flowtime.gridNavigation(false);
+		// Flowtime.useOverviewVariant(true);
+		// Flowtime.parallaxInPx(true);
+		//
+		// video management
+		var videos = document.querySelectorAll(".youtube-player");
+		var player = document.getElementById("yt-player");
+		Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
+		function onNavigation(e)
+		{	
+			console.log("navigate")
+			for (var i = 0; i < videos.length; i++) {
+				console.log("try to stop", player)
+				// videos[i].stopVideo();
+				player.stopVideo();
+			}
+		}
+		// starts the application with configuration options
+		Flowtime.start();
+	</script>
+	
+	<script>
+	 // custom code here
+	</script>
+</body>
+</html>

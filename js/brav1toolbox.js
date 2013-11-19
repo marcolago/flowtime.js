@@ -37,6 +37,18 @@ var Brav1Toolbox = (function()
 		}
 	}
 
+	function _removeListener(element, type, handler)
+	{
+		if (element.removeEventListener)
+		{
+			element.removeEventListener(type, handler);
+		}
+		else if (element.detachEvent)
+		{
+			element.detachEvent("on" + type, handler);
+		}
+	}
+
 	/**
 	 * checks if a CSS property is supported
 	 * including the prefixed ones
@@ -189,6 +201,7 @@ var Brav1Toolbox = (function()
 
 	return {
 		addListener: _addListener,
+		removeListener: _removeListener,
 		dispatchEvent: _dispatchEvent,
 		testCSS: _testCSS,
 		getPrefixed: _getPrefixed,

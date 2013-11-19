@@ -73,6 +73,12 @@ var Flowtime = (function ()
 	
 	var parallaxEnabled = document.querySelector(".parallax") != null; // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
 
+	var _mouseDragEnabled = false;									// in enabled is possible to drag the presentation with the mouse pointer
+	var _isScrollActive = true;
+	var _isKeyboardActive = true;
+	var _isTouchActive = true;
+	var _areLinksActive = true;
+
 
 	/**
 	 * test the base support
@@ -960,46 +966,48 @@ var Flowtime = (function ()
 
 	function onNavClick(e)
 	{
-		if (e.target.nodeName === "A" || e.target.parentNode.nodeName === "A")
-		{
-			var href = e.target.getAttribute("href") || e.target.parentNode.getAttribute("href");
-			if (href === "#")
+		if (_areLinksActive) {
+			if (e.target.nodeName === "A" || e.target.parentNode.nodeName === "A")
 			{
-				return;
-			}
-			// links with href starting with #
-			if (href)
-			{
-				e.target.blur();
-				if (href.substr(0,1) == "#")
+				var href = e.target.getAttribute("href") || e.target.parentNode.getAttribute("href");
+				if (href === "#")
 				{
-					e.preventDefault();
-					var dest = NavigationMatrix.setPage(href);
-					navigateTo(dest, true, true);
+					return;
+				}
+				// links with href starting with #
+				if (href)
+				{
+					e.target.blur();
+					if (href.substr(0,1) == "#")
+					{
+						e.preventDefault();
+						var dest = NavigationMatrix.setPage(href);
+						navigateTo(dest, true, true);
+					}
 				}
 			}
-		}
-		// pages in oveview mode
-		if (isOverview)
-		{
-			var dest = e.target;
-			while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+			// pages in oveview mode
+			if (isOverview)
 			{
-				dest = dest.parentNode;
+				var dest = e.target;
+				while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+				{
+					dest = dest.parentNode;
+				}
+				if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+				{
+					e.preventDefault();
+					navigateTo(dest, null, true);
+				}
 			}
-			if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
+			// thumbs in the default progress indicator
+			if (Brav1Toolbox.hasClass(e.target, PAGE_THUMB_CLASS))
 			{
 				e.preventDefault();
-				navigateTo(dest, null, true);
+				var pTo = Number(unsafeAttr(e.target.getAttribute("data-section")));
+				var spTo = Number(unsafeAttr(e.target.getAttribute("data-page")));
+				_gotoPage(pTo, spTo);
 			}
-		}
-		// thumbs in the default progress indicator
-		if (Brav1Toolbox.hasClass(e.target, PAGE_THUMB_CLASS))
-		{
-			e.preventDefault();
-			var pTo = Number(unsafeAttr(e.target.getAttribute("data-section")));
-			var spTo = Number(unsafeAttr(e.target.getAttribute("data-page")));
-			_gotoPage(pTo, spTo);
 		}
 	}
 
@@ -1055,6 +1063,31 @@ var Flowtime = (function ()
 	}
 
 /*
+	##     ##  #######  ##     ##  ######  ######## ########  ########     ###     ######   
+	###   ### ##     ## ##     ## ##    ## ##       ##     ## ##     ##   ## ##   ##    ##  
+	#### #### ##     ## ##     ## ##       ##       ##     ## ##     ##  ##   ##  ##        
+	## ### ## ##     ## ##     ##  ######  ######   ##     ## ########  ##     ## ##   #### 
+	##     ## ##     ## ##     ##       ## ##       ##     ## ##   ##   ######### ##    ##  
+	##     ## ##     ## ##     ## ##    ## ##       ##     ## ##    ##  ##     ## ##    ##  
+	##     ##  #######   #######   ######  ######## ########  ##     ## ##     ##  ######   
+*/
+
+	function _setMouseDrag(value)
+	{
+		_mouseDragEnabled = value;
+		if (_mouseDragEnabled)
+		{
+			Brav1Toolbox.addListener(ftContainer, "mousedown", onTouchStart, false);
+			Brav1Toolbox.addListener(ftContainer, "mouseup", onTouchEnd, false);
+		}
+		else
+		{
+			Brav1Toolbox.removeListener(ftContainer, "mousedown", onTouchStart);
+			Brav1Toolbox.removeListener(ftContainer, "mouseup", onTouchEnd);	
+		}
+	}
+
+/*
 	########  #######  ##     ##  ######  ##     ## 
 	   ##    ##     ## ##     ## ##    ## ##     ## 
 	   ##    ##     ## ##     ## ##       ##     ## 
@@ -1074,9 +1107,12 @@ var Flowtime = (function ()
 	var _dragAxis = "x";
 	var _swipeLimit = 100;
 
-	ftContainer.addEventListener("touchstart", onTouchStart, false);
-	ftContainer.addEventListener("touchmove",  onTouchMove, false);
-	ftContainer.addEventListener("touchend",   onTouchEnd, false);
+	if (isTouchDevice)
+	{
+		ftContainer.addEventListener("touchstart", onTouchStart, false);
+		ftContainer.addEventListener("touchmove",  onTouchMove, false);
+		ftContainer.addEventListener("touchend",   onTouchEnd, false);
+	}
 
 	function onTouchStart(e)
 	{
@@ -1090,6 +1126,10 @@ var Flowtime = (function ()
 		var initOffset = getInitOffset();
 		_ftX = initOffset.x;
 		_ftY = initOffset.y;
+		if (_mouseDragEnabled)
+		{
+			Brav1Toolbox.addListener(ftContainer, "mousemove", onTouchMove, false);
+		}
 	}
 
 	function onTouchMove(e)
@@ -1102,38 +1142,41 @@ var Flowtime = (function ()
 
 	function onTouchEnd(e)
 	{
-		if (Math.abs(_deltaX) >= _swipeLimit || Math.abs(_deltaY) >= _swipeLimit)
-		{
-			e = getTouchEvent(e);
-			_dragging = 0;
-			_dragAxis = Math.abs(_deltaX) >= Math.abs(_deltaY) ? "x" : "y";
-			if (_dragAxis == "x" && Math.abs(_deltaX) >= _swipeLimit)
+		if (_isTouchActive) {
+			if (Math.abs(_deltaX) >= _swipeLimit || Math.abs(_deltaY) >= _swipeLimit)
 			{
-				if (_deltaX > 0)
+				e = getTouchEvent(e);
+				_dragging = 0;
+				_dragAxis = Math.abs(_deltaX) >= Math.abs(_deltaY) ? "x" : "y";
+				if (_dragAxis == "x" && Math.abs(_deltaX) >= _swipeLimit)
 				{
-					_prevSection();
-					return;
+					if (_deltaX > 0)
+					{
+						_prevSection();
+						return;
+					}
+					else if (_deltaX < 0)
+					{
+						_nextSection();
+						return;
+					}
 				}
-				else if (_deltaX < 0)
+				else
 				{
-					_nextSection();
-					return;
-				}
-			}
-			else
-			{
-				if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit)
-				{
-					_prevPage();
-					return;
-				}
-				else if (_deltaY < 0)
-				{
-					_nextPage();
-					return;
+					if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit)
+					{
+						_prevPage();
+						return;
+					}
+					else if (_deltaY < 0)
+					{
+						_nextPage();
+						return;
+					}
 				}
 			}
 		}
+		Brav1Toolbox.removeListener(ftContainer, "mousemove", onTouchMove);
 	}
 
 	function getTouchEvent(e)
@@ -1210,9 +1253,12 @@ var Flowtime = (function ()
 
 	function onMouseScroll(e)
 	{
-		e.preventDefault();
 		clearTimeout(scrollTimeout);
-		scrollTimeout = setTimeout(function(){doScrollTimeout(e);}, 100);
+		//
+		if (_isScrollActive) {
+			e.preventDefault();
+			scrollTimeout = setTimeout(function(){doScrollTimeout(e);}, 100);	
+		}
 	}
 
 	function doScrollTimeout(e)
@@ -1531,23 +1577,23 @@ var Flowtime = (function ()
 	{
 		var pageIndex = NavigationMatrix.getPageIndex();
 		Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT,	{
-													section: 			NavigationMatrix.getCurrentSection(),
-													page: 				NavigationMatrix.getCurrentPage(),
+													section: 					NavigationMatrix.getCurrentSection(),
+													page: 						NavigationMatrix.getCurrentPage(),
 													sectionIndex: 		pageIndex.section, 
-													pageIndex: 			pageIndex.page,
-													pastSectionIndex: 	pastIndex.section,  
+													pageIndex: 				pageIndex.page,
+													pastSectionIndex: pastIndex.section,  
 													pastPageIndex: 		pastIndex.page,  
-													prevSection: 		NavigationMatrix.hasPrevSection(),
-													nextSection: 		NavigationMatrix.hasNextSection(),
-													prevPage: 			NavigationMatrix.hasPrevPage(),
-													nextPage: 			NavigationMatrix.hasNextPage(),
-													fragment: 			NavigationMatrix.getCurrentFragment(),
+													prevSection: 			NavigationMatrix.hasPrevSection(),
+													nextSection: 			NavigationMatrix.hasNextSection(),
+													prevPage: 				NavigationMatrix.hasPrevPage(),
+													nextPage: 				NavigationMatrix.hasNextPage(),
+													fragment: 				NavigationMatrix.getCurrentFragment(),
 													fragmentIndex: 		NavigationMatrix.getCurrentFragmentIndex(),
-													isOverview: 		isOverview, 
-													progress: 			NavigationMatrix.getProgress(),
-													total: 				NavigationMatrix.getPagesTotalLength(),
-													isLoopable: 		_isLoopable, 
-													isAutoplay: 		_isAutoplay, 
+													isOverview: 			isOverview, 
+													progress: 				NavigationMatrix.getProgress(),
+													total: 						NavigationMatrix.getPagesTotalLength(),
+													isLoopable: 			_isLoopable, 
+													isAutoplay: 			_isAutoplay, 
 												} );
 	}
 
@@ -1865,50 +1911,52 @@ var Flowtime = (function ()
 	
 	function onKeyUp(e)
 	{
-		var tag = e.target.tagName;
-		var elem;
-		if (tag != "INPUT" && tag != "TEXTAREA" && tag != "SELECT")
-		{
-			e.preventDefault();
-			switch (e.keyCode)
+		if (_isKeyboardActive) {
+			var tag = e.target.tagName;
+			var elem;
+			if (tag != "INPUT" && tag != "TEXTAREA" && tag != "SELECT")
 			{
-				case 27 : // esc
-					_toggleOverview(true);
-					break;
-				case 33 : // pag up
-					_gotoTop();
-					break;
-				case 34 : // pag down
-					_gotoBottom();
-					break;
-				case 35 : // end
-					_gotoEnd();
-					break;
-				case 36 : // home
-					_gotoHome();
-					break;
-				case 37 : // left
-					_prevSection(e.shiftKey);
-					break;
-				case 39 : // right
-					_nextSection(e.shiftKey);
-					break;
-				case 38 : // up
-					_prevPage(e.shiftKey);
-					break;
-				case 40 : // down
-					_nextPage(e.shiftKey);
-					break;
-				case 13 : // return
+				e.preventDefault();
+				switch (e.keyCode)
 				{
-					if (isOverview)
+					case 27 : // esc
+						_toggleOverview(true);
+						break;
+					case 33 : // pag up
+						_gotoTop();
+						break;
+					case 34 : // pag down
+						_gotoBottom();
+						break;
+					case 35 : // end
+						_gotoEnd();
+						break;
+					case 36 : // home
+						_gotoHome();
+						break;
+					case 37 : // left
+						_prevSection(e.shiftKey);
+						break;
+					case 39 : // right
+						_nextSection(e.shiftKey);
+						break;
+					case 38 : // up
+						_prevPage(e.shiftKey);
+						break;
+					case 40 : // down
+						_nextPage(e.shiftKey);
+						break;
+					case 13 : // return
 					{
-						_gotoPage(NavigationMatrix.getCurrentHilited());
+						if (isOverview)
+						{
+							_gotoPage(NavigationMatrix.getCurrentHilited());
+						}
+						break;
 					}
-					break;
+					default :
+						break;
 				}
-				default :
-					break;
 			}
 		}
 	}
@@ -2268,6 +2316,38 @@ var Flowtime = (function ()
 	{
 		_isLoopable = value;
 	}
+
+	function _enableNavigation(links, keyboard, scroll, touch)
+	{
+	  _areLinksActive = links === false ? false : true;
+	  _isKeyboardActive = keyboard === false ? false : true;
+		_isScrollActive = scroll === false ? false : true;
+	  _isTouchActive = touch === false ? false : true;
+	}
+
+	function _disableNavigation(links, keyboard, scroll, touch)
+	{
+	  _areLinksActive = links === false ? true : false;
+	  _isKeyboardActive = keyboard === false ? true : false;
+		_isScrollActive = scroll === false ? true : false;
+	  _isTouchActive = touch === false ? true : false;
+	}
+
+	function _setLinksNavigation(v) {
+		_areLinksActive = v === false ? false : true;
+	}
+
+	function _setKeyboardNavigation(v) {
+		_isKeyboardActive = v === false ? false : true;
+	}
+
+	function _setScrollNavigation(v) {
+		_isScrollActive = v === false ? false : true;
+	}
+
+	function _setTouchNavigation(v) {
+		_isTouchActive = v === false ? false : true;
+	}
 	
 	/**
 	 * return object for public methods
@@ -2308,7 +2388,14 @@ var Flowtime = (function ()
 		play: _play,
 		pause: _pause,
 		stop: _stop,
-		loop: _loop
+		loop: _loop,
+		mouseDragEnabled: _setMouseDrag,
+		enableNavigation : _enableNavigation,
+		disableNavigation: _disableNavigation,
+		setLinksNavigation: _setLinksNavigation,
+		setKeyboardNavigation: _setKeyboardNavigation,
+		setScrollNavigation: _setScrollNavigation,
+		setTouchNavigation: _setTouchNavigation
 	};
 	
 })();
