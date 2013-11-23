@@ -12,7 +12,10 @@ var Flowtime = (function ()
 	/**
 	 * test if the device is touch enbled
 	 */
-	var isTouchDevice = 'ontouchstart' in document.documentElement;
+	var isTouchDevice = false;
+	if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0)) {
+			isTouchDevice = true;
+	}
 	
 	/**
 	 * test if the HTML History API's where available
@@ -98,6 +101,7 @@ var Flowtime = (function ()
 	{
 		browserSupport = false;
 	}
+
 	/**
 	 * add "ft-absolute-nav" hook class to body
 	 * to set the CSS properties
@@ -956,12 +960,12 @@ var Flowtime = (function ()
 	{
 		if (isTouchDevice)
 		{
-			Brav1Toolbox.addListener(document, "touchend", onNavClick, false);
+			Brav1Toolbox.addListener(document, "touchend", function(e) {
+				e.preventDefault();
+				onNavClick(e);
+			}, false);
 		}
-		else
-		{
-			Brav1Toolbox.addListener(document, "click", onNavClick, false);
-		}
+		Brav1Toolbox.addListener(document, "click", onNavClick, false);
 	}
 
 	function onNavClick(e)
