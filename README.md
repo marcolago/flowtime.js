@@ -9,6 +9,13 @@ You can take a look at the [sample presentation](http://flowtime-js.marcolago.co
 - [Made with Flowtime.js](https://github.com/marcolago/flowtime.js/wiki/Made-With-Flowtime.js)
 - [Credits and Thanks](https://github.com/marcolago/flowtime.js/wiki/Credits-and-Thanks)
 
+## Build presentations online with Flowtime.js and SlideCaptain
+
+Flowtime.js is the slide engine used by [SlideCaptain](http://slidecaptain.com/).
+If you prefer a WYSIWYG editor or you feel not comfortable with plain HTML you can try [SlideCaptain](http://slidecaptain.com/): a powerful web app for building well-structured presentations in your browser.
+
+SlideCaptain is developed by [Engawa](http://engawa.de/).
+
 ## UPDATES
 
 - **May 12 2013**
