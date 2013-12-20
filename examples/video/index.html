@@ -38,11 +38,11 @@
 			</div>
 			<div id="/section-1/page-2" class="ft-page" data-id="page-2">
 				<h1>You Tube Video</h1>
-				<iframe id="yt-player" class="youtube-player" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/maNClwlCWRk?enablejsapi=1&html5=1" frameborder="0" allowfullscreen></iframe>
+				<iframe id="yt-player" class="youtube-player" type="text/html" width="640" height="360" src="https://www.youtube.com/embed/maNClwlCWRk?enablejsapi=1&amp;html5=1" frameborder="0" allowfullscreen></iframe>
 			</div>
 			<div id="/section-1/page-3" class="ft-page" data-id="page-3">
 				<h1>Vimeo Video</h1>
-				<iframe src="http://player.vimeo.com/video/66599774" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> <p><a href="http://vimeo.com/66599774">"LOAD"</a> from <a href="http://vimeo.com/briansoerensen">Brian S&oslash;rensen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
+				<iframe id="vimeo-video" src="http://player.vimeo.com/video/66599774?api=1&amp;player_id=vimeo-video" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> <p><a href="http://vimeo.com/66599774">"LOAD"</a> from <a href="http://vimeo.com/briansoerensen">Brian S&oslash;rensen</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
 			</div>
 	
 	<script src="../../js/brav1toolbox.js"></script>
@@ -71,19 +71,38 @@
 		// Flowtime.useOverviewVariant(true);
 		// Flowtime.parallaxInPx(true);
 		//
-		// video management
-		var videos = document.querySelectorAll(".youtube-player");
-		var player = document.getElementById("yt-player");
+		// YouTube video management
+		// https://developers.google.com/youtube/iframe_api_reference
+
+		var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+
+		var player;
+		function onYouTubeIframeAPIReady() {
+		  player = new YT.Player('yt-player');  // the ID of the iframe that contains the YouTube Video
+		}
+
+		//
+		// Vimeo video management
+		// http://developer.vimeo.com/player/js-api
+
+		var vimeoIframe = document.getElementById("vimeo-video");
+		var pauseCommand = {"method": "pause"};
+
+		//
+		// navigation event
+
 		Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
 		function onNavigation(e)
-		{	
-			console.log("navigate")
-			for (var i = 0; i < videos.length; i++) {
-				console.log("try to stop", player)
-				// videos[i].stopVideo();
-				player.stopVideo();
-			}
+		{
+			console.log("Trying to stop the YouTube video");
+			player.stopVideo();
+			console.log("trying to stop the Vimeo video");
+			vimeoIframe.contentWindow.postMessage(JSON.stringify(pauseCommand), "*");
 		}
+
 		// starts the application with configuration options
 		Flowtime.start();
 	</script>
