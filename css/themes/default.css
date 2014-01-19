@@ -360,6 +360,10 @@ body {
 	vertical-align: middle;
 }
 
+.flowtime .stack-center .stacked-center li {
+	text-align: left;
+}
+
 /* media queries */
 
 @media screen and (min-height: 41em) and (min-width: 80em)
