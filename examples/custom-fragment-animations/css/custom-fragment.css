@@ -3,13 +3,13 @@
  * https://github.com/marcolago/flowtime.js#customize-the-fragments-animation
  */
 
-.ft-fragment {
+.ft-fragment.peek-a-boo {
     opacity: 0;
-         -o-transition: all 0.8s 1.0s ease-in-out;
-        -ms-transition: all 0.8s 1.0s ease-in-out;
-       -moz-transition: all 0.8s 1.0s ease-in-out;
-    -webkit-transition: all 0.8s 1.0s ease-in-out;
-            transition: all 0.8s 1.0s ease-in-out;
+         -o-transition: all 0.8s ease-in-out 1.0s;
+        -ms-transition: all 0.8s ease-in-out 1.0s;
+       -moz-transition: all 0.8s ease-in-out 1.0s;
+    -webkit-transition: all 0.8s ease-in-out 1.0s;
+            transition: all 0.8s ease-in-out 1.0s;
 	     -o-transform: translateY(1500px);
 	    -ms-transform: translateY(1500px);
 	   -moz-transform: translateY(1500px);
