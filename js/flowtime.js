@@ -69,6 +69,8 @@ var Flowtime = (function ()
 	var _useOverviewVariant = false;								// use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
 	var _twoStepsSlide = false;										// not yet implemented! slides up or down before, then slides to the page
 	var _isLoopable = false;
+        // Used if presentation is being controlled by a "presenter" device (e.g., R400)
+	var _clickerMode = false;
 	var _showProgress = false;										// show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
 	var _parallaxInPx = false;										// if false the parallax movement is calulated in % values, if true in pixels
 	var defaultParallaxX = 50;										// the default parallax horizontal value used when no data-parallax value were specified
@@ -1597,6 +1599,7 @@ var Flowtime = (function ()
 													progress: 				NavigationMatrix.getProgress(),
 													total: 						NavigationMatrix.getPagesTotalLength(),
 													isLoopable: 			_isLoopable, 
+													clickerMode: 			_clickerMode, 
 													isAutoplay: 			_isAutoplay, 
 												} );
 	}
@@ -1926,11 +1929,13 @@ var Flowtime = (function ()
 					case 27 : // esc
 						_toggleOverview(true);
 						break;
-					case 33 : // pag up
-						_gotoTop();
+					case 33 : // page up
+						if (_clickerMode) _prevPage(e.shiftKey);
+                                                else _gotoTop();
 						break;
-					case 34 : // pag down
-						_gotoBottom();
+					case 34 : // page down
+						if (_clickerMode) _nextPage(e.shiftKey);
+                                                else _gotoBottom();
 						break;
 					case 35 : // end
 						_gotoEnd();
@@ -2321,6 +2326,11 @@ var Flowtime = (function ()
 		_isLoopable = value;
 	}
 
+	function _clicker(value)
+	{
+		_clickerMode = value;
+	}
+
 	function _enableNavigation(links, keyboard, scroll, touch)
 	{
 	  _areLinksActive = links === false ? false : true;
@@ -2393,6 +2403,7 @@ var Flowtime = (function ()
 		pause: _pause,
 		stop: _stop,
 		loop: _loop,
+		clicker: _clicker,
 		mouseDragEnabled: _setMouseDrag,
 		enableNavigation : _enableNavigation,
 		disableNavigation: _disableNavigation,
