@@ -4,12 +4,11 @@
  */
 
 .ft-fragment.peek-a-boo {
-    opacity: 0;
-         -o-transition: all 0.8s ease-in-out 1.0s;
-        -ms-transition: all 0.8s ease-in-out 1.0s;
-       -moz-transition: all 0.8s ease-in-out 1.0s;
-    -webkit-transition: all 0.8s ease-in-out 1.0s;
-            transition: all 0.8s ease-in-out 1.0s;
+  opacity: 0;
+       -o-transition: all 0.8s ease-in-out 1.0s;
+     -moz-transition: all 0.8s ease-in-out 1.0s;
+  -webkit-transition: all 0.8s ease-in-out 1.0s;
+          transition: all 0.8s ease-in-out 1.0s;
 	     -o-transform: translateY(1500px);
 	    -ms-transform: translateY(1500px);
 	   -moz-transform: translateY(1500px);

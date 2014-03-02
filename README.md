@@ -13,21 +13,32 @@ You can take a look at the [sample presentation](http://flowtime-js.marcolago.co
 
 Flowtime.js is the slide engine used by [SlideCaptain](http://slidecaptain.com/).
 If you prefer a WYSIWYG editor or you feel not comfortable with plain HTML you can try [SlideCaptain](http://slidecaptain.com/): a powerful web app for building well-structured presentations in your browser.
+SlideCaptain adds many features to Flowtime.js like MathJax™ support and PDF export tool .
 
 SlideCaptain is developed by [Engawa](http://engawa.de/).
 
-## UPDATES
+## Major Updates
+
+- **March 3 2014**
+  - Added methods to enable and disable navigation logics at runtime.
+  - Added options to get alternative horizontal layout; sections are stacked vertically and pages are arranged horizontally.
+  - Added option to reconfigure key bindings for some wireless presenters. ([#15](https://github.com/marcolago/flowtime.js/issues/15))
 
 - **May 12 2013**
   - Added the autoplay configuration functions and `start()`, `pause()` and `stop()` methods. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
-  - Now the presentations is loopable both for page and section navigation. ([#18](https://github.com/marcolago/flowtime.js/issues/18)) 
+  - Now the presentations is loopable both for page and section navigation. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
 
 ## Main Features
 
 **Full Page Fluid Layout Boilerplate**.  
 Flowtime.js is designed to perfectly fit your viewport and is based on a solid `display: inline-block;` foundation.  
-This frameworks doesn't style your presentations or sites for you but it takes care of all the annoying things like navigation and deep-linking, so you are free to style every single element of your design as you like.
+This frameworks doesn’t style your presentations or sites for you but it takes care of all the annoying things like navigation and deep-linking, so you are free to style every single element of your design as you like.
 But for the ones who need a ready-to-use tool it comes with a default theme that you can edit or you can add new themes just by linking your css files.
+
+**Alternate Horizontal Layout**
+The default layout for Flowtime.js has sections arranged side by side horizontally and pages stacked vertically in each section.
+You can use the alternate layout where section stacked vertically and pages arranged horizontally by adding the class `ft-cross`to the Flowtime element in the HTML document.
+See **How to Build the Markup** section for an example.
 
 **Multiple Controls Navigation**.  
 You can navigate through pages via links, keyboard or deep-linking.  
@@ -53,7 +64,7 @@ Overview mode allows you to look at the entire site/presentation structure in a 
 When in overview mode you can navigate to a page by click on it or using the arrow keys and **then press Return to go**.
 
 **History Management**.  
-Flowtime.js is built on top of the **HTML History APIs** so you can navigate using the browser's back and forward buttons and deep-link a page for sharing.
+Flowtime.js is built on top of the **HTML History APIs** so you can navigate using the browser’s back and forward buttons and deep-link a page for sharing.
 Flowtime.js is a client side only framework so if you want to optimize SEO you have to add a server side logic to serve only the single page content to search engines.
 If the History APIs were not available the framework degrades well using the hashchange event.
 
@@ -67,7 +78,7 @@ Integrated native parallax support based on CSS3 transformations and configurabl
 Flowtime.js is tested and works on **every modern desktop browser and IE9 and above**.  
 Where the basic support is not available the framework degrades to a native scrolling with anchor links but the full page fluid layouts remains intact.
 
-## How to build the markup
+## How to Build the Markup
 
 Markup for Flowtime.js is really simple and easy to learn.
 All you have to do is wrap some divs in a parent `<div class="flowtime">`, then, marking up the section with `class="ft-section"` and the single page with `class="ft-page"`.
@@ -82,7 +93,18 @@ To better understand the markup take a look at this snippet:
     </div>
 ```
 
-Every single page is a full window view - or a single slide if you prefer - and it's a relative formatting context.
+If you want to use the alternate layout you have to add the class `ft-cross`to the Flowtime element and Flowtime.js takes care of the rest:
+
+```html
+    <div class="flowtime ft-cross">
+      <div class="ft-section">
+        <div class="ft-page">Section 1 / Page 1</div>
+        <div class="ft-page">Section 1 / Page 2</div>
+      </div>
+    </div>
+```
+
+Every single page is a full window view—or a single slide if you prefer—and it’s a relative formatting context.
 Even if you have only single slides ordered in a row you have to nest the pages in sections; take a look at this markup which creates two slides one aside the other:
 
 ```html
@@ -98,7 +120,7 @@ Even if you have only single slides ordered in a row you have to nest the pages 
 
 ### Titles and Pages URL
 
-Flowtime.js sets automatically the title in the browser's tab on navigation reading it from the first `h1` on the page. If you want to override a title or use a different string instead of the heading content you can set a `data-title` attribute to the page.
+Flowtime.js sets automatically the title in the browser’s tab on navigation reading it from the first `h1` on the page. If you want to override a title or use a different string instead of the heading content you can set a `data-title` attribute to the page.
 You can add the `data-title` attribute both to `ft-section` and to `ft-page` elements; if a `data-title` attribute was found on a section it will be used to write the title in the browser tab with this schema:
 
 `<title> text content [ | data-title on ft-section ] | h1 text content or data-title on ft-page`
@@ -153,7 +175,7 @@ The `shy` class completely hides a fragment when it lose the focus; for example:
 
 ### Parallax
 
-If you want to enable the parallax effect on some elements add a `parallax` class to these elements and, optionally, sets the parallax distance value adding a `data-parallax` attribute specifying the `x` and `y` values separated by a comma. If you doesn't specify a `data-parallax` attribute will be used the default lengths.
+If you want to enable the parallax effect on some elements add a `parallax` class to these elements and, optionally, sets the parallax distance value adding a `data-parallax` attribute specifying the `x` and `y` values separated by a comma. If you doesn˙t specify a `data-parallax` attribute will be used the default lengths.
 
 ```html
     <div class="flowtime">
@@ -177,8 +199,8 @@ Flowtime.js comes with configuration APIs useful for customizing the experience 
 Flowtime.start();
 ```
 
-Starts the application logic. This method is optional but is required if you change some configuration parameters.
-If you does'n call the `start()` method Flowtime.js starts itself but some configuration parameters will be applied only after the first navigation action.  
+Starts the application logic. This method is optional unless you change some configuration parameters.
+If you doesn’t call the `start()` method Flowtime.js starts itself but some configuration parameters will be applied only after the first navigation action.  
 You can pass as optional parameters the same parameters that are accepted by the `gotoPage` method (see below) to let the presentation navigating to a specific page at start.
 
 ```javascript
@@ -249,7 +271,7 @@ In Webkit browsers the default overview mode can cause rendering problems if the
 Flowtime.defaultParallaxValues(Number x, [Number y]);
 ```
 
-Sets the default values for parallax elements so you doesn't have to set the values for every single element.  
+Sets the default values for parallax elements so you doesn’t have to set the values for every single element.  
 If you only pass the `x` value the `y` value will be the same.
 
 ```javascript
@@ -273,6 +295,22 @@ Flowtime.loop(Boolean loop);
 ```
 
 Default `false`. If true you can loop the navigation both for the sections and for the pages so you can back to the start of the presentation navigating forward from the last page.
+
+```javascript```
+Flowtime.clicker(Boolean clicker);
+```
+
+If passed `true` PageUp and PageDown keys are reconfigured to go to the previous and next page instead to the first and the last page of the section.
+This option useful if you use some wireless presenter like the Logitech R400; see issue ([#15](https://github.com/marcolago/flowtime.js/issues/15)) for more information.
+
+```javascript```
+Flowtime.setCrossDirection(Boolean cross);
+```
+
+Force the cross direction layout for sections and pages at runtime.
+Pass `true`to use the optional horizontal layout or pass `false` to use the standard vertical layout.
+Every related option will be automatically reconfigured.
+Related options are keyboard bindings, touchpad and touch gestures and pages coordinates cache.
 
 ### Navigation API
 
@@ -362,6 +400,48 @@ Flowtime.stop();
 ```
 
 Stops the autoplay timer resetting the delay.
+
+### Disabling the Navigation via APIs
+
+You can disable all the navigation logics together or selectively one by one via some API’s methods.
+
+```javascript
+Flowtime.enableNavigation(Boolean links, Boolean keyboard, Boolean scroll, Boolean touch);
+```
+
+Enables the navigation logic. If you pass `true` for a parameter the navigation will be enabled for that input type.
+You can also use the shorthand `Flowtime.enableNavigation();` instead of `Flowtime.enableNavigation(true, true, true, true);`.
+
+```javascript
+Flowtime.disableNavigation(Boolean links, Boolean keyboard, Boolean scroll, Boolean touch);
+```
+
+Disables the navigation logic. If you pass `true` for a parameter the navigation will be disabled for that input type.
+You can also use the shorthand `Flowtime.disableNavigation();` instead of `Flowtime.disableNavigation(true, true, true, true);`.
+
+```javascript
+Flowtime.setLinksNavigation(Boolean enable);
+```
+
+Enables (`true`) or disables (`false`) the links navigation logic. If you disable the links navigation you will not be able to change slide via anchor links.
+
+```javascript
+Flowtime.setKeyboardNavigation(Boolean enable);
+```
+
+Enables (`true`) or disables (`false`) the keyboard navigation logic. If you disable the links navigation you will not be able to change slide via arrow keys.
+
+```javascript
+Flowtime.setScrollNavigation(Boolean enable);
+```
+
+Enables (`true`) or disables (`false`) the links navigation logic. If you disable the links navigation you will not be able to change slide via mouse scrollwheel or trackpad scroll gestures.
+
+```javascript
+Flowtime.setTouchNavigation(Boolean enable);
+```
+
+Enables (`true`) or disables (`false`) the links navigation logic. If you disable the links navigation you will not be able to change slide via touch swipe gestures.
 
 ### Data API
 
