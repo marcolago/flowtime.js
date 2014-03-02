@@ -275,11 +275,7 @@ var Flowtime = (function ()
         _sp.x = _sp.offsetLeft + _sp.parentNode.offsetLeft;
         _sp.y = _sp.offsetTop + _sp.parentNode.offsetTop;
       }
-<<<<<<< HEAD
-    };
-=======
     }
->>>>>>> 3af890677934087c406faecde80da229788e6b68
     
     /**
      * returns the next section in navigation
@@ -1653,13 +1649,8 @@ var Flowtime = (function ()
                           progress:         NavigationMatrix.getProgress(),
                           total:            NavigationMatrix.getPagesTotalLength(),
                           isLoopable:       _isLoopable, 
-<<<<<<< HEAD
-                          clickerMode:      _clickerMode, 
-                          isAutoplay:       _isAutoplay, 
-=======
                           clickerMode:      _clickerMode,
                           isAutoplay:       _isAutoplay
->>>>>>> 3af890677934087c406faecde80da229788e6b68
                         } );
   }
 
@@ -2537,8 +2528,4 @@ var Flowtime = (function ()
     setCrossDirection: _setCrossDirection
   };
   
-<<<<<<< HEAD
 })();
-=======
-})();
->>>>>>> 3af890677934087c406faecde80da229788e6b68
