@@ -3,7 +3,7 @@
  * http://marcolago.com/flowtime-js/
  * MIT licensed
  *
- * Copyright (C) 2012-2013 Marco Lago, http://marcolago.com
+ * Copyright (C) 2012-now Marco Lago, http://marcolago.com
  */
 
 var Flowtime = (function ()
@@ -83,6 +83,8 @@ var Flowtime = (function ()
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
+
+  var _debouncingDelay = 100;
 
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
 
@@ -1281,7 +1283,7 @@ var Flowtime = (function ()
     //
     if (_isScrollActive) {
       e.preventDefault();
-      scrollTimeout = setTimeout(function(){doScrollTimeout(e);}, 100); 
+      scrollTimeout = setTimeout(function(){doScrollTimeout(e);}, _debouncingDelay); 
     }
   }
 
@@ -2414,14 +2416,14 @@ var Flowtime = (function ()
     return NavigationMatrix.getPageIndex().page;
   }
 
-  function _loop(value)
+  function _loop(v)
   {
-    _isLoopable = value;
+    _isLoopable = v;
   }
 
-  function _clicker(value)
+  function _clicker(v)
   {
-    _clickerMode = value;
+    _clickerMode = v;
   }
 
   function _enableNavigation(links, keyboard, scroll, touch)
@@ -2476,6 +2478,10 @@ var Flowtime = (function ()
       navigateTo();
     }
   }
+
+  function _setDebouncingDelay(v) {
+    _debouncingDelay = v;
+  }
   
   /**
    * return object for public methods
@@ -2525,7 +2531,8 @@ var Flowtime = (function ()
     setKeyboardNavigation: _setKeyboardNavigation,
     setScrollNavigation: _setScrollNavigation,
     setTouchNavigation: _setTouchNavigation,
-    setCrossDirection: _setCrossDirection
+    setCrossDirection: _setCrossDirection,
+    setDebouncingDelay: _setDebouncingDelay
   };
   
 })();

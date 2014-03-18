@@ -360,7 +360,7 @@
 
   <script type="text/javascript">
     var cacheTitle = document.title.replace("Flowtime.js | ", "");
-    /*var _gaq = _gaq || [];
+    var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-1228618-10']);
     _gaq.push(['_trackPageview']);
     _gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
@@ -368,7 +368,7 @@
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();*/
+    })();
     
     // Configuration API test
     Flowtime.showProgress(true);
@@ -385,9 +385,9 @@
     Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
     function onNavigation(e)
     {
-      // _gaq.push(['_trackEvent', 'Flowtime', 'Navigation', cacheTitle + ' > ' + document.title.replace("Flowtime.js | ", "")]);
+       _gaq.push(['_trackEvent', 'Flowtime', 'Navigation', cacheTitle + ' > ' + document.title.replace("Flowtime.js | ", "")]);
       // console.log(cacheTitle + ' > ' + document.title.replace("Flowtime.js | ", ""));
-      // cacheTitle = document.title.replace("Flowtime.js | ", "");
+      cacheTitle = document.title.replace("Flowtime.js | ", "");
       //console.log('section', e.section, 'sectionIndex', e.sectionIndex);
       //console.log('page', e.page, 'pageIndex', e.);
       //console.log('pastSectionIndex', e.pastSectionIndex, 'pastPageIndex', e.pastPageIndex);

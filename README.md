@@ -312,6 +312,12 @@ Pass `true`to use the optional horizontal layout or pass `false` to use the stan
 Every related option will be automatically reconfigured.
 Related options are keyboard bindings, touchpad and touch gestures and pages coordinates cache.
 
+```javascript```
+Flowtime.setDebouncingDelay(Number value);
+```
+
+Set the debouncing delay time in milliseconds to trigger the event used for the scroll handler.
+
 ### Navigation API
 
 ```javascript
