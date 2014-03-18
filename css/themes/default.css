@@ -67,7 +67,7 @@ html {
 	line-height: 1.5rem;
 	background-color: #333333;
 	color: #ffffff;
-	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4);
+	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 body {
@@ -223,7 +223,7 @@ body {
 .flowtime strong {
 	font-weight: bold;
 	color: #ffdd00;
-	text-shadow: 1px 2px 0 #000000, 1px -1px 0 rgba(0,0,0,0.3), -1px -1px 0 rgba(0,0,0,0.3), -1px 1px 0 rgba(0,0,0,0.3)
+	text-shadow: 1px 2px 0 rgba(0,0,0,0.5);
 }
 
 /* quotes and citations */
