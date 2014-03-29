@@ -6,8 +6,7 @@
     -webkit-text-size-adjust:none;
   }
 
-  body { 
-    white-space: nowrap;  /* disable the wrapping of the space between articles */
+  body {
   }
 
   .flowtime {
@@ -15,6 +14,7 @@
                 /* WARNING! this technique does non remove the white-space in Safari for Windows */
                 /* unless you use this hack: http://absolide.tumblr.com/post/36597829434/safari-inline-block-white-spaces-bug-fix */
                 /* you can use any other white-space removal technique as per: http://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
+    white-space: nowrap;  /* disable the wrapping of the space between articles */
     width: 100%;
     height: 100%;
          -o-transform-origin: 0 0;
@@ -36,7 +36,7 @@
        -moz-transition:    -moz-transform 0.5s cubic-bezier(.77, .10, .22, 1);
     -webkit-transition: -webkit-transform 0.5s cubic-bezier(.77, .10, .22, 1);
             transition:         transform 0.5s cubic-bezier(.77, .10, .22, 1);
-        
+
   }
 
   .flowtime.no-transition {
@@ -54,13 +54,13 @@
     height: 100%;
 
     position: relative;
-    
+
          -o-transform: translateZ(0);
         -ms-transform: translateZ(0);
        -moz-transform: translateZ(0);
     -webkit-transform: translateZ(0);
             transform: translateZ(0);
-    
+
   }
 
   /* section and section thumb alignment */
@@ -115,7 +115,7 @@
     display: inline-block;
     vertical-align: top;
   }
-  
+
   /**
    * GPU acceleration enabled only on the pages involved in the slide animation to ensure no glitches on transition
    */
@@ -244,7 +244,7 @@
 
   .ft-page-thumb.actual {
     background-color: rgba(255,255,255,0.5);
-    border: 1px solid #ffffff;  
+    border: 1px solid #ffffff;
   }
 
   /* overview mode page highlighting */
@@ -286,7 +286,7 @@
     -webkit-transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
             transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
   }
-  
+
   .ft-overview .parallax {
          -o-transform: translateZ(0) !important;
         -ms-transform: translateZ(0) !important;
