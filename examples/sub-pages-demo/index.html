@@ -27,10 +27,10 @@
 	<link rel="stylesheet" href="../../css/flowtime.css">
 	<link rel="stylesheet" href="../../css/themes/default.css">
 	<link rel="stylesheet" href="css/custom.css">
-	
+
 </head>
 <body class="">
-	
+
 	<div class="flowtime">
 		<div class="ft-section" data-id="section-1">
 			<div id="/section-1/page-1" class="ft-page" data-id="page-1">
@@ -59,7 +59,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<script src="../../js/brav1toolbox.js"></script>
 	<script src="../../js/flowtime.js"></script>
 
@@ -73,7 +73,7 @@
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
-		
+
 		// Configuration API test
 		Flowtime.showProgress(true);
 		// Flowtime.fragmentsOnSide(true);
@@ -89,7 +89,7 @@
 		// event management
 		Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
 		function onNavigation(e)
-		{	
+		{
 			/**
 			 * resets the sub pages status when navigating between pages
 			 * but maintains the subpages status if was only triggered the overview mode
@@ -106,7 +106,7 @@
 		// starts the application with configuration options
 		Flowtime.start();
 	</script>
-	
+
 	<script>
 		Brav1Toolbox.addListener(document, "click", onClick);
 		Brav1Toolbox.addListener(document, "touchend", onClick);

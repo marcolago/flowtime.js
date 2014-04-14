@@ -2590,6 +2590,7 @@ var Flowtime = (function ()
   return {
     start: _start,
     updateNavigation: _updateNavigation,
+
     nextSection: _nextSection,
     prevSection: _prevSection,
     next: _nextPage,
@@ -2601,6 +2602,7 @@ var Flowtime = (function ()
     gotoTop: _gotoTop,
     gotoBottom: _gotoBottom,
     gotoEnd: _gotoEnd,
+
     toggleOverview: _toggleOverview,
     fragmentsOnSide: _setFragmentsOnSide,
     fragmentsOnBack: _setFragmentsOnBack,
@@ -2611,12 +2613,14 @@ var Flowtime = (function ()
     useOverviewVariant: _setUseOverviewVariant,
     twoStepsSlide: _setTwoStepsSlide,
     showProgress: _setShowProgress,
-    addEventListener: _addEventListener,
     defaultParallaxValues: _setDefaultParallaxValues,
     parallaxInPx: _setParallaxInPx,
+
+    addEventListener: _addEventListener,
     getDefaultProgress: _getDefaultProgress,
-    getSection: NavigationMatrix.getSection,
-    getPage: NavigationMatrix.getPage,
+
+    getSection: NavigationMatrix.getCurrentSection,
+    getPage: NavigationMatrix.getCurrentPage,
     getSectionIndex: _getSectionIndex,
     getPageIndex: _getPageIndex,
     getPrevSection: NavigationMatrix.getPrevSectionObject,
