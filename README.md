@@ -499,7 +499,7 @@ Flowtime.getNextPage();
 
 Gets a reference to the next page HTML Element.
 
-### Events
+### Events and Callback
 
 When navigating Flowtime.js dispatches a `flowtimenavigation` event useful for create custom behaviours and callbacks.
 You can register the event using `Flowtime.addEventListener("flowtimenavigation", callback, useCapture);` API.
@@ -607,6 +607,15 @@ e.isLoopable
 ```
 
 `true` if Flowtime.js is configured for looping.
+
+If you prefer setting a callback instead of register an event to get the navigation data object you can do it with the onNavigation method:
+
+```javascript
+Flowtime.onNavigation(callback);
+```
+
+`callback` is the function you want to be called every time Flowtime.js navigate.
+The callback function receive the same navigation data object as the event handler.
 
 ## Customizing and Styling Default Components and Behaviours
 
