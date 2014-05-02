@@ -41,19 +41,19 @@
 	<link rel="stylesheet" href="css/flowtime.css">
 	<link rel="stylesheet" href="css/themes/default.css">
 	<link rel="stylesheet" href="assets/css/prism.css">
-	
-	
+
+
 	<link rel="apple-touch-icon-precomposed" 						href="img/touch-icon-iphone.png">
 	<link rel="apple-touch-icon-precomposed" 	sizes="72x72" 		href="img/touch-icon-ipad.png">
 	<link rel="apple-touch-icon-precomposed" 	sizes="114x114" 	href="img/touch-icon-iphone-retina.png">
 	<link rel="apple-touch-icon-precomposed" 	sizes="144x144" 	href="img/touch-icon-ipad-retina.png">
-	
+
 	<link rel="apple-touch-startup-image" href="img/startup-640x920.png" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)">
 	<link rel="apple-touch-startup-image" href="img/startup-640x1096.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
-	
+
 </head>
 <body class="">
-	
+
 	<div class="flowtime">
 		<div class="ft-section" data-id="section-1">
 			<div id="/section-1/page-1" class="ft-page" data-id="page-1" data-title="A Presentation Framework by @marcolago">
@@ -355,7 +355,7 @@
 	</div>
 
 	<a href="https://github.com/marcolago/flowtime.js"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 1000;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
-	
+
 	<script src="js/brav1toolbox.js"></script>
 	<script src="js/flowtime.js"></script>
 	<script src="assets/js/prism.js"></script>
@@ -371,7 +371,7 @@
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
-		
+
 		// Configuration API test
 		Flowtime.showProgress(true);
 		// Flowtime.fragmentsOnSide(true);
@@ -384,7 +384,8 @@
 		Flowtime.parallaxInPx(true);
 		//
 		// event management
-		Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
+		// Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
+		Flowtime.onNavigation(e);
 		function onNavigation(e)
 		{
 			_gaq.push(['_trackEvent', 'Flowtime', 'Navigation', cacheTitle + ' > ' + document.title.replace("Flowtime.js | ", "")]);

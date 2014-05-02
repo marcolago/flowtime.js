@@ -87,6 +87,7 @@ var Flowtime = (function ()
   var _debouncingDelay = 100;
 
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
+  var _navigationCallback = undefined;
 
 
   /**
@@ -1735,26 +1736,31 @@ var Flowtime = (function ()
   function fireNavigationEvent()
   {
     var pageIndex = NavigationMatrix.getPageIndex();
-    Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT,  {
-                          section:          NavigationMatrix.getCurrentSection(),
-                          page:             NavigationMatrix.getCurrentPage(),
-                          sectionIndex:     pageIndex.section,
-                          pageIndex:        pageIndex.page,
-                          pastSectionIndex: pastIndex.section,
-                          pastPageIndex:    pastIndex.page,
-                          prevSection:      NavigationMatrix.hasPrevSection(),
-                          nextSection:      NavigationMatrix.hasNextSection(),
-                          prevPage:         NavigationMatrix.hasPrevPage(),
-                          nextPage:         NavigationMatrix.hasNextPage(),
-                          fragment:         NavigationMatrix.getCurrentFragment(),
-                          fragmentIndex:    NavigationMatrix.getCurrentFragmentIndex(),
-                          isOverview:       isOverview,
-                          progress:         NavigationMatrix.getProgress(),
-                          total:            NavigationMatrix.getPagesTotalLength(),
-                          isLoopable:       _isLoopable,
-                          clickerMode:      _clickerMode,
-                          isAutoplay:       _isAutoplay
-                        } );
+    var eventData =   {
+                        section:          NavigationMatrix.getCurrentSection(),
+                        page:             NavigationMatrix.getCurrentPage(),
+                        sectionIndex:     pageIndex.section,
+                        pageIndex:        pageIndex.page,
+                        pastSectionIndex: pastIndex.section,
+                        pastPageIndex:    pastIndex.page,
+                        prevSection:      NavigationMatrix.hasPrevSection(),
+                        nextSection:      NavigationMatrix.hasNextSection(),
+                        prevPage:         NavigationMatrix.hasPrevPage(),
+                        nextPage:         NavigationMatrix.hasNextPage(),
+                        fragment:         NavigationMatrix.getCurrentFragment(),
+                        fragmentIndex:    NavigationMatrix.getCurrentFragmentIndex(),
+                        isOverview:       isOverview,
+                        progress:         NavigationMatrix.getProgress(),
+                        total:            NavigationMatrix.getPagesTotalLength(),
+                        isLoopable:       _isLoopable,
+                        clickerMode:      _clickerMode,
+                        isAutoplay:       _isAutoplay
+                      }
+    Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT, eventData);
+    //
+    if (_navigationCallback !== undefined) {
+      _navigationCallback(eventData);
+    }
   }
 
   /**
@@ -2584,6 +2590,10 @@ var Flowtime = (function ()
     _debouncingDelay = v;
   }
 
+  function _setNavigationCallback(f) {
+    _navigationCallback = f;
+  }
+
   /**
    * return object for public methods
    */
@@ -2641,7 +2651,8 @@ var Flowtime = (function ()
     setScrollNavigation: _setScrollNavigation,
     setTouchNavigation: _setTouchNavigation,
     setCrossDirection: _setCrossDirection,
-    setDebouncingDelay: _setDebouncingDelay
+    setDebouncingDelay: _setDebouncingDelay,
+    onNavigation: _setNavigationCallback
   };
 
 })();
