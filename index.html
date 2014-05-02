@@ -385,7 +385,7 @@
 		//
 		// event management
 		// Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
-		Flowtime.onNavigation(e);
+		Flowtime.onNavigation(onNavigation);
 		function onNavigation(e)
 		{
 			_gaq.push(['_trackEvent', 'Flowtime', 'Navigation', cacheTitle + ' > ' + document.title.replace("Flowtime.js | ", "")]);
