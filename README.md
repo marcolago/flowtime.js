@@ -225,8 +225,8 @@ You are not limited to the default progress indicator. If you want to buil your 
 Flowtime.fragmentsOnSide(Boolean show);
 ```
 
-Default `false`. Enable the fragments navigation also on section navigation (left and right arrows) and no only on page navigation.
-If true it also set `fragmentsOnBack` on `true`.
+Default `false`. Enable the fragments navigation also on section navigation (left and right arrows) and not only on page navigation.
+If true it also set `fragmentsOnBack` to `true`.
 
 ```javascript
 Flowtime.fragmentsOnBack(Boolean show);
@@ -252,13 +252,13 @@ Use true if you want to alter the default placement of the sections (i.e. settin
 Flowtime.sectionsSlideToTop(Boolean toTop);
 ```
 
-Default `true`. Set to false if you want to customize the fragment animation with a more complex behaviour. This methd enables or disables the animation only and not the internal fragments counter logic. See the event section for more info on how manage a custom fragment navigation.
+Default `false`. Set to true if you want to go to the first page of the section when navigate from sections.
 
 ```javascript
 Flowtime.gridNavigation(Boolean useGrid);
 ```
 
-Default `false`. Just a proxy for `Flowtime.sectionsSlideToTop` but with reversed value; if `true` sets `Flowtime.sectionsSlideToTop` to `False`. Implemented just because the more semantic and easy to understand naming.
+Default `true`. Just a proxy for `Flowtime.sectionsSlideToTop` but with reversed value; if `true` sets `Flowtime.sectionsSlideToTop` to `false`. Implemented just because the more semantic and easy to understand naming.
 
 ```javascript
 Flowtime.useOverviewVariant(Boolean use);
