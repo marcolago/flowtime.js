@@ -1531,7 +1531,7 @@ var Flowtime = (function ()
 
     return {
       enable: _enable,
-      disable: _disable,
+      disable: _disable
     }
   })();
 
@@ -1983,6 +1983,17 @@ var Flowtime = (function ()
       overviewCachedDest = NavigationMatrix.getCurrentPage();
       zoomOut();
     }
+  }
+
+  /**
+   * set the overview state to the given value
+   */
+  function _setShowOverview(v, back, navigate) {
+    if (isOverview === v) {
+      return;
+    }
+    isOverview = !v;
+    _toggleOverview(back, navigate);
   }
 
   /**
@@ -2614,6 +2625,7 @@ var Flowtime = (function ()
     gotoEnd: _gotoEnd,
 
     toggleOverview: _toggleOverview,
+    showOverview: _setShowOverview,
     fragmentsOnSide: _setFragmentsOnSide,
     fragmentsOnBack: _setFragmentsOnBack,
     useHistory: _setUseHistory,

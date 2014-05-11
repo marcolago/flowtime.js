@@ -387,7 +387,13 @@ Flowtime.toggleOverview([Boolean back]);
 ```
 
 Toggles the overview mode switching between overview and page mode.
-If the optional `back` paramerter is `true` toggling the overview mode when in overview does not navigate to the highlighted page but will returns to the active page; default `false`.
+If the optional `back` parameter is `true` toggling the overview mode when in overview does not navigate to the highlighted page but will returns to the active page; default `false`.
+
+```javascript
+Flowtime.showOverview(Boolean show, [Boolean back]);
+```
+
+Sets the overview mode to the given state. See `Flowtime.toggleOverview([Boolean back]);`.
 
 ```javascript
 Flowtime.play();
