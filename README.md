@@ -211,7 +211,7 @@ Force the update of the navigation object which stores the data about every poss
 If you change the number of sub pages at runtime call this method after the DOM manipulation.
 
 ```javascript
-Flowtime.showProgress(toggleOverview([Boolean back]););
+Flowtime.showProgress(Boolean show);
 ```
 
 Default `false`. Show the default progress when in page mode (the standard content navigation mode).
