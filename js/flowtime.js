@@ -18,7 +18,7 @@ var Flowtime = (function ()
   }
 
   /**
-   * test if the HTML History API's where available
+   * test if the HTML History API's is available
    * this value can be overridden to disable the History API
    */
   var pushHistory = window.history.pushState;
@@ -26,22 +26,22 @@ var Flowtime = (function ()
   /**
    * application constants
    */
-  var SECTION_CLASS = "ft-section";
-  var SECTION_SELECTOR = "." + SECTION_CLASS;
-  var PAGE_CLASS = "ft-page";
-  var PAGE_SELECTOR = "." + PAGE_CLASS;
-  var FRAGMENT_CLASS = "ft-fragment";
-  var FRAGMENT_SELECTOR = "." + FRAGMENT_CLASS;
-  var FRAGMENT_REVEALED_CLASS = "revealed";
-  var FRAGMENT_ACTUAL_CLASS = "actual";
-  var FRAGMENT_REVEALED_TEMP_CLASS = "revealed-temp";
-  var DEFAULT_PROGRESS_CLASS = "ft-default-progress";
-  var DEFAULT_PROGRESS_SELECTOR = "." + DEFAULT_PROGRESS_CLASS;
-  var SECTION_THUMB_CLASS = "ft-section-thumb";
-  var SECTION_THUMB_SELECTOR = "." + SECTION_THUMB_CLASS;
-  var PAGE_THUMB_CLASS = "ft-page-thumb";
-  var PAGE_THUMB_SELECTOR = "." + PAGE_THUMB_CLASS;
-  var CROSS_DIRECTION_CLASS = "ft-cross";
+  var SECTION_CLASS                                           = "ft-section";
+  var SECTION_SELECTOR                                        = "." + SECTION_CLASS;
+  var PAGE_CLASS                                              = "ft-page";
+  var PAGE_SELECTOR                                           = "." + PAGE_CLASS;
+  var FRAGMENT_CLASS                                          = "ft-fragment";
+  var FRAGMENT_SELECTOR                                       = "." + FRAGMENT_CLASS;
+  var FRAGMENT_REVEALED_CLASS                                 = "revealed";
+  var FRAGMENT_ACTUAL_CLASS                                   = "actual";
+  var FRAGMENT_REVEALED_TEMP_CLASS                            = "revealed-temp";
+  var DEFAULT_PROGRESS_CLASS                                  = "ft-default-progress";
+  var DEFAULT_PROGRESS_SELECTOR                               = "." + DEFAULT_PROGRESS_CLASS;
+  var SECTION_THUMB_CLASS                                     = "ft-section-thumb";
+  var SECTION_THUMB_SELECTOR                                  = "." + SECTION_THUMB_CLASS;
+  var PAGE_THUMB_CLASS                                        = "ft-page-thumb";
+  var PAGE_THUMB_SELECTOR                                     = "." + PAGE_THUMB_CLASS;
+  var CROSS_DIRECTION_CLASS                                   = "ft-cross";
 
   /**
    * events
@@ -51,35 +51,35 @@ var Flowtime = (function ()
   /**
    * application variables
    */
-  var ftContainer = document.querySelector(".flowtime");      // cached reference to .flowtime element
-  var html = document.querySelector("html");                  // cached reference to html element
-  var body = document.querySelector("body");                  // cached reference to body element
-  var useHash = false;                                        // if true the engine uses only the hash change logic
-  var currentHash = "";                                       // the hash string of the current section / page pair
-  var pastIndex = { section:0, page:0 };                      // section and page indexes of the past page
-  var isOverview = false;                                     // Boolean status for the overview
-  var siteName = document.title;                              // cached base string for the site title
-  var overviewCachedDest;                                     // caches the destination before performing an overview zoom out for navigation back purposes
-  var overviewFixedScaleFactor = 22;                          // fixed scale factor for overview variant
-  var defaultProgress = null;                                 // default progress bar reference
+  var ftContainer = document.querySelector(".flowtime");                // cached reference to .flowtime element
+  var html = document.querySelector("html");                            // cached reference to html element
+  var body = document.querySelector("body");                            // cached reference to body element
+  var useHash = false;                                                  // if true the engine uses only the hash change logic
+  var currentHash = "";                                                 // the hash string of the current section / page pair
+  var pastIndex = { section:0, page:0 };                                // section and page indexes of the past page
+  var isOverview = false;                                               // Boolean status for the overview
+  var siteName = document.title;                                        // cached base string for the site title
+  var overviewCachedDest;                                               // caches the destination before performing an overview zoom out for navigation back purposes
+  var overviewFixedScaleFactor = 22;                                    // fixed scale factor for overview variant
+  var defaultProgress = null;                                           // default progress bar reference
 
-  var _fragmentsOnSide = false;                               // enable or disable fragments navigation when navigating from sections
-  var _fragmentsOnBack = true;                                // shows or hide fragments when navigating back to a page
-  var _slideInPx = false;                                     // calculate the slide position in px instead of %, use in case the % mode does not works
-  var _sectionsSlideToTop = false;                            // if true navigation with right or left arrow go to the first page of the section
-  var _useOverviewVariant = false;                            // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
-  var _twoStepsSlide = false;                                 // not yet implemented! slides up or down before, then slides to the page
+  var _fragmentsOnSide = false;                                         // enable or disable fragments navigation when navigating from sections
+  var _fragmentsOnBack = true;                                          // shows or hide fragments when navigating back to a page
+  var _slideInPx = false;                                               // calculate the slide position in px instead of %, use in case the % mode does not works
+  var _sectionsSlideToTop = false;                                      // if true navigation with right or left arrow go to the first page of the section
+  var _useOverviewVariant = false;                                      // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
+  var _twoStepsSlide = false;                                           // not yet implemented! slides up or down before, then slides to the page
   var _isLoopable = false;
-  var _showProgress = false;                                  // show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
-  var _clickerMode = false;                                   // Used if presentation is being controlled by a "presenter" device (e.g., R400)
-  var _parallaxInPx = false;                                  // if false the parallax movement is calulated in % values, if true in pixels
-  var defaultParallaxX = 50;                                  // the default parallax horizontal value used when no data-parallax value were specified
-  var defaultParallaxY = 50;                                  // the default parallax vertical value used when no data-parallax value were specified
+  var _showProgress = false;                                            // show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
+  var _clickerMode = false;                                             // Used if presentation is being controlled by a "presenter" device (e.g., R400)
+  var _parallaxInPx = false;                                            // if false the parallax movement is calulated in % values, if true in pixels
+  var defaultParallaxX = 50;                                            // the default parallax horizontal value used when no data-parallax value were specified
+  var defaultParallaxY = 50;                                            // the default parallax vertical value used when no data-parallax value were specified
 
-  var parallaxEnabled = document.querySelector(".parallax") != null; // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
+  var parallaxEnabled = document.querySelector(".parallax") != null;    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
 
-  var _mouseDragEnabled = false;                              // in enabled is possible to drag the presentation with the mouse pointer
-  var _isScrollActive = true;                                 // flags to enable or disable javascript input listeners for the navigation
+  var _mouseDragEnabled = false;                                        // in enabled is possible to drag the presentation with the mouse pointer
+  var _isScrollActive = true;                                           // flags to enable or disable javascript input listeners for the navigation
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
@@ -88,6 +88,10 @@ var Flowtime = (function ()
 
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
   var _navigationCallback = undefined;
+
+  var _sectionsStatus = [];
+  var _rememberSectionsStatus = false;
+  var _nearestToTop = false;
 
 
   /**
@@ -136,21 +140,21 @@ var Flowtime = (function ()
 
   var NavigationMatrix = (function ()
   {
-    var sections;                         // HTML Collection of .flowtime > .ft-section elements
-    var sectionsArray;                    // multi-dimensional array containing the pages' array
-    var allPages;                         // HTML Collection of .flowtime .ft-page elements
-    var fragments;                        // HTML Collection of .fragment elements
-    var fragmentsArray;                   // multi-dimensional array containing the per page fragments' array
-    var fr = [];                          // multi-dimensional array containing the index of the current active fragment per page
-    var parallaxElements = [];            // array containing all elements with parrallax
-    var sectionsLength = 0;               // cached total number of .ft-section elements
-    var pagesLength = 0;                  // cached max number of .page elements
-    var pagesTotalLength = 0;             // cached total number of .page elements
-    var p = 0;                            // index of the current section viewved or higlighted
-    var sp = 0;                           // index of the current page viewved or higlighted
-    var pCache = 0;                       // cache index of the current section
-    var spCache = 0;                      // cache index of the current page
-    var hilited;                          // the current page higlighted, useful for overview mode
+    var sections;                                             // HTML Collection of .flowtime > .ft-section elements
+    var sectionsArray;                                        // multi-dimensional array containing the pages' array
+    var allPages;                                             // HTML Collection of .flowtime .ft-page elements
+    var fragments;                                            // HTML Collection of .fragment elements
+    var fragmentsArray;                                       // multi-dimensional array containing the per page fragments' array
+    var fr = [];                                              // multi-dimensional array containing the index of the current active fragment per page
+    var parallaxElements = [];                                // array containing all elements with parrallax
+    var sectionsLength = 0;                                   // cached total number of .ft-section elements
+    var pagesLength = 0;                                      // cached max number of .page elements
+    var pagesTotalLength = 0;                                 // cached total number of .page elements
+    var p = 0;                                                // index of the current section viewved or higlighted
+    var sp = 0;                                               // index of the current page viewved or higlighted
+    var pCache = 0;                                           // cache index of the current section
+    var spCache = 0;                                          // cache index of the current page
+    var hilited;                                              // the current page higlighted, useful for overview mode
 
     /**
      * update the navigation matrix array
@@ -288,7 +292,7 @@ var Flowtime = (function ()
     function _getNextSection(top, fos)
     {
       var sub = sp;
-      var toTop = top == !_sectionsSlideToTop;
+      var toTop = top === !_sectionsSlideToTop;
       if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop != true && io == false)
       {
         _showFragment(p, sp);
@@ -296,11 +300,11 @@ var Flowtime = (function ()
       else
       {
         sub = 0;
-        if (toTop == true && p + 1 < sectionsArray.length - 1)
+        if (toTop === true && p + 1 <= sectionsArray.length - 1)
         {
           sub = 0;
         }
-        else if (toTop != true || _fragmentsOnBack == true || p + 1 > sectionsArray.length - 1)
+        else if (toTop !== true || _fragmentsOnBack === true || p + 1 > sectionsArray.length - 1)
         {
           sub = sp;
         }
@@ -313,6 +317,11 @@ var Flowtime = (function ()
         {
           p = pTemp;
         }
+        //
+        if (_rememberSectionsStatus === true && _sectionsStatus[p] !== undefined) {
+          sub = _sectionsStatus[p];
+        }
+        //
         return _getNearestPage(sectionsArray[p], sub);
       }
       return hiliteOrNavigate(sectionsArray[p][sp]);
@@ -326,8 +335,8 @@ var Flowtime = (function ()
     function _getPrevSection(top, fos)
     {
       var sub = sp;
-      var toTop = top == !_sectionsSlideToTop;
-      if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop != true && isOverview == false)
+      var toTop = top === !_sectionsSlideToTop;
+      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && isOverview === false)
       {
         _hideFragment(p, sp);
       }
@@ -335,16 +344,16 @@ var Flowtime = (function ()
       {
         var sub = 0;
         sub = 0;
-        if (toTop == true && p - 1 >= 0)
+        if (toTop === true && p - 1 >= 0)
         {
           sub = 0;
         }
-        else if (toTop != true || _fragmentsOnBack == true || p - 1 < 0)
+        else if (toTop !== true || _fragmentsOnBack === true || p - 1 < 0)
         {
           sub = sp;
         }
         var pTemp = Math.max(p - 1, 0);
-        if (_isLoopable == true && pTemp === p)
+        if (_isLoopable === true && pTemp === p)
         {
           p = sectionsArray.length - 1;
         }
@@ -352,6 +361,11 @@ var Flowtime = (function ()
         {
           p = pTemp;
         }
+        //
+        if (_rememberSectionsStatus === true && _sectionsStatus[p] >= 0) {
+          sub = _sectionsStatus[p];
+        }
+        //
         return _getNearestPage(sectionsArray[p], sub);
       }
       return hiliteOrNavigate(sectionsArray[p][sp]);
@@ -359,7 +373,7 @@ var Flowtime = (function ()
 
     /**
      * checks if there is a valid page in the current section array
-     * if the passed page is not valid thne check which is the first valid page in the array
+     * if the passed page is not valid the check which is the first valid page in the array
      * then returns the page
      * @param p Number  the section index in the sections array
      * @param sub Number  the page index in the sections->page array
@@ -367,15 +381,18 @@ var Flowtime = (function ()
     function _getNearestPage(pg, sub)
     {
       var nsp = pg[sub];
-      if (nsp == undefined)
+      if (nsp === undefined)
       {
-        for (var i = sub; i >= 0; i--)
-        {
-          if (pg[i] != undefined)
-          {
-            nsp = pg[i];
-            sub = i;
-            break;
+        if (_nearestToTop === true && pg[sub] === undefined) {
+          nsp = pg[0];
+          sub = 0;
+        } else {
+          for (var i = sub; i >= 0; i--) {
+            if (pg[i] !== undefined) {
+              nsp = pg[i];
+              sub = i;
+              break;
+            }
           }
         }
       }
@@ -1720,6 +1737,10 @@ var Flowtime = (function ()
     // set the title
     setTitle(h);
     //
+
+    // store the status of the section, the last page visited in the section
+    _sectionsStatus[pageIndex.section] = pageIndex.page;
+
     // dispatches an event populated with navigation data
     fireNavigationEvent();
     // cache the section and page index, useful to determine the direction of the next navigation
@@ -2452,49 +2473,54 @@ var Flowtime = (function ()
 
   function _setFragmentsOnSide(v)
   {
-    _fragmentsOnSide = v;
+    _fragmentsOnSide = v === true ? true : false;
     _setFragmentsOnBack(v);
   }
 
   function _setFragmentsOnBack(v)
   {
-    _fragmentsOnBack = v;
+    _fragmentsOnBack = v === true ? true : false;
   }
 
   function _setUseHistory(v)
   {
-    pushHistory = v;
+    pushHistory = v === true ? true : false;
   }
 
   function _setSlideInPx(v)
   {
-    _slideInPx = v;
+    _slideInPx = v === true ? true : false;
     navigateTo();
   }
 
   function _setSectionsSlideToTop(v)
   {
-    _sectionsSlideToTop = v;
+    _sectionsSlideToTop = v === true ? true : false;
+  }
+
+  function _setNearestToTop(v)
+  {
+    _nearestToTop = v === true ? true : false;
   }
 
   function _setGridNavigation(v)
   {
-    _sectionsSlideToTop = !v;
+    _sectionsSlideToTop = v === true ? false : true;
   }
 
   function _setUseOverviewVariant(v)
   {
-    _useOverviewVariant = v;
+    _useOverviewVariant = v === true ? true : false;
   }
 
   function _setTwoStepsSlide(v)
   {
-    _twoStepsSlide = v;
+    _twoStepsSlide = v === true ? true : false;
   }
 
   function _setShowProgress(v)
   {
-    _showProgress = v;
+    _showProgress = v === true ? true : false;
     if (_showProgress)
     {
       if (defaultProgress == null)
@@ -2521,7 +2547,7 @@ var Flowtime = (function ()
 
   function _setParallaxInPx(v)
   {
-    _parallaxInPx = v;
+    _parallaxInPx = v === true ? true : false;
   }
 
   function _getSectionIndex()
@@ -2536,12 +2562,12 @@ var Flowtime = (function ()
 
   function _loop(v)
   {
-    _isLoopable = v;
+    _isLoopable = v === true ? true : false;
   }
 
   function _clicker(v)
   {
-    _clickerMode = v;
+    _clickerMode = v === true ? true : false;
   }
 
   function _enableNavigation(links, keyboard, scroll, touch)
@@ -2597,12 +2623,16 @@ var Flowtime = (function ()
     }
   }
 
-  function _setDebouncingDelay(v) {
-    _debouncingDelay = v;
+  function _setDebouncingDelay(n) {
+    _debouncingDelay = n;
   }
 
   function _setNavigationCallback(f) {
     _navigationCallback = f;
+  }
+
+  function _setRememberSectionsStatus(v) {
+    _rememberSectionsStatus = v === true ? true : false;
   }
 
   /**
@@ -2631,6 +2661,7 @@ var Flowtime = (function ()
     useHistory: _setUseHistory,
     slideInPx: _setSlideInPx,
     sectionsSlideToTop: _setSectionsSlideToTop,
+    nearestPageToTop: _setNearestToTop,
     gridNavigation: _setGridNavigation,
     useOverviewVariant: _setUseOverviewVariant,
     twoStepsSlide: _setTwoStepsSlide,
@@ -2664,7 +2695,8 @@ var Flowtime = (function ()
     setTouchNavigation: _setTouchNavigation,
     setCrossDirection: _setCrossDirection,
     setDebouncingDelay: _setDebouncingDelay,
-    onNavigation: _setNavigationCallback
+    onNavigation: _setNavigationCallback,
+    rememberSectionsStatus: _setRememberSectionsStatus
   };
 
 })();
