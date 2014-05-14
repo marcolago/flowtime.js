@@ -925,7 +925,7 @@ var Flowtime = (function ()
       // append to h the value of data-id attribute or, if data-id is not defined, the data-prog attribute
       var _p = sections[p];
       h += getPageId(_p);
-      if (sectionsArray[p].length > 1)
+      if (sectionsArray[p].length > 0)
       {
         var _sp = sectionsArray[p][sp];
         h += "/" + getPageId(_sp);
