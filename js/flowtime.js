@@ -66,7 +66,6 @@ var Flowtime = (function ()
   var _fragmentsOnSide = false;                                         // enable or disable fragments navigation when navigating from sections
   var _fragmentsOnBack = true;                                          // shows or hide fragments when navigating back to a page
   var _slideInPx = false;                                               // calculate the slide position in px instead of %, use in case the % mode does not works
-  var _sectionsSlideToTop = false;                                      // if true navigation with right or left arrow go to the first page of the section
   var _useOverviewVariant = false;                                      // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
   var _twoStepsSlide = false;                                           // not yet implemented! slides up or down before, then slides to the page
   var _isLoopable = false;
@@ -89,9 +88,16 @@ var Flowtime = (function ()
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
   var _navigationCallback = undefined;
 
-  var _sectionsStatus = [];
-  var _rememberSectionsStatus = false;
+  // section navigation modifiers
+
+  var _sectionsSlideToTop = false;                                      // if true navigation with right or left arrow go to the first page of the section
   var _nearestToTop = false;
+  var _rememberSectionsStatus = false;
+  var _rememberSectionsLastPage = false;
+
+  var _sectionsStatus = [];
+  var _sectionsMaxPageDepth = 0;
+  var _sectionsLastPageDepth = 0;
 
 
   /**
@@ -292,8 +298,9 @@ var Flowtime = (function ()
     function _getNextSection(top, fos)
     {
       var sub = sp;
-      var toTop = top === !_sectionsSlideToTop;
-      if (fos == true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop != true && io == false)
+      //
+      var toTop = isOverview === true ? false : top === !_sectionsSlideToTop;
+      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && io === false)
       {
         _showFragment(p, sp);
       }
@@ -318,8 +325,14 @@ var Flowtime = (function ()
           p = pTemp;
         }
         //
-        if (_rememberSectionsStatus === true && _sectionsStatus[p] !== undefined) {
-          sub = _sectionsStatus[p];
+        if (!isOverview) {
+          if (_rememberSectionsStatus === true && _sectionsStatus[p] !== undefined) {
+            sub = _sectionsStatus[p];
+          }
+          //
+          if (_rememberSectionsLastPage === true) {
+            sub = _sectionsLastPageDepth;
+          }
         }
         //
         return _getNearestPage(sectionsArray[p], sub);
@@ -335,7 +348,8 @@ var Flowtime = (function ()
     function _getPrevSection(top, fos)
     {
       var sub = sp;
-      var toTop = top === !_sectionsSlideToTop;
+      //
+      var toTop = isOverview === true ? false : top === !_sectionsSlideToTop;
       if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && isOverview === false)
       {
         _hideFragment(p, sp);
@@ -362,8 +376,15 @@ var Flowtime = (function ()
           p = pTemp;
         }
         //
-        if (_rememberSectionsStatus === true && _sectionsStatus[p] >= 0) {
-          sub = _sectionsStatus[p];
+        if (!isOverview) {
+          if (_rememberSectionsStatus === true && _sectionsStatus[p] >= 0) {
+            sub = _sectionsStatus[p];
+          }
+          //
+          console.log("prev", _sectionsLastPageDepth);
+          if (_rememberSectionsLastPage === true) {
+            sub = _sectionsLastPageDepth;
+          }
         }
         //
         return _getNearestPage(sectionsArray[p], sub);
@@ -381,9 +402,8 @@ var Flowtime = (function ()
     function _getNearestPage(pg, sub)
     {
       var nsp = pg[sub];
-      if (nsp === undefined)
-      {
-        if (_nearestToTop === true && pg[sub] === undefined) {
+      if (nsp === undefined) {
+        if (_nearestToTop === true) {
           nsp = pg[0];
           sub = 0;
         } else {
@@ -411,20 +431,20 @@ var Flowtime = (function ()
      */
     function _getNextPage(jump)
     {
-      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump != true && isOverview == false)
+      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump !== true && isOverview === false)
       {
         _showFragment(p, sp);
       }
       else
       {
-        if (sectionsArray[p][sp + 1] == undefined)
+        if (sectionsArray[p][sp + 1] === undefined)
         {
-          if (sectionsArray[p + 1] != undefined)
+          if (sectionsArray[p + 1] !== undefined)
           {
             p += 1;
             sp = 0;
           }
-          else if (sectionsArray[p + 1] == undefined && _isLoopable == true)
+          else if (sectionsArray[p + 1] === undefined && _isLoopable === true)
           {
             p = 0;
             sp = 0;
@@ -704,10 +724,17 @@ var Flowtime = (function ()
     /**
      * returns the pages collection of all pages in the presentation
      */
-     function _getAllPages()
-     {
+    function _getAllPages()
+    {
       return allPages;
-     }
+    }
+
+    /**
+     * returns the number of pages in the specified section
+     */
+    function _getSectionLength(i) {
+      return sectionsArray[i].length;
+    }
 
     /**
      * returns the number of sections
@@ -1038,6 +1065,7 @@ var Flowtime = (function ()
       getPrevSection: _getPrevSection,
       getNextPage: _getNextPage,
       getPrevPage: _getPrevPage,
+      getSectionLength: _getSectionLength,
       getSectionsLength: _getSectionsLength,
       getPagesLength: _getPagesLength,
       getPagesTotalLength: _getPagesTotalLength,
@@ -1740,6 +1768,11 @@ var Flowtime = (function ()
 
     // store the status of the section, the last page visited in the section
     _sectionsStatus[pageIndex.section] = pageIndex.page;
+
+    // store the last page index visited using up or down only if the section have the same number of pages or more
+    if (pastIndex.section === pageIndex.section && pastIndex.page !== pageIndex.page) {
+      _sectionsLastPageDepth = pageIndex.page;
+    }
 
     // dispatches an event populated with navigation data
     fireNavigationEvent();
@@ -2635,6 +2668,10 @@ var Flowtime = (function ()
     _rememberSectionsStatus = v === true ? true : false;
   }
 
+  function _setRememberSectionsLastPage(v) {
+    _rememberSectionsLastPage = v === true ? true : false;
+  }
+
   /**
    * return object for public methods
    */
@@ -2696,7 +2733,8 @@ var Flowtime = (function ()
     setCrossDirection: _setCrossDirection,
     setDebouncingDelay: _setDebouncingDelay,
     onNavigation: _setNavigationCallback,
-    rememberSectionsStatus: _setRememberSectionsStatus
+    rememberSectionsStatus: _setRememberSectionsStatus,
+    rememberSectionsLastPage: _setRememberSectionsLastPage
   };
 
 })();

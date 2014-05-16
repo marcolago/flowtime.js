@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US" class="ie ie6 lt-ie9">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US" class="ie ie7 lt-ie9">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US" class="ie ie8 lt-ie9">
+<![endif]-->
+<!--[if gte IE 9]>
+<html lang="en-US" class="ie ie9">
+<![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="en-US" class="">
+<!--<![endif]-->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0 minimal-ui">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="author" content="marcolago">
+
+	<meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
+
+	<title>Flowtime.js - Sections Status Memory Demo</title>
+	<link rel="stylesheet" href="../../assets/css/reset.css">
+	<link rel="stylesheet" href="../../css/flowtime.css">
+	<link rel="stylesheet" href="../../css/themes/default.css">
+
+</head>
+<body class="">
+
+	<div class="flowtime">
+
+		<div class="ft-section">
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 1, Page 1</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 1, Page 2</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 1, Page 3</h2>
+			</div>
+		</div>
+
+		<div class="ft-section">
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 2, Page 1</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 2, Page 2</h2>
+			</div>
+		</div>
+
+		<div class="ft-section">
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 3, Page 1</h2>
+			</div>
+		</div>
+
+		<div class="ft-section">
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 4, Page 1</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 4, Page 2</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 4, Page 3</h2>
+			</div>
+		</div>
+
+		<div class="ft-section">
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 5, Page 1</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 5, Page 2</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 5, Page 3</h2>
+			</div>
+		</div>
+
+		<div class="ft-section">
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 6, Page 1</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Sections Status Memory Demo</h1>
+				<h2>Section 6, Page 2</h2>
+			</div>
+		</div>
+
+	</div>
+
+	<script src="../../js/brav1toolbox.js"></script>
+	<script src="../../js/flowtime.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-1228618-10']);
+		_gaq.push(['_trackPageview']);
+		_gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+
+		// Configuration API test
+		Flowtime.showProgress(true);
+		// Flowtime.fragmentsOnSide(true);
+		// Flowtime.fragmentsOnBack(true);
+		// Flowtime.useHistory(false);
+		// Flowtime.slideInPx(true);
+		// Flowtime.sectionsSlideToTop(true);
+		// Flowtime.useOverviewVariant(true);
+		// Flowtime.parallaxInPx(true);
+		// Flowtime.clicker(true);
+		// Flowtime.gridNavigation(false);
+		Flowtime.nearestPageToTop(true);
+		Flowtime.rememberSectionsLastPage(true);
+		// Flowtime.rememberSectionsStatus(true);
+		//
+		// starts the application with configuration options
+		Flowtime.start();
+	</script>
+</body>
+</html>
