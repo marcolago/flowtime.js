@@ -2697,9 +2697,6 @@ var Flowtime = (function ()
     fragmentsOnBack: _setFragmentsOnBack,
     useHistory: _setUseHistory,
     slideInPx: _setSlideInPx,
-    sectionsSlideToTop: _setSectionsSlideToTop,
-    nearestPageToTop: _setNearestToTop,
-    gridNavigation: _setGridNavigation,
     useOverviewVariant: _setUseOverviewVariant,
     twoStepsSlide: _setTwoStepsSlide,
     showProgress: _setShowProgress,
@@ -2733,6 +2730,9 @@ var Flowtime = (function ()
     setCrossDirection: _setCrossDirection,
     setDebouncingDelay: _setDebouncingDelay,
     onNavigation: _setNavigationCallback,
+
+    gridNavigation: _setGridNavigation,
+    nearestPageToTop: _setNearestToTop,
     rememberSectionsStatus: _setRememberSectionsStatus,
     rememberSectionsLastPage: _setRememberSectionsLastPage
   };

@@ -19,14 +19,17 @@ SlideCaptain is developed by [Engawa](http://engawa.de/).
 
 ## Major Updates
 
-- **March 3 2014**
-  - Added methods to enable and disable navigation logics at runtime.
-  - Added options to get alternative horizontal layout; sections are stacked vertically and pages are arranged horizontally.
-  - Added option to reconfigure key bindings for some wireless presenters. ([#15](https://github.com/marcolago/flowtime.js/issues/15))
+- **May 20 2014**
+    - Added new section navigation modifiers. See [Section Navigation Options](#section-navigation-options) for the updates.
 
 - **May 12 2013**
-  - Added the autoplay configuration functions and `start()`, `pause()` and `stop()` methods. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
-  - Now the presentations is loopable both for page and section navigation. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
+    - Added the autoplay configuration functions and `start()`, `pause()` and `stop()` methods. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
+    - Now the presentations is loopable both for page and section navigation. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
+
+- **March 3 2014**
+    - Added methods to enable and disable navigation logics at runtime.
+    - Added options to get alternative horizontal layout; sections are stacked vertically and pages are arranged horizontally.
+    - Added option to reconfigure key bindings for some wireless presenters. ([#15](https://github.com/marcolago/flowtime.js/issues/15))
 
 ## Main Features
 
@@ -47,7 +50,7 @@ Keyboard navigation is based on arrow keys with the Shift key as a modifier to j
 
 - **Down or Up Arrows**: navigate to the previous or the next page. This is the main navigation input; the entire content is navigable using this keys only. If there are fragments in the page every input shows or hides a fragment.
 - **Shift + Down or Up Arrows**: navigate to the prev o next page jumping all the fragments.
-- **Left or Right Arrows**: navigate to the prev or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the higher available index..
+- **Left or Right Arrows**: navigate to the prev or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the higher available index (see [Section Navigation Options](#section-navigation-options) for more options).
 - **Shift + Left or Right Arrows**: Navigate to the first page of the previous or next section.
 - **Page Up**: navigates to the first page of the current section.
 - **Page Down**: navigates to the last page of the current section.
@@ -249,18 +252,6 @@ Default `false`. If true performs the calculation for the container translation 
 Use true if you want to alter the default placement of the sections (i.e. setting `vertical-align` different from `top`) or in any case the pages does not perfectly fit the viewport (i.e. Safari for Windows with the `font-size: 0;` bug).
 
 ```javascript
-Flowtime.sectionsSlideToTop(Boolean toTop);
-```
-
-Default `false`. Set to true if you want to go to the first page of the section when navigate from sections.
-
-```javascript
-Flowtime.gridNavigation(Boolean useGrid);
-```
-
-Default `true`. Just a proxy for `Flowtime.sectionsSlideToTop` but with reversed value; if `true` sets `Flowtime.sectionsSlideToTop` to `false`. Implemented just because the more semantic and easy to understand naming.
-
-```javascript
 Flowtime.useOverviewVariant(Boolean use);
 ```
 
@@ -312,11 +303,53 @@ Pass `true`to use the optional horizontal layout or pass `false` to use the stan
 Every related option will be automatically reconfigured.
 Related options are keyboard bindings, touchpad and touch gestures and pages coordinates cache.
 
-```javascript```
+```javascript
 Flowtime.setDebouncingDelay(Number value);
 ```
 
 Set the debouncing delay time in milliseconds to trigger the event used for the scroll handler.
+
+### Section Navigation Options
+
+Flowtime.js comes with a lot of ways to navigate through sections; you can set up your installation with some, simple to use, options to fit your needs.
+
+```javascript
+Flowtime.gridNavigation(Boolean value);
+```
+
+[Grid Navigation True (default) Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/default/)  
+[Grid Navigation False Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/grid-navigation-false/)
+
+Default `true`. The default behaviour out-of-the-box.
+When navigating from section to section with left and right arrows (or swipe) you will go to the same page index of the previous or next sections, if available, or to the nearest (highest number) page if the section is shorter.
+If you set this to `false` you will ever go to the first page of every section instead.
+
+```javascript
+Flowtime.nearestPageToTop(Boolean value);
+```
+
+[Nearest Page To Top Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/nearest-page-to-top/)
+
+Default `false`. If `true` when navigating to a section that is shorter than the current one Flowtime.js always goes to the first page of the new section.
+This does not affect the navigation to sections longer than, or as, the current section.
+
+```javascript
+Flowtime.rememberSectionsStatus(Boolean value);
+```
+
+[Remember Sections Status Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/remember-sections-status/)
+
+Default `false`. If `true` Flowtime.js will remember the last page visited in every section and, when navigating from section to section, will go to the last page visited for that section.
+This setting overrides the `gridNavigation` one only for previously visited sections but use the `gridNavigation` and `nearestPageToTop` values for sections not visited yet.
+
+```javascript
+Flowtime.rememberSectionsLastPage(Boolean value);
+```
+
+[Remember Sections Last Page Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/remember-sections-status/)
+
+Default `false`. If `true` Flowtime.js will remember the last page visited in the last section and stores this value for horizontal navigation purposes. It’s similar to the `gridNavigation(true)` setting but when navigating from a section with less pages to a section with the at least as page as the index stored Flowtime.js goes to the index stored and not to the adjacent page.
+This setting overrides the `rememberSectionsStatus` one.
 
 ### Navigation API
 

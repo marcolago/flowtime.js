@@ -22,10 +22,11 @@
 
 	<meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
 
-	<title>Flowtime.js - Sections Status Memory Demo</title>
-	<link rel="stylesheet" href="../../assets/css/reset.css">
-	<link rel="stylesheet" href="../../css/flowtime.css">
-	<link rel="stylesheet" href="../../css/themes/default.css">
+	<title>Flowtime.js - Remember Sections Last Page Demo</title>
+	<link rel="stylesheet" href="../../../assets/css/reset.css">
+	<link rel="stylesheet" href="../../../css/flowtime.css">
+	<link rel="stylesheet" href="../../../css/themes/default.css">
+	<link rel="stylesheet" href="../../../assets/css/prism.css">
 
 </head>
 <body class="">
@@ -34,48 +35,88 @@
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Remember Sections Last Page Demo</h1>
 				<h2>Section 1, Page 1</h2>
+				<pre><code class="language-javascript">
+// Configuration used in this Flow:
+
+Flowtime.gridNavigation(true); // default
+Flowtime.nearestPageToTop(false); // default
+Flowtime.rememberSectionsStatus(false); // default
+Flowtime.rememberSectionsLastPage(true);
+				</code></pre>
+				<p>Go to the <a href="#/1/3/">page 3 of the section 1</a> then navigate through sections using the right key. When you reach the section 4 you will go to the page 3 and not to the page 1.</p>
+			</div>
+			<div class="ft-page">
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 1, Page 2</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 1, Page 3</h2>
 			</div>
 		</div>
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Remember Sections Last Page Demo</h1>
 				<h2>Section 2, Page 1</h2>
 			</div>
-			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
-				<h2>Section 2, Page 2</h2>
-			</div>
-			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
-				<h2>Section 2, Page 3</h2>
-			</div>
 		</div>
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Remember Sections Last Page Demo</h1>
 				<h2>Section 3, Page 1</h2>
 			</div>
+		</div>
+
+		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
-				<h2>Section 3, Page 2</h2>
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 4, Page 1</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 4, Page 2</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 4, Page 3</h2>
 			</div>
 		</div>
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
-				<h2>Section 4, Page 1</h2>
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 5, Page 1</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 5, Page 2</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 5, Page 3</h2>
+			</div>
+		</div>
+
+		<div class="ft-section">
+			<div class="ft-page">
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 6, Page 1</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Remember Sections Last Page Demo</h1>
+				<h2>Section 6, Page 2</h2>
 			</div>
 		</div>
 
 	</div>
 
-	<script src="../../js/brav1toolbox.js"></script>
-	<script src="../../js/flowtime.js"></script>
+	<script src="../../../js/brav1toolbox.js"></script>
+	<script src="../../../js/flowtime.js"></script>
+	<script src="../../../assets/js/prism.js"></script>
 
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
@@ -98,8 +139,10 @@
 		// Flowtime.useOverviewVariant(true);
 		// Flowtime.parallaxInPx(true);
 		// Flowtime.clicker(true);
-		Flowtime.gridNavigation(false);
-		Flowtime.rememberSectionsStatus(true);
+		// Flowtime.gridNavigation(false);
+		Flowtime.nearestPageToTop(true);
+		// Flowtime.rememberSectionsStatus(true);
+		Flowtime.rememberSectionsLastPage(true);
 		//
 		// starts the application with configuration options
 		Flowtime.start();

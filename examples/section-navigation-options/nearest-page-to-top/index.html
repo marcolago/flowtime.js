@@ -22,10 +22,11 @@
 
 	<meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
 
-	<title>Flowtime.js - Sections Status Memory Demo</title>
-	<link rel="stylesheet" href="../../assets/css/reset.css">
-	<link rel="stylesheet" href="../../css/flowtime.css">
-	<link rel="stylesheet" href="../../css/themes/default.css">
+	<title>Flowtime.js - Nearest Page To Top Demo</title>
+	<link rel="stylesheet" href="../../../assets/css/reset.css">
+	<link rel="stylesheet" href="../../../css/flowtime.css">
+	<link rel="stylesheet" href="../../../css/themes/default.css">
+	<link rel="stylesheet" href="../../../assets/css/prism.css">
 
 </head>
 <body class="">
@@ -34,86 +35,112 @@
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 1, Page 1</h2>
+				<pre><code class="language-javascript">
+// Configuration used in this Flow:
+
+Flowtime.gridNavigation(true); // default
+Flowtime.nearestPageToTop(true);
+Flowtime.rememberSectionsStatus(false); // default
+Flowtime.rememberSectionsLastPage(false); // default
+				</code></pre>
+				<p>Same demo as the <a href="../default/">default</a> one but when navigating through sections shorter than the old one you will always go to the first page.</p>
 			</div>
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 1, Page 2</h2>
 			</div>
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 1, Page 3</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Nearest Page To Top Demo</h1>
+				<h2>Section 1, Page 4</h2>
 			</div>
 		</div>
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 2, Page 1</h2>
 			</div>
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 2, Page 2</h2>
 			</div>
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 2, Page 3</h2>
 			</div>
 		</div>
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 3, Page 1</h2>
 			</div>
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 3, Page 2</h2>
 			</div>
-			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
-				<h2>Section 3, Page 3</h2>
-			</div>
 		</div>
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 4, Page 1</h2>
 			</div>
+			<div class="ft-page">
+				<h1>Nearest Page To Top Demo</h1>
+				<h2>Section 4, Page 2</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Nearest Page To Top Demo</h1>
+				<h2>Section 4, Page 3</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Nearest Page To Top Demo</h1>
+				<h2>Section 4, Page 4</h2>
+			</div>
+			<div class="ft-page">
+				<h1>Nearest Page To Top Demo</h1>
+				<h2>Section 4, Page 5</h2>
+			</div>
 		</div>
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 5, Page 1</h2>
 			</div>
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 5, Page 2</h2>
 			</div>
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 5, Page 3</h2>
 			</div>
 		</div>
 
 		<div class="ft-section">
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 6, Page 1</h2>
 			</div>
 			<div class="ft-page">
-				<h1>Sections Status Memory Demo</h1>
+				<h1>Nearest Page To Top Demo</h1>
 				<h2>Section 6, Page 2</h2>
 			</div>
 		</div>
 
 	</div>
 
-	<script src="../../js/brav1toolbox.js"></script>
-	<script src="../../js/flowtime.js"></script>
+	<script src="../../../js/brav1toolbox.js"></script>
+	<script src="../../../js/flowtime.js"></script>
+	<script src="../../../assets/js/prism.js"></script>
 
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
@@ -136,9 +163,10 @@
 		// Flowtime.useOverviewVariant(true);
 		// Flowtime.parallaxInPx(true);
 		// Flowtime.clicker(true);
-		// Flowtime.gridNavigation(false);
+		// Flowtime.gridNavigation(true);
 		Flowtime.nearestPageToTop(true);
 		// Flowtime.rememberSectionsStatus(true);
+		// Flowtime.rememberSectionsLastPage(true);
 		//
 		// starts the application with configuration options
 		Flowtime.start();
