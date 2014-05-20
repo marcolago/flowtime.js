@@ -346,7 +346,7 @@ This setting overrides the `gridNavigation` one only for previously visited sect
 Flowtime.rememberSectionsLastPage(Boolean value);
 ```
 
-[Remember Sections Last Page Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/remember-sections-status/)
+[Remember Sections Last Page Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/remember-sections-last-page/)
 
 Default `false`. If `true` Flowtime.js will remember the last page visited in the last section and stores this value for horizontal navigation purposes. It’s similar to the `gridNavigation(true)` setting but when navigating from a section with less pages to a section with the at least as page as the index stored Flowtime.js goes to the index stored and not to the adjacent page.
 This setting overrides the `rememberSectionsStatus` one.
