@@ -381,7 +381,6 @@ var Flowtime = (function ()
             sub = _sectionsStatus[p];
           }
           //
-          console.log("prev", _sectionsLastPageDepth);
           if (_rememberSectionsLastPage === true) {
             sub = _sectionsLastPageDepth;
           }
@@ -1312,7 +1311,7 @@ var Flowtime = (function ()
             if (_crossDirection === true) {
               _prevPage();
             } else {
-              _prevSection();
+              _prevSection(false);
             }
             return;
           }
@@ -1321,7 +1320,7 @@ var Flowtime = (function ()
             if (_crossDirection === true) {
               _nextPage();
             } else {
-              _nextSection();
+              _nextSection(false);
             }
             return;
           }
@@ -1331,7 +1330,7 @@ var Flowtime = (function ()
           if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit)
           {
             if (_crossDirection === true) {
-              _prevSection();
+              _prevSection(false);
             } else {
               _prevPage();
             }
@@ -1340,7 +1339,7 @@ var Flowtime = (function ()
           else if (_deltaY < 0)
           {
             if (_crossDirection === true) {
-              _nextSection();
+              _nextSection(false);
             } else {
               _nextPage();
             }
@@ -2166,7 +2165,7 @@ var Flowtime = (function ()
     if (_isKeyboardActive) {
       var tag = e.target.tagName;
       var elem;
-      if (tag != "INPUT" && tag != "TEXTAREA" && tag != "SELECT")
+      if (tag !== "INPUT" && tag !== "TEXTAREA" && tag !== "SELECT")
       {
         e.preventDefault();
         switch (e.keyCode)

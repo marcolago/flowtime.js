@@ -1,0 +1,2 @@
+.overlay{position:fixed;top:0;right:0;bottom:0;left:0;overflow-y:scroll;background-color:rgba(0,0,0,0.5);display:none}.overlay.active{display:block}.overlay-content{width:80%;height:2000px;margin:2em auto;position:relative;background-color:white;-webkit-box-shadow:1px 1px 5px 0 black;-moz-box-shadow:1px 1px 5px 0 black;box-shadow:1px 1px 5px 0 black}
+.overlay-close{color:black;text-decoration:none;padding:.5em;position:absolute;top:0;right:.5em;display:block;border-radius:0 0 3px 3px;background-color:rgba(255,255,255,0.8)}

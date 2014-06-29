@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US" class="ie ie6 lt-ie9">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US" class="ie ie7 lt-ie9">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US" class="ie ie8 lt-ie9">
+<![endif]-->
+<!--[if gte IE 9]>
+<html lang="en-US" class="ie ie9">
+<![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="en-US" class="">
+<!--<![endif]-->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0 minimal-ui">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="author" content="marcolago">
+
+	<meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
+
+	<title>Flowtime.js - Modal Overlay Demo</title>
+	<link rel="stylesheet" href="../../assets/css/reset.css">
+	<link rel="stylesheet" href="../../css/flowtime.css">
+	<link rel="stylesheet" href="../../css/themes/default.css">
+	<link rel="stylesheet" href="css/custom.css">
+
+</head>
+<body class="">
+
+	<div class="flowtime">
+		<div class="ft-section">
+			
+			<div class="ft-page">
+				<h1>Modal Overlay Demo</h1>
+				<p>This presentation shows how to get a modal overlay with vertical scrollbar on top of a Flowtime.js presentation and how to disable the navigation while the overlay is open.</p>
+				<p><a href="#" class="overlay-link">Open Modal Overlay</a>.</p>
+			</div>
+
+			<div class="ft-page">
+				<h1>Modal Overlay Demo</h1>
+				<p>Page 2</p>
+				<p><a href="#" class="overlay-link">Open Modal Overlay</a>.</p>
+			</div>
+
+			<div class="ft-page">
+				<h1>Modal Overlay Demo</h1>
+				<p>Page 3</p>
+				<p><a href="#" class="overlay-link">Open Modal Overlay</a>.</p>
+			</div>
+
+			<div class="ft-page">
+				<h1>Modal Overlay Demo</h1>
+				<p>Page 4</p>
+				<p><a href="#" class="overlay-link">Open Modal Overlay</a>.</p>
+			</div>
+			
+		</div>
+	</div>
+
+	<div class="overlay">
+		<div class="overlay-content"></div>
+		<a href="#" class="overlay-close">Close</a>
+	</div>
+
+	<script src="../../js/brav1toolbox.js"></script>
+	<script src="../../js/flowtime.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-1228618-10']);
+		_gaq.push(['_trackPageview']);
+		_gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+
+		// Configuration API test
+		Flowtime.showProgress(true);
+		//
+		// starts the application with configuration options
+		Flowtime.start();
+	</script>
+
+	<script>
+		var overlay = document.querySelector(".overlay");
+		Brav1Toolbox.addListener(document, "click", onClick);
+		function onClick(e) {
+			// use e.preventDefault to disable the hash change
+			e.preventDefault();
+			//
+			var t = e.target;
+			if (t.className.indexOf("overlay-link") != -1)
+			{
+				Brav1Toolbox.addClass(overlay, "active");
+				Flowtime.setKeyboardNavigation(false);
+			}
+			//
+			if (t.className.indexOf("overlay-close") != -1)
+			{
+				Brav1Toolbox.removeClass(overlay, "active");
+				Flowtime.setKeyboardNavigation(true);
+			}
+		}
+	</script>
+</body>
+</html>
