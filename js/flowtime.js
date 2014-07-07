@@ -1445,7 +1445,7 @@ var Flowtime = (function ()
           if (e.wheelDeltaY < 0)
           {
             if (_crossDirection === true) {
-              _nextSection(!e.shiftKey);
+              _nextSection(e.shiftKey);
             } else {
               _nextPage();
             }
@@ -1453,7 +1453,7 @@ var Flowtime = (function ()
           else if (e.wheelDeltaY > 0)
           {
             if (_crossDirection === true) {
-              _prevSection(!e.shiftKey);
+              _prevSection(e.shiftKey);
             } else {
               _prevPage();
             }
@@ -1466,7 +1466,7 @@ var Flowtime = (function ()
             if (_crossDirection === true) {
               _nextPage();
             } else {
-              _nextSection(!e.shiftKey);
+              _nextSection(e.shiftKey);
             }
           }
           else if (e.wheelDeltaX > 0)
@@ -1474,7 +1474,7 @@ var Flowtime = (function ()
             if (_crossDirection === true) {
               _prevPage();
             } else {
-              _prevSection(!e.shiftKey);
+              _prevSection(e.shiftKey);
             }
           }
         }
@@ -1500,13 +1500,13 @@ var Flowtime = (function ()
           if (_crossDirection === true) {
             _nextPage();
           } else {
-            _nextSection(!e.shiftKey);
+            _nextSection(e.shiftKey);
           }
         }
         else
         {
           if (_crossDirection === true) {
-            _nextSection(!e.shiftKey);
+            _nextSection(e.shiftKey);
           } else {
             _nextPage();
           }
@@ -1519,13 +1519,13 @@ var Flowtime = (function ()
           if (_crossDirection === true) {
             _prevPage();
           } else {
-            _prevSection(!e.shiftKey);
+            _prevSection(e.shiftKey);
           }
         }
         else
         {
           if (_crossDirection === true) {
-            _prevSection(!e.shiftKey);
+            _prevSection(e.shiftKey);
           } else {
             _prevPage();
           }
