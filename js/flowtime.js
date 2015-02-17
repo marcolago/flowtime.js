@@ -1438,28 +1438,10 @@ var Flowtime = (function ()
     clearTimeout(scrollTimeout);
     if (e.wheelDelta)
     {
+      console.log("e.wheelDelta", e);
       if (e.wheelDeltaX != undefined)
       {
-        if (e.wheelDeltaX == 0)
-        {
-          if (e.wheelDeltaY < 0)
-          {
-            if (_crossDirection === true) {
-              _nextSection(e.shiftKey);
-            } else {
-              _nextPage();
-            }
-          }
-          else if (e.wheelDeltaY > 0)
-          {
-            if (_crossDirection === true) {
-              _prevSection(e.shiftKey);
-            } else {
-              _prevPage();
-            }
-          }
-        }
-        else if (e.wheelDeltaY == 0)
+        if (e.wheelDeltaY == 0)
         {
           if (e.wheelDeltaX < 0)
           {
@@ -1478,6 +1460,25 @@ var Flowtime = (function ()
             }
           }
         }
+        else
+        {
+          if (e.wheelDeltaY < 0)
+          {
+            if (_crossDirection === true) {
+              _nextSection(e.shiftKey);
+            } else {
+              _nextPage();
+            }
+          }
+          else if (e.wheelDeltaY > 0)
+          {
+            if (_crossDirection === true) {
+              _prevSection(e.shiftKey);
+            } else {
+              _prevPage();
+            }
+          }
+        }
       }
       else
       {
@@ -1491,7 +1492,7 @@ var Flowtime = (function ()
         }
       }
     }
-    else if (e.detail)
+    else if (e.detail) // firefox
     {
       if (e.detail > 0)
       {
