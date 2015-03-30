@@ -5,7 +5,6 @@
 
 .ft-fragment.peek-a-boo {
   opacity: 0;
-	     -o-transform: translateY(1500px);
 	    -ms-transform: translateY(1500px);
 	   -moz-transform: translateY(1500px);
 	-webkit-transform: translateY(1500px);
@@ -14,7 +13,6 @@
 
 .ft-fragment.revealed, .ft-fragment.revealed-temp {
 	opacity: 1;
-	     -o-transform: translateY(0);
 	    -ms-transform: translateY(0);
 	   -moz-transform: translateY(0);
 	-webkit-transform: translateY(0);

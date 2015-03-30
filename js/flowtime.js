@@ -82,8 +82,9 @@ var Flowtime = (function ()
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
+  var _isScrolling = false;
 
-  var _debouncingDelay = 100;
+  var _debouncingDelay = 1000;
 
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
   var _navigationCallback = undefined;
@@ -1113,7 +1114,7 @@ var Flowtime = (function ()
     if (isTouchDevice)
     {
       Brav1Toolbox.addListener(document, "touchend", function(e) {
-        e.preventDefault();
+        // e.preventDefault(); // TODO FIX
         onNavClick(e);
       }, false);
     }
@@ -1128,6 +1129,7 @@ var Flowtime = (function ()
         var href = e.target.getAttribute("href") || e.target.parentNode.getAttribute("href");
         if (href === "#")
         {
+          e.preventDefault();
           return;
         }
         // links with href starting with #
@@ -1403,8 +1405,6 @@ var Flowtime = (function ()
   /**
    * native scroll management
    */
-  var scrollEventEnabled = true;
-
   Brav1Toolbox.addListener(window, "scroll", onNativeScroll);
 
   function onNativeScroll(e)
@@ -1416,120 +1416,61 @@ var Flowtime = (function ()
   /**
    * Mouse Wheel Scroll Navigation
    */
-
-  Brav1Toolbox.addListener(ftContainer, "mousewheel", onMouseScroll, false);
-  // Firefox
-  ftContainer.addEventListener("DOMMouseScroll", onMouseScroll, false);
+  addWheelListener(ftContainer, onMouseScroll);
 
   var scrollTimeout = NaN;
 
   function onMouseScroll(e)
   {
-    clearTimeout(scrollTimeout);
-    //
-    if (_isScrollActive) {
-      e.preventDefault();
-      scrollTimeout = setTimeout(function(){doScrollTimeout(e);}, _debouncingDelay);
+    console.log("onMouseScroll");
+    e.preventDefault();
+    if (_isScrolling === false) {
+      doScrollOnce(e);
     }
   }
 
-  function doScrollTimeout(e)
+  function doScrollOnce(e)
   {
-    clearTimeout(scrollTimeout);
-    if (e.wheelDelta)
+    console.log("doScrollOnce", e);
+    //
+    _isScrolling = true;
+    setTimeout(function() { _isScrolling = false; }, _debouncingDelay);
+    //
+    if (e.deltaY == 0)
     {
-      console.log("e.wheelDelta", e);
-      if (e.wheelDeltaX != undefined)
+      if (e.deltaX > 0)
       {
-        if (e.wheelDeltaY == 0)
-        {
-          if (e.wheelDeltaX < 0)
-          {
-            if (_crossDirection === true) {
-              _nextPage();
-            } else {
-              _nextSection(e.shiftKey);
-            }
-          }
-          else if (e.wheelDeltaX > 0)
-          {
-            if (_crossDirection === true) {
-              _prevPage();
-            } else {
-              _prevSection(e.shiftKey);
-            }
-          }
-        }
-        else
-        {
-          if (e.wheelDeltaY < 0)
-          {
-            if (_crossDirection === true) {
-              _nextSection(e.shiftKey);
-            } else {
-              _nextPage();
-            }
-          }
-          else if (e.wheelDeltaY > 0)
-          {
-            if (_crossDirection === true) {
-              _prevSection(e.shiftKey);
-            } else {
-              _prevPage();
-            }
-          }
+        if (_crossDirection === true) {
+          _nextPage();
+        } else {
+          _nextSection(e.shiftKey);
         }
       }
-      else
+      else if (e.deltaX < 0)
       {
-        if (e.wheelDelta < 0)
-        {
-          _nextPage();
-        }
-        else if (e.wheelDelta > 0)
-        {
+        if (_crossDirection === true) {
           _prevPage();
+        } else {
+          _prevSection(e.shiftKey);
         }
       }
     }
-    else if (e.detail) // firefox
+    else
     {
-      if (e.detail > 0)
+      if (e.deltaY > 0)
       {
-        if (e.axis == 1)
-        {
-          if (_crossDirection === true) {
-            _nextPage();
-          } else {
-            _nextSection(e.shiftKey);
-          }
-        }
-        else
-        {
-          if (_crossDirection === true) {
-            _nextSection(e.shiftKey);
-          } else {
-            _nextPage();
-          }
+        if (_crossDirection === true) {
+          _nextSection(e.shiftKey);
+        } else {
+          _nextPage();
         }
       }
-      else if (e.detail < 0)
+      else if (e.deltaY < 0)
       {
-        if (e.axis == 1)
-        {
-          if (_crossDirection === true) {
-            _prevPage();
-          } else {
-            _prevSection(e.shiftKey);
-          }
-        }
-        else
-        {
-          if (_crossDirection === true) {
-            _prevSection(e.shiftKey);
-          } else {
-            _prevPage();
-          }
+        if (_crossDirection === true) {
+          _prevSection(e.shiftKey);
+        } else {
+          _prevPage();
         }
       }
     }

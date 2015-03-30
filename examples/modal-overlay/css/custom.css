@@ -19,8 +19,8 @@
   margin: 2em auto;
   position: relative;
   background-color: white;
-  -webkit-box-shadow: 1px 1px 5px 0 black;
      -moz-box-shadow: 1px 1px 5px 0 black;
+  -webkit-box-shadow: 1px 1px 5px 0 black;
           box-shadow: 1px 1px 5px 0 black;
 }
 
