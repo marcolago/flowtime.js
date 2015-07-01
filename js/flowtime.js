@@ -1241,7 +1241,7 @@ var Flowtime = (function ()
 
   function onMouseScroll(e) {
     e.preventDefault();
-    if (_isScrolling === false) {
+    if (_isScrolling === false && _isScrollActive === true) {
       doScrollOnce(e);
     }
   }
@@ -1548,17 +1548,24 @@ var Flowtime = (function ()
     }
     if (_scrollTheSection === true) {
       if (Brav1Toolbox.testCSS("transform")) {
-        if (_slideInPx) {
-          ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px)";
-        } else {
-          ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%)";
+        var currentSection = NavigationMatrix.getCurrentSection();
+        var outside = ftContainer;
+        var inside = currentSection;
+        //
+        if (_crossDirection === true) {
+          outside = currentSection;
+          inside = ftContainer;
         }
         //
-        var currentSection = NavigationMatrix.getCurrentSection();
         if (_slideInPx) {
-          currentSection.style[Brav1Toolbox.getPrefixed("transform")] = "translateY(" + -y + "px)";
+          outside.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px)";
         } else {
-          currentSection.style[Brav1Toolbox.getPrefixed("transform")] = "translateY(" + -y * 100 + "%)";
+          outside.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%)";
+        }
+        if (_slideInPx) {
+          inside.style[Brav1Toolbox.getPrefixed("transform")] = "translateY(" + -y + "px)";
+        } else {
+          inside.style[Brav1Toolbox.getPrefixed("transform")] = "translateY(" + -y * 100 + "%)";
         }
       }
     } else {
