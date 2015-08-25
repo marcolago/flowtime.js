@@ -161,7 +161,7 @@ var Flowtime = (function ()
     /**
      * update the navigation matrix array
      * this is a publicy exposed method
-     * useful for updating the matrix whne the site structure changes at runtime
+     * useful for updating the matrix when the site structure changes at runtime
      */
     function _updateMatrix() {
       sectionsArray = [];
@@ -1532,7 +1532,7 @@ var Flowtime = (function ()
     var x;
     var y;
     var pageIndex = NavigationMatrix.getPageIndex(dest);
-    if (_slideInPx == true) {
+    if (_slideInPx === true) {
       // calculate the coordinates of the destination
       x = dest.x;
       y = dest.y;
@@ -2135,6 +2135,9 @@ var Flowtime = (function ()
 
   function _setSlideInPx(v) {
     _slideInPx = v === true ? true : false;
+    if (_slideInPx === true) {
+      NavigationMatrix.updateOffsets();
+    }
     navigateTo();
   }
 
