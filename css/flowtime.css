@@ -33,7 +33,7 @@
 
   .flowtime.no-transition {
     -webkit-transition: -webkit-transform 0s;
-       transition:         transform 0s;
+       transition: transform 0s;
   }
 
 /* SECTIONS (COLUMNS) */
@@ -44,8 +44,6 @@
     height: 100%;
 
     position: relative;
-        -ms-transform: translateZ(0);
-    -webkit-transform: translateZ(0);
             transform: translateZ(0);
   }
 
@@ -60,6 +58,10 @@
                 /* the elements doesn't break the line */
     vertical-align: top;  /* fix the default alignement for the inline-block elements (default: baseline) */
                 /* if different from "top" set Flowtime.slideWithPx(true) */
+  }
+
+  .ft-scroll-the-section .ft-section {
+    transition: transform 0.5s cubic-bezier(.77, .10, .22, 1);
   }
 
   .ft-cross .ft-section,

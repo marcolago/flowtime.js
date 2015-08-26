@@ -42,6 +42,7 @@ var Flowtime = (function ()
   var PAGE_THUMB_CLASS                                        = "ft-page-thumb";
   var PAGE_THUMB_SELECTOR                                     = "." + PAGE_THUMB_CLASS;
   var CROSS_DIRECTION_CLASS                                   = "ft-cross";
+  var SCROLL_THE_SECTION_CLASS                                = "ft-scroll-the-section";
 
   /**
    * events
@@ -52,6 +53,7 @@ var Flowtime = (function ()
    * application variables
    */
   var ftContainer = document.querySelector(".flowtime");                // cached reference to .flowtime element
+  var ftParent = ftContainer.parentNode;                                // cached reference to .flowtime parent element
   var html = document.querySelector("html");                            // cached reference to html element
   var body = document.querySelector("body");                            // cached reference to body element
   var useHash = false;                                                  // if true the engine uses only the hash change logic
@@ -95,6 +97,7 @@ var Flowtime = (function ()
   var _nearestToTop = false;
   var _rememberSectionsStatus = false;
   var _rememberSectionsLastPage = false;
+  var _scrollTheSection = Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_SECTION_CLASS);  // flag to set the scroll the section logic
 
   var _sectionsStatus = [];
   var _sectionsMaxPageDepth = 0;
@@ -105,18 +108,12 @@ var Flowtime = (function ()
    * test the base support
    */
   var browserSupport = true;
-  try
-  {
+  try {
     var htmlClass = document.querySelector("html").className.toLowerCase();
-    if (htmlClass.indexOf("ie7") != -1 ||
-      htmlClass.indexOf("ie8") != -1 ||
-      htmlClass.indexOf("lt-ie9") != -1 )
-    {
+    if (htmlClass.indexOf("ie7") != -1 || htmlClass.indexOf("ie8") != -1 || htmlClass.indexOf("lt-ie9") != -1 ) {
       browserSupport = false;
     }
-  }
-  catch(e)
-  {
+  } catch(e) {
     browserSupport = false;
   }
 
@@ -125,9 +122,8 @@ var Flowtime = (function ()
    * to set the CSS properties
    * needed for application scrolling
    */
-  if (browserSupport)
-  {
-    Brav1Toolbox.addClass(body, "ft-absolute-nav");
+  if (browserSupport) {
+    Brav1Toolbox.addClass(ftParent, "ft-absolute-nav");
   }
 
 /*
@@ -145,8 +141,7 @@ var Flowtime = (function ()
    * and which expose all the methods to get and set the navigation destinations
    */
 
-  var NavigationMatrix = (function ()
-  {
+  var NavigationMatrix = (function() {
     var sections;                                             // HTML Collection of .flowtime > .ft-section elements
     var sectionsArray;                                        // multi-dimensional array containing the pages' array
     var allPages;                                             // HTML Collection of .flowtime .ft-page elements
@@ -166,10 +161,9 @@ var Flowtime = (function ()
     /**
      * update the navigation matrix array
      * this is a publicy exposed method
-     * useful for updating the matrix whne the site structure changes at runtime
+     * useful for updating the matrix when the site structure changes at runtime
      */
-    function _updateMatrix()
-    {
+    function _updateMatrix() {
       sectionsArray = [];
       parallaxElements = [];
       fragments = document.querySelectorAll(FRAGMENT_SELECTOR);
@@ -177,15 +171,13 @@ var Flowtime = (function ()
       sections = ftContainer.querySelectorAll(".flowtime > " + SECTION_SELECTOR);
       allPages = ftContainer.querySelectorAll(".flowtime " + PAGE_SELECTOR);
       //
-      for (var i = 0; i < sections.length; i++)
-      {
+      for (var i = 0; i < sections.length; i++) {
         var pagesArray = [];
         var section = sections[i];
         fragmentsArray[i] = [];
         fr[i] = [];
         //
-        if (section.getAttribute("data-id"))
-        {
+        if (section.getAttribute("data-id")) {
           section.setAttribute("data-id", "__" + unsafeAttr(section.getAttribute("data-id"))); // prevents attributes starting with a number
         }
         section.setAttribute("data-prog", "__" + (i + 1));
@@ -195,22 +187,18 @@ var Flowtime = (function ()
         pages = section.querySelectorAll(PAGE_SELECTOR);
         pagesTotalLength += pages.length;
         pagesLength = Math.max(pagesLength, pages.length); // sets the pages max number for overview purposes
-        for (var ii = 0; ii < pages.length; ii++)
-        {
+        for (var ii = 0; ii < pages.length; ii++) {
           var _sp = pages[ii];
-          if (_sp.getAttribute("data-id"))
-          {
+          if (_sp.getAttribute("data-id")) {
             _sp.setAttribute("data-id", "__" + unsafeAttr(_sp.getAttribute("data-id"))); // prevents attributes starting with a number
           }
           _sp.setAttribute("data-prog", "__" + (ii + 1));
           _sp.index = ii;
           _sp.setAttribute("id", "");
           // set data-title attributes to pages that doesn't have one and have at least an h1 heading element inside
-          if (!_sp.getAttribute("data-title"))
-          {
+          if (!_sp.getAttribute("data-title")) {
             var heading = _sp.querySelector("h1");
-            if (heading != null && heading.textContent.lenght != "")
-            {
+            if (heading != null && heading.textContent.lenght != "") {
               _sp.setAttribute("data-title", heading.textContent);
             }
           }
@@ -235,33 +223,25 @@ var Flowtime = (function ()
      * stores parallax data directly on the dome elements with a data-parallax attribute
      * data are stored on a multi dimensional array ordered per section and per page to easily manage the position
      */
-    function setParallax(page, sectionIndex, pageIndex)
-    {
-      if (parallaxEnabled)
-      {
-        if (parallaxElements[sectionIndex] == undefined)
-        {
+    function setParallax(page, sectionIndex, pageIndex) {
+      if (parallaxEnabled) {
+        if (parallaxElements[sectionIndex] == undefined) {
           parallaxElements[sectionIndex] = [];
         }
-        if (parallaxElements[sectionIndex][pageIndex] == undefined)
-        {
+        if (parallaxElements[sectionIndex][pageIndex] == undefined) {
           parallaxElements[sectionIndex][pageIndex] = [];
         }
         //
         var pxs = page.querySelectorAll(".parallax");
-        if (pxs.length > 0)
-        {
-          for (var i = 0; i < pxs.length; i++)
-          {
+        if (pxs.length > 0) {
+          for (var i = 0; i < pxs.length; i++) {
             var el = pxs[i];
             var pX = defaultParallaxX;
             var pY = defaultParallaxY;
-            if (el.getAttribute("data-parallax") != null)
-            {
+            if (el.getAttribute("data-parallax") != null) {
               var pValues = el.getAttribute("data-parallax").split(",");
               pX = pY = pValues[0];
-              if (pValues.length > 1)
-              {
+              if (pValues.length > 1) {
                 pY = pValues[1];
               }
             }
@@ -273,18 +253,15 @@ var Flowtime = (function ()
       }
     }
 
-    function _getParallaxElements()
-    {
+    function _getParallaxElements() {
       return parallaxElements;
     }
 
     /**
      * cache the position for every page, useful when navigatin in pixels or when attaching a page after scrolling
      */
-    function _updateOffsets ()
-    {
-      for (var i = 0; i < allPages.length; i++)
-      {
+    function _updateOffsets () {
+      for (var i = 0; i < allPages.length; i++) {
         var _sp = allPages[i];
         _sp.x = _sp.offsetLeft + _sp.parentNode.offsetLeft;
         _sp.y = _sp.offsetTop + _sp.parentNode.offsetTop;
@@ -296,33 +273,23 @@ var Flowtime = (function ()
      * @param top Boolean if true the next page will be the first page in the next array; if false the next section will be the same index page in the next array
      * @param fos Boolean value of _fragmentsOnSide
      */
-    function _getNextSection(top, fos)
-    {
+    function _getNextSection(top, fos) {
       var sub = sp;
       //
       var toTop = isOverview === true ? false : top === !_sectionsSlideToTop;
-      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && io === false)
-      {
+      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && io === false) {
         _showFragment(p, sp);
-      }
-      else
-      {
+      } else {
         sub = 0;
-        if (toTop === true && p + 1 <= sectionsArray.length - 1)
-        {
+        if (toTop === true && p + 1 <= sectionsArray.length - 1) {
           sub = 0;
-        }
-        else if (toTop !== true || _fragmentsOnBack === true || p + 1 > sectionsArray.length - 1)
-        {
+        } else if (toTop !== true || _fragmentsOnBack === true || p + 1 > sectionsArray.length - 1) {
           sub = sp;
         }
         var pTemp = Math.min(p + 1, sectionsArray.length - 1);
-        if (_isLoopable == true && pTemp === p)
-        {
+        if (_isLoopable == true && pTemp === p) {
           p = 0;
-        }
-        else
-        {
+        } else {
           p = pTemp;
         }
         //
@@ -346,34 +313,24 @@ var Flowtime = (function ()
      * @param top Boolean if true the next section will be the first page in the prev array; if false the prev section will be the same index page in the prev array
      * @param fos Boolean value of _fragmentsOnSide
      */
-    function _getPrevSection(top, fos)
-    {
+    function _getPrevSection(top, fos) {
       var sub = sp;
       //
       var toTop = isOverview === true ? false : top === !_sectionsSlideToTop;
-      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && isOverview === false)
-      {
+      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && isOverview === false) {
         _hideFragment(p, sp);
-      }
-      else
-      {
+      } else {
         var sub = 0;
         sub = 0;
-        if (toTop === true && p - 1 >= 0)
-        {
+        if (toTop === true && p - 1 >= 0) {
           sub = 0;
-        }
-        else if (toTop !== true || _fragmentsOnBack === true || p - 1 < 0)
-        {
+        } else if (toTop !== true || _fragmentsOnBack === true || p - 1 < 0) {
           sub = sp;
         }
         var pTemp = Math.max(p - 1, 0);
-        if (_isLoopable === true && pTemp === p)
-        {
+        if (_isLoopable === true && pTemp === p) {
           p = sectionsArray.length - 1;
-        }
-        else
-        {
+        } else {
           p = pTemp;
         }
         //
@@ -399,8 +356,7 @@ var Flowtime = (function ()
      * @param p Number  the section index in the sections array
      * @param sub Number  the page index in the sections->page array
      */
-    function _getNearestPage(pg, sub)
-    {
+    function _getNearestPage(pg, sub) {
       var nsp = pg[sub];
       if (nsp === undefined) {
         if (_nearestToTop === true) {
@@ -417,8 +373,7 @@ var Flowtime = (function ()
         }
       }
       sp = sub;
-      if (!isOverview)
-      {
+      if (!isOverview) {
         _updateFragments();
       }
       return hiliteOrNavigate(nsp);
@@ -429,29 +384,19 @@ var Flowtime = (function ()
      * if the next page is not in the current section array returns the first page in the next section array
      * @param jump  Boolean if true jumps over the fragments directly to the next page
      */
-    function _getNextPage(jump)
-    {
-      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump !== true && isOverview === false)
-      {
+    function _getNextPage(jump) {
+      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump !== true && isOverview === false) {
         _showFragment(p, sp);
-      }
-      else
-      {
-        if (sectionsArray[p][sp + 1] === undefined)
-        {
-          if (sectionsArray[p + 1] !== undefined)
-          {
+      } else {
+        if (sectionsArray[p][sp + 1] === undefined) {
+          if (sectionsArray[p + 1] !== undefined) {
             p += 1;
             sp = 0;
-          }
-          else if (sectionsArray[p + 1] === undefined && _isLoopable === true)
-          {
+          } else if (sectionsArray[p + 1] === undefined && _isLoopable === true) {
             p = 0;
             sp = 0;
           }
-        }
-        else
-        {
+        } else {
           sp = Math.min(sp + 1, sectionsArray[p].length - 1);
         }
       }
@@ -463,29 +408,19 @@ var Flowtime = (function ()
      * if the prev page is not in the current section array returns the last page in the prev section array
      * @param jump  Boolean if true jumps over the fragments directly to the prev page
      */
-    function _getPrevPage(jump)
-    {
-      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && isOverview == false)
-      {
+    function _getPrevPage(jump) {
+      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && isOverview == false) {
         _hideFragment(p, sp);
-      }
-      else
-      {
-        if (sp == 0)
-        {
-          if (sectionsArray[p - 1] != undefined)
-          {
+      } else {
+        if (sp == 0) {
+          if (sectionsArray[p - 1] != undefined) {
             p -= 1;
             sp = sectionsArray[p].length - 1;
-          }
-          else if (sectionsArray[p - 1] == undefined && _isLoopable == true)
-          {
+          } else if (sectionsArray[p - 1] == undefined && _isLoopable == true) {
             p = sectionsArray.length - 1;
             sp = sectionsArray[p].length - 1;
           }
-        }
-        else
-        {
+        } else {
           sp = Math.max(sp - 1, 0);
         }
       }
@@ -498,15 +433,11 @@ var Flowtime = (function ()
      * switch the active page without returning a destination
      * @param d HTMLElement the candidate destination
      */
-    function hiliteOrNavigate(d)
-    {
-      if (isOverview == true)
-      {
+    function hiliteOrNavigate(d) {
+      if (isOverview == true) {
         _switchActivePage(d);
         return;
-      }
-      else
-      {
+      } else {
         return d;
       }
     }
@@ -519,18 +450,14 @@ var Flowtime = (function ()
      * @param fsp Number  the page index
      * @param f Number  the fragment index (optional)
      */
-    function _showFragment(fp, fsp, f)
-    {
-      if (f != undefined)
-      {
+    function _showFragment(fp, fsp, f) {
+      if (f != undefined) {
         fr[fp][fsp] = f;
       }
-      else
-      {
+      else {
         f = fr[fp][fsp] += 1;
       }
-      for (var i = 0; i <= f; i++)
-      {
+      for (var i = 0; i <= f; i++) {
         Brav1Toolbox.addClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_CLASS);
         Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_ACTUAL_CLASS);
       }
@@ -545,28 +472,21 @@ var Flowtime = (function ()
      * @param fsp Number  the page index
      * @param f Number  the fragment index (optional)
      */
-    function _hideFragment(fp, fsp, f)
-    {
-      if (f != undefined)
-      {
+    function _hideFragment(fp, fsp, f) {
+      if (f != undefined) {
         fr[fp][fsp] = f;
-      }
-      else
-      {
+      } else {
         f = fr[fp][fsp];
       }
-      for (var i = 0; i < fragmentsArray[fp][fsp].length; i++)
-      {
-        if (i >= f)
-        {
+      for (var i = 0; i < fragmentsArray[fp][fsp].length; i++) {
+        if (i >= f) {
           Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_CLASS);
           Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_TEMP_CLASS);
         }
         Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_ACTUAL_CLASS);
       }
       f -= 1;
-      if (f >= 0)
-      {
+      if (f >= 0) {
         Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], FRAGMENT_ACTUAL_CLASS);
       }
       fr[fp][fsp] = f;
@@ -576,10 +496,8 @@ var Flowtime = (function ()
      * show all the fragments or the fragments in the specified page
      * adds a temporary class which does not override the current status of fragments
      */
-    function _showFragments()
-    {
-      for (var i = 0; i < fragments.length; i++)
-      {
+    function _showFragments() {
+      for (var i = 0; i < fragments.length; i++) {
         Brav1Toolbox.addClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
       }
     }
@@ -588,16 +506,14 @@ var Flowtime = (function ()
      * hide all the fragments or the fragments in the specified page
      * removes a temporary class which does not override the current status of fragments
      */
-    function _hideFragments()
-    {
-      for (var i = 0; i < fragments.length; i++)
-      {
+    function _hideFragments() {
+      for (var i = 0; i < fragments.length; i++) {
         Brav1Toolbox.removeClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
       }
     }
 
-    function _updateFragments()
-    {
+    function _updateFragments() {
+      // YES! This is Allman style and is correct
       for (var ip = 0; ip < fragmentsArray.length; ip++)
       {
         var frp = fragmentsArray[ip];
@@ -684,10 +600,8 @@ var Flowtime = (function ()
     /**
      * returns the current section index
      */
-    function _getSection(h)
-    {
-      if (h)
-      {
+    function _getSection(h) {
+      if (h) {
         // TODO return the index of the section by hash
       }
       return p;
@@ -696,10 +610,8 @@ var Flowtime = (function ()
     /**
      * returns the current page index
      */
-    function _getPage(h)
-    {
-      if (h)
-      {
+    function _getPage(h) {
+      if (h) {
         // TODO return the index of the page by hash
       }
       return sp;
@@ -708,24 +620,21 @@ var Flowtime = (function ()
     /**
      * returns the sections collection
      */
-     function _getSections()
-     {
+     function _getSections() {
       return sections;
      }
 
     /**
      * returns the pages collection inside the passed section index
      */
-     function _getPages(i)
-     {
+     function _getPages(i) {
       return sectionsArray[i];
      }
 
     /**
      * returns the pages collection of all pages in the presentation
      */
-    function _getAllPages()
-    {
+    function _getAllPages() {
       return allPages;
     }
 
@@ -739,59 +648,50 @@ var Flowtime = (function ()
     /**
      * returns the number of sections
      */
-    function _getSectionsLength()
-    {
+    function _getSectionsLength() {
       return sectionsLength;
     }
 
     /**
      * returns the max number of pages
      */
-    function _getPagesLength()
-    {
+    function _getPagesLength() {
       return pagesLength;
     }
 
     /**
      * returns the total number of pages
      */
-    function _getPagesTotalLength()
-    {
+    function _getPagesTotalLength() {
       return pagesTotalLength;
     }
 
     /**
      * returns a object with the index of the current section and page
      */
-    function _getPageIndex(d)
-    {
+    function _getPageIndex(d) {
       var pIndex = p;
       var spIndex = sp;
-      if (d != undefined)
-      {
+      if (d != undefined) {
         pIndex = d.parentNode.index; //parseInt(d.parentNode.getAttribute("data-prog").replace(/__/, "")) - 1;
         spIndex = d.index; //parseInt(d.getAttribute("data-prog").replace(/__/, "")) - 1;
       }
       return { section: pIndex, page: spIndex };
     }
 
-    function _getSectionByIndex(i)
-    {
+    function _getSectionByIndex(i) {
       return sections[i];
     }
 
-    function _getPageByIndex(i, pi)
-    {
+    function _getPageByIndex(i, pi) {
       return sectionsArray[pi][i];
     }
 
-    function _getCurrentSection()
-    {
+    function _getCurrentSection() {
       return sections[p];
     }
 
-    function _getCurrentPage()
-    {
+    function _getCurrentPage() {
       return sectionsArray[p][sp];
     }
 
@@ -813,8 +713,7 @@ var Flowtime = (function ()
       return sectionIndex;
     }
 
-    function _getPrevSectionObject()
-    {
+    function _getPrevSectionObject() {
       var sectionIndex = _getPrevSectionIndex();
       if (sectionIndex === null) {
         return null;
@@ -861,8 +760,7 @@ var Flowtime = (function ()
       return sectionIndex;
     }
 
-    function _getNextSectionObject()
-    {
+    function _getNextSectionObject() {
       var sectionIndex = _getNextSectionIndex();
       if (sectionIndex === null) {
         return null;
@@ -890,48 +788,39 @@ var Flowtime = (function ()
       return sectionsArray[p][pageIndex];
     }
 
-    function _getCurrentFragment()
-    {
+    function _getCurrentFragment() {
       return fragmentsArray[p][sp][_getCurrentFragmentIndex()];
     }
 
-    function _getCurrentFragmentIndex()
-    {
+    function _getCurrentFragmentIndex() {
       return fr[p][sp];
     }
 
-    function _hasNextSection()
-    {
+    function _hasNextSection() {
       return p < sections.length - 1;
     }
 
-    function _hasPrevSection()
-    {
+    function _hasPrevSection() {
       return p > 0;
     }
 
-    function _hasNextPage()
-    {
+    function _hasNextPage() {
       return sp < sectionsArray[p].length - 1;
     }
 
-    function _hasPrevPage()
-    {
+    function _hasPrevPage() {
       return sp > 0;
     }
 
     /**
      * get a progress value calculated on the total number of pages
      */
-    function _getProgress()
-    {
-      if (p == 0 && sp == 0)
-      {
+    function _getProgress() {
+      if (p == 0 && sp == 0) {
         return 0;
       }
       var c = 0;
-      for (var i = 0; i < p; i++)
-      {
+      for (var i = 0; i < p; i++) {
         c += sectionsArray[i].length;
       }
       c += sectionsArray[p][sp].index + 1;
@@ -941,10 +830,8 @@ var Flowtime = (function ()
     /**
      * get a composed hash based on current section and page
      */
-    function _getHash(d)
-    {
-      if (d != undefined)
-      {
+    function _getHash(d) {
+      if (d != undefined) {
         sp = _getPageIndex(d).page;
         p = _getPageIndex(d).section;
       }
@@ -952,8 +839,7 @@ var Flowtime = (function ()
       // append to h the value of data-id attribute or, if data-id is not defined, the data-prog attribute
       var _p = sections[p];
       h += getPageId(_p);
-      if (sectionsArray[p].length > 0)
-      {
+      if (sectionsArray[p].length > 0) {
         var _sp = sectionsArray[p][sp];
         h += "/" + getPageId(_sp);
       }
@@ -963,22 +849,16 @@ var Flowtime = (function ()
     /**
      * expose the method to set the page from a hash
      */
-    function _setPage(h)
-    {
+    function _setPage(h) {
       var elem = getElementByHash(h);
-      if (elem)
-      {
+      if (elem) {
         var pElem = elem.parentNode;
-        for (var i = 0; i < sectionsArray.length; i++)
-        {
+        for (var i = 0; i < sectionsArray.length; i++) {
           var pa = sectionsArray[i];
-          if (sections[i] === pElem)
-          {
+          if (sections[i] === pElem) {
             p = i;
-            for (var ii = 0; ii < pa.length; ii++)
-            {
-              if (pa[ii] === elem)
-              {
+            for (var ii = 0; ii < pa.length; ii++) {
+              if (pa[ii] === elem) {
                 sp = ii;
                 break;
               }
@@ -990,14 +870,11 @@ var Flowtime = (function ()
       return elem;
     }
 
-    function _switchActivePage(d, navigate)
-    {
+    function _switchActivePage(d, navigate) {
       var sIndex = d.parentNode.index;
-      for (var i = 0; i < sectionsArray.length; i++)
-      {
+      for (var i = 0; i < sectionsArray.length; i++) {
         var pa = sectionsArray[i];
-        for (var ii = 0; ii < pa.length; ii++)
-        {
+        for (var ii = 0; ii < pa.length; ii++) {
           var spa = pa[ii];
           //
           Brav1Toolbox.removeClass(spa, "past-section");
@@ -1005,47 +882,36 @@ var Flowtime = (function ()
           Brav1Toolbox.removeClass(spa, "past-page");
           Brav1Toolbox.removeClass(spa, "future-page");
           //
-          if (spa !== d)
-          {
+          if (spa !== d) {
             Brav1Toolbox.removeClass(spa, "hilite");
-            if (isOverview == false && spa !== _getCurrentPage())
-            {
+            if (isOverview == false && spa !== _getCurrentPage()) {
               Brav1Toolbox.removeClass(spa, "actual");
             }
-            if (i < sIndex)
-            {
+            if (i < sIndex) {
               Brav1Toolbox.addClass(spa, "past-section");
-            }
-            else if (i > sIndex)
-            {
+            } else if (i > sIndex) {
               Brav1Toolbox.addClass(spa, "future-section");
             }
-            if (spa.index < d.index)
-            {
+            if (spa.index < d.index) {
               Brav1Toolbox.addClass(spa, "past-page");
-            }
-            else if (spa.index > d.index)
-            {
+            } else if (spa.index > d.index) {
               Brav1Toolbox.addClass(spa, "future-page");
             }
           }
         }
       }
       Brav1Toolbox.addClass(d, "hilite");
-      if (navigate)
-      {
+      if (navigate) {
         setActual(d);
       }
       hilited = d;
     }
 
-    function _getCurrentHilited()
-    {
+    function _getCurrentHilited() {
       return hilited;
     }
 
-    function setActual(d)
-    {
+    function setActual(d) {
       Brav1Toolbox.addClass(d, "actual");
     }
 
@@ -1109,10 +975,8 @@ var Flowtime = (function ()
    * add a listener for event delegation
    * used for navigation purposes
    */
-  if (browserSupport)
-  {
-    if (isTouchDevice)
-    {
+  if (browserSupport) {
+    if (isTouchDevice) {
       Brav1Toolbox.addListener(document, "touchend", function(e) {
         // e.preventDefault(); // TODO FIX
         onNavClick(e);
@@ -1121,23 +985,18 @@ var Flowtime = (function ()
     Brav1Toolbox.addListener(document, "click", onNavClick, false);
   }
 
-  function onNavClick(e)
-  {
+  function onNavClick(e) {
     if (_areLinksActive) {
-      if (e.target.nodeName === "A" || e.target.parentNode.nodeName === "A")
-      {
+      if (e.target.nodeName === "A" || e.target.parentNode.nodeName === "A") {
         var href = e.target.getAttribute("href") || e.target.parentNode.getAttribute("href");
-        if (href === "#")
-        {
+        if (href === "#") {
           e.preventDefault();
           return;
         }
         // links with href starting with #
-        if (href)
-        {
+        if (href) {
           e.target.blur();
-          if (href.substr(0,1) == "#")
-          {
+          if (href.substr(0,1) == "#") {
             e.preventDefault();
             var dest = NavigationMatrix.setPage(href);
             navigateTo(dest, true, true);
@@ -1145,22 +1004,18 @@ var Flowtime = (function ()
         }
       }
       // pages in oveview mode
-      if (isOverview)
-      {
+      if (isOverview) {
         var dest = e.target;
-        while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS))
-        {
+        while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS)) {
           dest = dest.parentNode;
         }
-        if (Brav1Toolbox.hasClass(dest, PAGE_CLASS))
-        {
+        if (Brav1Toolbox.hasClass(dest, PAGE_CLASS)) {
           e.preventDefault();
           navigateTo(dest, null, true);
         }
       }
       // thumbs in the default progress indicator
-      if (Brav1Toolbox.hasClass(e.target, PAGE_THUMB_CLASS))
-      {
+      if (Brav1Toolbox.hasClass(e.target, PAGE_THUMB_CLASS)) {
         e.preventDefault();
         var pTo = Number(unsafeAttr(e.target.getAttribute("data-section")));
         var spTo = Number(unsafeAttr(e.target.getAttribute("data-page")));
@@ -1174,25 +1029,19 @@ var Flowtime = (function ()
    * uses native history API to manage navigation
    * but uses the # for client side navigation on return
    */
-  if (useHash == false && window.history.pushState)
-  {
+  if (useHash == false && window.history.pushState) {
     window.onpopstate = onPopState;
   }
-  else
-  {
+  else {
     useHash = true;
   }
   //
-  function onPopState(e)
-  {
+  function onPopState(e) {
     useHash = false;
     var h;
-    if (e.state)
-    {
+    if (e.state) {
       h = e.state.token.replace("#/", "");
-    }
-    else
-    {
+    } else {
       h = document.location.hash.replace("#/", "");
     }
     var dest = NavigationMatrix.setPage(h);
@@ -1210,10 +1059,8 @@ var Flowtime = (function ()
    * @param e Event the hashChange Event
    * @param d Boolean force the hash change
    */
-  function onHashChange(e, d)
-  {
-    if (useHash || d)
-    {
+  function onHashChange(e, d) {
+    if (useHash || d) {
       var h = document.location.hash.replace("#/", "");
       var dest = NavigationMatrix.setPage(h);
       navigateTo(dest, false);
@@ -1230,16 +1077,12 @@ var Flowtime = (function ()
   ##     ##  #######   #######   ######  ######## ########  ##     ## ##     ##  ######
 */
 
-  function _setMouseDrag(value)
-  {
+  function _setMouseDrag(value) {
     _mouseDragEnabled = value;
-    if (_mouseDragEnabled)
-    {
+    if (_mouseDragEnabled) {
       Brav1Toolbox.addListener(ftContainer, "mousedown", onTouchStart, false);
       Brav1Toolbox.addListener(ftContainer, "mouseup", onTouchEnd, false);
-    }
-    else
-    {
+    } else {
       Brav1Toolbox.removeListener(ftContainer, "mousedown", onTouchStart);
       Brav1Toolbox.removeListener(ftContainer, "mouseup", onTouchEnd);
     }
@@ -1265,15 +1108,13 @@ var Flowtime = (function ()
   var _dragAxis = "x";
   var _swipeLimit = 100;
 
-  if (isTouchDevice)
-  {
+  if (isTouchDevice) {
     ftContainer.addEventListener("touchstart", onTouchStart, false);
     ftContainer.addEventListener("touchmove",  onTouchMove, false);
     ftContainer.addEventListener("touchend",   onTouchEnd, false);
   }
 
-  function onTouchStart(e)
-  {
+  function onTouchStart(e) {
     _deltaX = 0;
     _deltaY = 0;
     //e.preventDefault(); // preventing the defaul event behaviour breaks external links
@@ -1284,41 +1125,33 @@ var Flowtime = (function ()
     var initOffset = getInitOffset();
     _ftX = initOffset.x;
     _ftY = initOffset.y;
-    if (_mouseDragEnabled)
-    {
+    if (_mouseDragEnabled) {
       Brav1Toolbox.addListener(ftContainer, "mousemove", onTouchMove, false);
     }
   }
 
-  function onTouchMove(e)
-  {
+  function onTouchMove(e) {
     e.preventDefault();
     e = getTouchEvent(e);
     _deltaX = e.clientX - _touchStartX;
     _deltaY = e.clientY - _touchStartY;
   }
 
-  function onTouchEnd(e)
-  {
+  function onTouchEnd(e) {
     if (_isTouchActive) {
-      if (Math.abs(_deltaX) >= _swipeLimit || Math.abs(_deltaY) >= _swipeLimit)
-      {
+      if (Math.abs(_deltaX) >= _swipeLimit || Math.abs(_deltaY) >= _swipeLimit) {
         e = getTouchEvent(e);
         _dragging = 0;
         _dragAxis = Math.abs(_deltaX) >= Math.abs(_deltaY) ? "x" : "y";
-        if (_dragAxis == "x" && Math.abs(_deltaX) >= _swipeLimit)
-        {
-          if (_deltaX > 0)
-          {
+        if (_dragAxis == "x" && Math.abs(_deltaX) >= _swipeLimit) {
+          if (_deltaX > 0) {
             if (_crossDirection === true) {
               _prevPage();
             } else {
               _prevSection(false);
             }
             return;
-          }
-          else if (_deltaX < 0)
-          {
+          } else if (_deltaX < 0) {
             if (_crossDirection === true) {
               _nextPage();
             } else {
@@ -1327,19 +1160,15 @@ var Flowtime = (function ()
             return;
           }
         }
-        else
-        {
-          if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit)
-          {
+        else {
+          if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit) {
             if (_crossDirection === true) {
               _prevSection(false);
             } else {
               _prevPage();
             }
             return;
-          }
-          else if (_deltaY < 0)
-          {
+          } else if (_deltaY < 0) {
             if (_crossDirection === true) {
               _nextSection(false);
             } else {
@@ -1353,40 +1182,31 @@ var Flowtime = (function ()
     Brav1Toolbox.removeListener(ftContainer, "mousemove", onTouchMove);
   }
 
-  function getTouchEvent(e)
-  {
-    if (e.touches)
-    {
-          e = e.touches[0];
-        }
-        return e;
+  function getTouchEvent(e) {
+    if (e.touches) {
+        e = e.touches[0];
+      }
+      return e;
     }
 
-    function getInitOffset()
-    {
+    function getInitOffset() {
       var off = ftContainer.style[Brav1Toolbox.getPrefixed("transform")];
       // X
       var indexX = off.indexOf("translateX(") + 11;
       var offX = off.substring(indexX, off.indexOf(")", indexX));
-      if (offX.indexOf("%") != -1)
-      {
+      if (offX.indexOf("%") != -1) {
         offX = offX.replace("%", "");
         offX = (parseInt(offX) / 100) * window.innerWidth;
-      }
-      else if (offX.indexOf("px") != -1)
-      {
+      } else if (offX.indexOf("px") != -1) {
         offX = parseInt(offX.replace("px", ""));
       }
       // Y
       var indexY = off.indexOf("translateY(") + 11;
       var offY = off.substring(indexY, off.indexOf(")", indexY));
-      if (offY.indexOf("%") != -1)
-      {
+      if (offY.indexOf("%") != -1) {
         offY = offY.replace("%", "");
         offY = (parseInt(offY) / 100) * window.innerHeight;
-      }
-      else if (offY.indexOf("px") != -1)
-      {
+      } else if (offY.indexOf("px") != -1) {
         offY = parseInt(offY.replace("px", ""));
       }
       return { x:offX, y:offY };
@@ -1407,8 +1227,7 @@ var Flowtime = (function ()
    */
   Brav1Toolbox.addListener(window, "scroll", onNativeScroll);
 
-  function onNativeScroll(e)
-  {
+  function onNativeScroll(e) {
     e.preventDefault();
     resetScroll();
   }
@@ -1420,53 +1239,40 @@ var Flowtime = (function ()
 
   var scrollTimeout = NaN;
 
-  function onMouseScroll(e)
-  {
-    console.log("onMouseScroll");
+  function onMouseScroll(e) {
     e.preventDefault();
-    if (_isScrolling === false) {
+    if (_isScrolling === false && _isScrollActive === true) {
       doScrollOnce(e);
     }
   }
 
-  function doScrollOnce(e)
-  {
-    console.log("doScrollOnce", e);
+  function doScrollOnce(e) {
     //
     _isScrolling = true;
     setTimeout(function() { _isScrolling = false; }, _debouncingDelay);
     //
-    if (e.deltaY == 0)
-    {
-      if (e.deltaX > 0)
-      {
+    if (e.deltaY == 0) {
+      if (e.deltaX > 0) {
         if (_crossDirection === true) {
           _nextPage();
         } else {
           _nextSection(e.shiftKey);
         }
-      }
-      else if (e.deltaX < 0)
-      {
+      } else if (e.deltaX < 0) {
         if (_crossDirection === true) {
           _prevPage();
         } else {
           _prevSection(e.shiftKey);
         }
       }
-    }
-    else
-    {
-      if (e.deltaY > 0)
-      {
+    } else {
+      if (e.deltaY > 0) {
         if (_crossDirection === true) {
           _nextSection(e.shiftKey);
         } else {
           _nextPage();
         }
-      }
-      else if (e.deltaY < 0)
-      {
+      } else if (e.deltaY < 0) {
         if (_crossDirection === true) {
           _prevSection(e.shiftKey);
         } else {
@@ -1489,25 +1295,20 @@ var Flowtime = (function ()
   /**
    * monitoring function that triggers hashChange when resizing window
    */
-  var resizeMonitor = (function _resizeMonitor()
-  {
+  var resizeMonitor = (function _resizeMonitor() {
     var ticker = NaN;
-    function _enable()
-    {
+    function _enable() {
       _disable();
-      if (!isOverview)
-      {
+      if (!isOverview) {
         ticker = setTimeout(doResizeHandler, 300);
       }
     }
 
-    function _disable()
-    {
+    function _disable() {
       clearTimeout(ticker);
     }
 
-    function doResizeHandler()
-    {
+    function doResizeHandler() {
       NavigationMatrix.updateOffsets();
       navigateTo();
     }
@@ -1535,23 +1336,17 @@ var Flowtime = (function ()
    * returns the element by parsing the hash
    * @param h String  the hash string to evaluate
    */
-  function getElementByHash(h)
-  {
-    if (h.length > 0)
-    {
+  function getElementByHash(h) {
+    if (h.length > 0) {
       var aHash = h.replace("#/", "").split("/");
-      if (aHash.length > 0)
-      {
+      if (aHash.length > 0) {
         var p = document.querySelector(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]") || document.querySelector(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
-        if (p != null)
-        {
+        if (p != null) {
           var sp = null;
-          if (aHash.length > 1)
-          {
+          if (aHash.length > 1) {
             sp = p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
           }
-          if (sp == null)
-          {
+          if (sp == null) {
             sp = p.querySelector(PAGE_SELECTOR);
           }
           return sp;
@@ -1564,8 +1359,7 @@ var Flowtime = (function ()
   /**
    * public method to force navigation updates
    */
-  function _updateNavigation()
-  {
+  function _updateNavigation() {
     NavigationMatrix.update();
     onHashChange(null, true);
   }
@@ -1575,22 +1369,16 @@ var Flowtime = (function ()
    * if a data-title is available in a page and or in a section then it will be used
    * otherwise it will be used a formatted version of the hash string
    */
-  function setTitle(h)
-  {
+  function setTitle(h) {
     var t = siteName;
     var ht = NavigationMatrix.getCurrentPage().getAttribute("data-title");
-    if (ht == null)
-    {
+    if (ht == null) {
       var hs = h.split("/");
-      for (var i = 0; i < hs.length; i++)
-      {
+      for (var i = 0; i < hs.length; i++) {
         t += " | " + hs[i];
       }
-    }
-    else
-    {
-      if (NavigationMatrix.getCurrentSection().getAttribute("data-title") != null)
-      {
+    } else {
+      if (NavigationMatrix.getCurrentSection().getAttribute("data-title") != null) {
         t += " | " + NavigationMatrix.getCurrentSection().getAttribute("data-title");
       }
       t += " | " + ht
@@ -1603,8 +1391,7 @@ var Flowtime = (function ()
    * if there is a data-id attribute it will be returned
    * otherwise will be returned the data-prog attribute
    */
-  function getPageId(d)
-  {
+  function getPageId(d) {
     return (d.getAttribute("data-id") != null ? d.getAttribute("data-id").replace(/__/, "") : d.getAttribute("data-prog").replace(/__/, ""));
   }
 
@@ -1612,14 +1399,10 @@ var Flowtime = (function ()
    * returns a safe version of an attribute value
    * adding __ in front of the value
    */
-  function safeAttr(a)
-  {
-    if (a.substr(0,2) != "__")
-    {
+  function safeAttr(a) {
+    if (a.substr(0,2) != "__") {
       return "__" + a;
-    }
-    else
-    {
+    } else {
       return a;
     }
   }
@@ -1628,14 +1411,10 @@ var Flowtime = (function ()
    * clean the save value of an attribute
    * removing __ from the beginning of the value
    */
-  function unsafeAttr(a)
-  {
-    if (a.substr(0,2) == "__")
-    {
+  function unsafeAttr(a) {
+    if (a.substr(0,2) == "__") {
       return a.replace(/__/, "");
-    }
-    else
-    {
+    } else {
       return a;
     }
   }
@@ -1656,18 +1435,13 @@ var Flowtime = (function ()
    * @param push Boolean if true the hash string were pushed to the history API
    * @param linked Boolean if true triggers a forced update of all the fragments in the pages, used when navigating from links or overview
    */
-  function navigateTo(dest, push, linked)
-  {
+  function navigateTo(dest, push, linked) {
     push = push == false ? push : true;
     // if dest doesn't exist then go to homepage
-    if (!dest)
-    {
-      if (NavigationMatrix.getCurrentPage() != null)
-      {
+    if (!dest) {
+      if (NavigationMatrix.getCurrentPage() != null) {
         dest = NavigationMatrix.getCurrentPage();
-      }
-      else
-      {
+      } else {
         dest = document.querySelector(PAGE_SELECTOR);
       }
       push = true;
@@ -1677,29 +1451,23 @@ var Flowtime = (function ()
     //
     moveParallax(dest);
     //
-    if (isOverview)
-    {
+    if (isOverview) {
       _toggleOverview(false, false);
     }
     //
     var h = NavigationMatrix.getHash(dest);
-    if (linked == true)
-    {
+    if (linked == true) {
       NavigationMatrix.updateFragments();
     }
     // set history properties
     var pageIndex = NavigationMatrix.getPageIndex(dest);
-    if (pastIndex.section != pageIndex.section || pastIndex.page != pageIndex.page)
-    {
-      if (pushHistory != null && push != false && NavigationMatrix.getCurrentFragmentIndex() == -1)
-      {
+    if (pastIndex.section != pageIndex.section || pastIndex.page != pageIndex.page) {
+      if (pushHistory != null && push != false && NavigationMatrix.getCurrentFragmentIndex() == -1) {
         var stateObj = { token: h };
         var nextHash = "#/" + h;
         currentHash = nextHash;
         window.history.pushState(stateObj, null, currentHash);
-      }
-      else
-      {
+      } else {
         document.location.hash = "/" + h;
       }
     }
@@ -1721,36 +1489,34 @@ var Flowtime = (function ()
     pastIndex = pageIndex;
     NavigationMatrix.switchActivePage(dest, true);
     //
-    if (_showProgress)
-    {
+    if (_showProgress) {
       updateProgress();
     }
 
   }
 
-  function fireNavigationEvent()
-  {
+  function fireNavigationEvent() {
     var pageIndex = NavigationMatrix.getPageIndex();
-    var eventData =   {
-                        section:          NavigationMatrix.getCurrentSection(),
-                        page:             NavigationMatrix.getCurrentPage(),
-                        sectionIndex:     pageIndex.section,
-                        pageIndex:        pageIndex.page,
-                        pastSectionIndex: pastIndex.section,
-                        pastPageIndex:    pastIndex.page,
-                        prevSection:      NavigationMatrix.hasPrevSection(),
-                        nextSection:      NavigationMatrix.hasNextSection(),
-                        prevPage:         NavigationMatrix.hasPrevPage(),
-                        nextPage:         NavigationMatrix.hasNextPage(),
-                        fragment:         NavigationMatrix.getCurrentFragment(),
-                        fragmentIndex:    NavigationMatrix.getCurrentFragmentIndex(),
-                        isOverview:       isOverview,
-                        progress:         NavigationMatrix.getProgress(),
-                        total:            NavigationMatrix.getPagesTotalLength(),
-                        isLoopable:       _isLoopable,
-                        clickerMode:      _clickerMode,
-                        isAutoplay:       _isAutoplay
-                      }
+    var eventData = {
+                      section:          NavigationMatrix.getCurrentSection(),
+                      page:             NavigationMatrix.getCurrentPage(),
+                      sectionIndex:     pageIndex.section,
+                      pageIndex:        pageIndex.page,
+                      pastSectionIndex: pastIndex.section,
+                      pastPageIndex:    pastIndex.page,
+                      prevSection:      NavigationMatrix.hasPrevSection(),
+                      nextSection:      NavigationMatrix.hasNextSection(),
+                      prevPage:         NavigationMatrix.hasPrevPage(),
+                      nextPage:         NavigationMatrix.hasNextPage(),
+                      fragment:         NavigationMatrix.getCurrentFragment(),
+                      fragmentIndex:    NavigationMatrix.getCurrentFragmentIndex(),
+                      isOverview:       isOverview,
+                      progress:         NavigationMatrix.getProgress(),
+                      total:            NavigationMatrix.getPagesTotalLength(),
+                      isLoopable:       _isLoopable,
+                      clickerMode:      _clickerMode,
+                      isAutoplay:       _isAutoplay
+                    }
     Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT, eventData);
     //
     if (_navigationCallback !== undefined) {
@@ -1762,19 +1528,15 @@ var Flowtime = (function ()
    * check the availability of transform CSS property
    * if transform is not available then fallbacks to position absolute behaviour
    */
-  function navigate(dest)
-  {
+  function navigate(dest) {
     var x;
     var y;
     var pageIndex = NavigationMatrix.getPageIndex(dest);
-    if (_slideInPx == true)
-    {
+    if (_slideInPx === true) {
       // calculate the coordinates of the destination
       x = dest.x;
       y = dest.y;
-    }
-    else
-    {
+    } else {
       // calculate the index of the destination page
       if (_crossDirection === true) {
         y = pageIndex.section;
@@ -1784,78 +1546,78 @@ var Flowtime = (function ()
         y = pageIndex.page;
       }
     }
-    //
-    if (Brav1Toolbox.testCSS("transform"))
-    {
-      if (_slideInPx)
-      {
-        ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";
+    if (_scrollTheSection === true) {
+      if (Brav1Toolbox.testCSS("transform")) {
+        var currentSection = NavigationMatrix.getCurrentSection();
+        var outside = ftContainer;
+        var inside = currentSection;
+        //
+        if (_crossDirection === true) {
+          outside = currentSection;
+          inside = ftContainer;
+        }
+        //
+        if (_slideInPx) {
+          outside.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px)";
+        } else {
+          outside.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%)";
+        }
+        if (_slideInPx) {
+          inside.style[Brav1Toolbox.getPrefixed("transform")] = "translateY(" + -y + "px)";
+        } else {
+          inside.style[Brav1Toolbox.getPrefixed("transform")] = "translateY(" + -y * 100 + "%)";
+        }
       }
-      else
-      {
-        ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%) translateY(" + -y * 100 + "%)";
-      }
-    }
-    else
-    {
-      if (_slideInPx)
-      {
-        ftContainer.style.top = -y + "px";
-        ftContainer.style.left = -x + "px";
-      }
-      else
-      {
-        ftContainer.style.top = -y * 100 + "%";
-        ftContainer.style.left = -x * 100 + "%";
+    } else {
+      if (Brav1Toolbox.testCSS("transform")) {
+        if (_slideInPx) {
+          ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";
+        } else {
+          ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%) translateY(" + -y * 100 + "%)";
+        }
+      } else {
+        if (_slideInPx) {
+          ftContainer.style.top = -y + "px";
+          ftContainer.style.left = -x + "px";
+        } else {
+          ftContainer.style.top = -y * 100 + "%";
+          ftContainer.style.left = -x * 100 + "%";
+        }
       }
     }
     resetScroll();
   }
 
-  function moveParallax(dest)
-  {
-    if (parallaxEnabled)
-    {
+  function moveParallax(dest) {
+    if (parallaxEnabled) {
       var pageIndex = NavigationMatrix.getPageIndex(dest);
-
+      //
       var pxElements = NavigationMatrix.getParallaxElements();
-      for (var i = 0; i < pxElements.length; i++)
-      {
+      for (var i = 0; i < pxElements.length; i++) {
         var pxSection = pxElements[i];
-        if (pxSection != undefined)
-        {
-          for (var ii = 0; ii < pxSection.length; ii++)
-          {
+        if (pxSection != undefined) {
+          for (var ii = 0; ii < pxSection.length; ii++) {
             var pxPage = pxSection[ii];
-            if (pxPage != undefined)
-            {
-              for (var iii = 0; iii < pxPage.length; iii++)
-              {
+            if (pxPage != undefined) {
+              for (var iii = 0; iii < pxPage.length; iii++) {
                 var pxElement = pxPage[iii]
                 var pX = 0;
                 var pY = 0;
                 // sections
-                if (pageIndex.section < i)
-                {
+                if (pageIndex.section < i) {
                   pX = pxElement.pX;
-                }
-                else if (pageIndex.section > i)
-                {
+                } else if (pageIndex.section > i) {
                   pX = -pxElement.pX;
                 }
                 // pages
-                if (pageIndex.page < ii)
-                {
+                if (pageIndex.page < ii) {
                   pY = pxElement.pY;
-                }
-                else if (pageIndex.page > ii)
-                {
+                } else if (pageIndex.page > ii) {
                   pY = -pxElement.pY;
                 }
                 // animation
                 var unit = "%";
-                if (_parallaxInPx)
-                {
+                if (_parallaxInPx) {
                   unit = "px";
                 }
                 if (_crossDirection === true) {
@@ -1871,8 +1633,7 @@ var Flowtime = (function ()
     }
   }
 
-  function resetScroll()
-  {
+  function resetScroll() {
     window.scrollTo(0,0); // fix the eventually occurred page scrolling resetting the scroll values to 0
   }
 
@@ -1888,16 +1649,14 @@ var Flowtime = (function ()
   var defaultProgress = null;
   var progressFill = null;
 
-  function buildProgressIndicator()
-  {
+  function buildProgressIndicator() {
     var domFragment = document.createDocumentFragment();
     // create the progress container div
     defaultProgress = document.createElement("div");
     defaultProgress.className = DEFAULT_PROGRESS_CLASS + (_crossDirection === true ? " ft-cross" : "");
     domFragment.appendChild(defaultProgress);
     // loop through sections
-    for (var i = 0; i < NavigationMatrix.getSectionsLength(); i++)
-    {
+    for (var i = 0; i < NavigationMatrix.getSectionsLength(); i++) {
       var pDiv = document.createElement("div");
         pDiv.setAttribute("data-section", "__" + i);
         pDiv.className = SECTION_THUMB_CLASS;
@@ -1917,31 +1676,23 @@ var Flowtime = (function ()
     body.appendChild(defaultProgress);
   }
 
-  function hideProgressIndicator()
-  {
-    if (defaultProgress != null)
-    {
+  function hideProgressIndicator() {
+    if (defaultProgress != null) {
       body.removeChild(defaultProgress);
       defaultProgress = null;
     }
   }
 
-  function updateProgress()
-  {
-    if (defaultProgress != null)
-    {
+  function updateProgress() {
+    if (defaultProgress != null) {
       var spts = defaultProgress.querySelectorAll(PAGE_THUMB_SELECTOR);
-      for (var i = 0; i < spts.length; i++)
-      {
+      for (var i = 0; i < spts.length; i++) {
         var spt = spts[i];
         var pTo = Number(unsafeAttr(spt.getAttribute("data-section")));
         var spTo = Number(unsafeAttr(spt.getAttribute("data-page")));
-        if (pTo == NavigationMatrix.getPageIndex().section && spTo == NavigationMatrix.getPageIndex().page)
-        {
+        if (pTo == NavigationMatrix.getPageIndex().section && spTo == NavigationMatrix.getPageIndex().page) {
           Brav1Toolbox.addClass(spts[i], "actual");
-        }
-        else
-        {
+        } else {
           Brav1Toolbox.removeClass(spts[i], "actual");
         }
       }
@@ -1949,8 +1700,7 @@ var Flowtime = (function ()
     }
   }
 
-  function _getDefaultProgress()
-  {
+  function _getDefaultProgress() {
     return defaultProgress;
   }
 
@@ -1967,14 +1717,10 @@ var Flowtime = (function ()
   /**
    * switch from the overview states
    */
-  function _toggleOverview(back, navigate)
-  {
-    if (isOverview)
-    {
+  function _toggleOverview(back, navigate) {
+    if (isOverview) {
       zoomIn(back, navigate);
-    }
-    else
-    {
+    } else {
       overviewCachedDest = NavigationMatrix.getCurrentPage();
       zoomOut();
     }
@@ -1994,20 +1740,15 @@ var Flowtime = (function ()
   /**
    * zoom in the view to focus on the current section / page
    */
-  function zoomIn(back, navigate)
-  {
+  function zoomIn(back, navigate) {
     isOverview = false;
     Brav1Toolbox.removeClass(body, "ft-overview");
     NavigationMatrix.hideFragments();
     navigate = navigate === false ? false : true;
-    if (navigate == true)
-    {
-      if (back == true)
-      {
+    if (navigate == true) {
+      if (back == true) {
         navigateTo(overviewCachedDest);
-      }
-      else
-      {
+      } else {
         navigateTo();
       }
     }
@@ -2016,28 +1757,22 @@ var Flowtime = (function ()
   /**
    * zoom out the view for an overview of all the sections / pages
    */
-  function zoomOut()
-  {
+  function zoomOut() {
     isOverview = true;
     Brav1Toolbox.addClass(body, "ft-overview");
     NavigationMatrix.showFragments();
     //
-    if (_useOverviewVariant == false)
-    {
+    if (_useOverviewVariant == false) {
       overviewZoomTypeA(true);
-    }
-    else
-    {
+    } else {
       overviewZoomTypeB(true);
     }
     fireNavigationEvent();
   }
 
-  function overviewZoomTypeA(out)
-  {
+  function overviewZoomTypeA(out) {
     // ftContainer scale version
-    if (out)
-    {
+    if (out) {
       if (_crossDirection === true) {
         var scaleY = 100 / NavigationMatrix.getSectionsLength();
         var scaleX = 100 / NavigationMatrix.getPagesLength();
@@ -2054,11 +1789,9 @@ var Flowtime = (function ()
     }
   }
 
-  function overviewZoomTypeB(out)
-  {
+  function overviewZoomTypeB(out) {
     // ftContainer scale alternative version
-    if (out)
-    {
+    if (out) {
       var scale = overviewFixedScaleFactor // Math.min(scaleX, scaleY) * 0.9;
       var pIndex = NavigationMatrix.getPageIndex();
       //
@@ -2090,28 +1823,22 @@ var Flowtime = (function ()
   Brav1Toolbox.addListener(window, "keydown", onKeyDown);
   Brav1Toolbox.addListener(window, "keyup", onKeyUp);
 
-  function onKeyDown(e)
-  {
+  function onKeyDown(e) {
     var tag = e.target.tagName;
-    if (tag != "INPUT" && tag != "TEXTAREA" && tag != "SELECT")
-    {
-      if (e.keyCode >= 37 && e.keyCode <= 40)
-      {
+    if (tag != "INPUT" && tag != "TEXTAREA" && tag != "SELECT") {
+      if (e.keyCode >= 37 && e.keyCode <= 40) {
         e.preventDefault();
       }
     }
   }
 
-  function onKeyUp(e)
-  {
+  function onKeyUp(e) {
     if (_isKeyboardActive) {
       var tag = e.target.tagName;
       var elem;
-      if (tag !== "INPUT" && tag !== "TEXTAREA" && tag !== "SELECT")
-      {
+      if (tag !== "INPUT" && tag !== "TEXTAREA" && tag !== "SELECT") {
         e.preventDefault();
-        switch (e.keyCode)
-        {
+        switch (e.keyCode) {
           case 27 : // esc
             _toggleOverview(true);
             break;
@@ -2164,13 +1891,10 @@ var Flowtime = (function ()
             }
             break;
           case 13 : // return
-          {
-            if (isOverview)
-            {
+            if (isOverview) {
               _gotoPage(NavigationMatrix.getCurrentHilited());
             }
             break;
-          }
           default :
             break;
         }
@@ -2201,18 +1925,15 @@ var Flowtime = (function ()
    * @param   autostart   Boolean if true the autoplay starts right now (default true)
    * @param   skipFragments   Boolean if true goes to the next page skipping all the fragments (default false)
    */
-  function _autoplay(status, delay, autostart, skipFragments)
-  {
+  function _autoplay(status, delay, autostart, skipFragments) {
     autoplayDelay = isNaN(parseInt(delay)) ? autoplayDelay : delay;
     autoplaySkipFragments = skipFragments === true || false
-    if (status == true && autostart !== false)
-    {
+    if (status == true && autostart !== false) {
       _play();
     }
   }
 
-  function _play()
-  {
+  function _play() {
     _isAutoplay = true;
     clearTimeout(autoplayTimer);
     autoplayTimerStartedAt = Date.now();
@@ -2223,15 +1944,13 @@ var Flowtime = (function ()
     autoplayTimerPausedAt = 0;
   }
 
-  function _pause()
-  {
+  function _pause() {
     _isAutoplay = false;
     autoplayTimerPausedAt = Date.now() - autoplayTimerStartedAt;
     clearTimeout(autoplayTimer);
   }
 
-  function _stop()
-  {
+  function _stop() {
     _isAutoplay = false;
     clearTimeout(autoplayTimer);
     autoplayTimerStartedAt = 0;
@@ -2253,28 +1972,20 @@ var Flowtime = (function ()
    * triggers the first animation when visiting the site
    * if the hash is not empty
    */
-  function _start()
-  {
+  function _start() {
     // init and configuration
-    if (_showProgress && defaultProgress == null)
-    {
+    if (_showProgress && defaultProgress == null) {
       buildProgressIndicator();
     }
     // start navigation
-    if (document.location.hash.length > 0)
-    {
+    if (document.location.hash.length > 0) {
       Brav1Toolbox.addClass(ftContainer, "no-transition");
       onHashChange(null, true);
       Brav1Toolbox.removeClass(ftContainer, "no-transition");
-    }
-    else
-    {
-      if (_start.arguments.length > 0)
-      {
+    } else {
+      if (_start.arguments.length > 0) {
         _gotoPage.apply(this, _start.arguments);
-      }
-      else
-      {
+      } else {
         _gotoPage(0,0);
         updateProgress();
       }
@@ -2285,17 +1996,12 @@ var Flowtime = (function ()
    * Public API to go to the next section
    * @param top Boolean if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
    */
-  function _nextSection(top)
-  {
+  function _nextSection(top) {
     var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide);
-    if (d != undefined)
-    {
+    if (d != undefined) {
       navigateTo(d);
-    }
-    else
-    {
-      if (isOverview && _useOverviewVariant)
-      {
+    } else {
+      if (isOverview && _useOverviewVariant) {
         zoomOut();
       }
     }
@@ -2305,17 +2011,12 @@ var Flowtime = (function ()
    * Public API to go to the prev section
    *
    */
-  function _prevSection(top)
-  {
+  function _prevSection(top) {
     var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide);
-    if (d != undefined)
-    {
+    if (d != undefined) {
       navigateTo(d);
-    }
-    else
-    {
-      if (isOverview && _useOverviewVariant)
-      {
+    } else {
+      if (isOverview && _useOverviewVariant) {
         zoomOut();
       }
     }
@@ -2324,17 +2025,12 @@ var Flowtime = (function ()
   /*
    * Public API to go to the next page
    */
-  function _nextPage(jump)
-  {
+  function _nextPage(jump) {
     var d = NavigationMatrix.getNextPage(jump);
-    if (d != undefined)
-    {
+    if (d != undefined) {
       navigateTo(d);
-    }
-    else
-    {
-      if (isOverview && _useOverviewVariant)
-      {
+    } else {
+      if (isOverview && _useOverviewVariant) {
         zoomOut();
       }
     }
@@ -2343,17 +2039,12 @@ var Flowtime = (function ()
   /*
    * Public API to go to the prev page
    */
-  function _prevPage(jump)
-  {
+  function _prevPage(jump) {
     var d = NavigationMatrix.getPrevPage(jump);
-    if (d != undefined)
-    {
+    if (d != undefined) {
       navigateTo(d);
-    }
-    else
-    {
-      if (isOverview && _useOverviewVariant)
-      {
+    } else {
+      if (isOverview && _useOverviewVariant) {
         zoomOut();
       }
     }
@@ -2366,40 +2057,29 @@ var Flowtime = (function ()
    * if an object is passed it assumes that the object has a section property and a page property to get the indexes to navigate;
    * if an HTMLElement is passed it assumes the element is a destination page
    */
-  function _gotoPage()
-  {
+  function _gotoPage() {
     var args = _gotoPage.arguments;
-    if (args.length > 0)
-    {
-      if (args.length == 1)
-      {
-
-        if (Brav1Toolbox.typeOf(args[0]) === "Object")
-        {
+    if (args.length > 0) {
+      if (args.length == 1) {
+        if (Brav1Toolbox.typeOf(args[0]) === "Object") {
           var o = args[0];
           var p = o.section;
           var sp = o.page;
-          if (p != null && p != undefined)
-          {
+          if (p != null && p != undefined) {
             var pd = document.querySelector(SECTION_SELECTOR + "[data-id=" + safeAttr(p) + "]");
-            if (sp != null && sp != undefined)
-            {
+            if (sp != null && sp != undefined) {
               var spd = pd.querySelector(PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
-              if (spd != null)
-              {
+              if (spd != null) {
                 navigateTo(spd);
                 return;
               }
             }
           }
-        }
-        else if (args[0].nodeName != undefined)
-        {
+        } else if (args[0].nodeName != undefined) {
           navigateTo(args[0], null, true);
         }
       }
-      if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0)
-      {
+      if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0) {
         var spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
         navigateTo(spd);
         return;
@@ -2407,31 +2087,26 @@ var Flowtime = (function ()
     }
   }
 
-  function _gotoHome()
-  {
+  function _gotoHome() {
     _gotoPage(0,0);
   }
 
-  function _gotoEnd()
-  {
+  function _gotoEnd() {
     var sl = NavigationMatrix.getSectionsLength() - 1;
     _gotoPage(sl, NavigationMatrix.getPages(sl).length - 1);
   }
 
-  function _gotoTop()
-  {
+  function _gotoTop() {
     var pageIndex = NavigationMatrix.getPageIndex();
     _gotoPage(pageIndex.section, 0);
   }
 
-  function _gotoBottom()
-  {
+  function _gotoBottom() {
     var pageIndex = NavigationMatrix.getPageIndex();
     _gotoPage(pageIndex.section, NavigationMatrix.getPages(pageIndex.section).length - 1);
   }
 
-  function _addEventListener(type, handler, useCapture)
-  {
+  function _addEventListener(type, handler, useCapture) {
     Brav1Toolbox.addListener(document, type, handler, useCapture);
   }
 
@@ -2445,115 +2120,95 @@ var Flowtime = (function ()
    ######  ########    ##       ##    ######## ##     ##  ######
 */
 
-  function _setFragmentsOnSide(v)
-  {
+  function _setFragmentsOnSide(v) {
     _fragmentsOnSide = v === true ? true : false;
     _setFragmentsOnBack(v);
   }
 
-  function _setFragmentsOnBack(v)
-  {
+  function _setFragmentsOnBack(v) {
     _fragmentsOnBack = v === true ? true : false;
   }
 
-  function _setUseHistory(v)
-  {
+  function _setUseHistory(v){
     pushHistory = v === true ? true : false;
   }
 
-  function _setSlideInPx(v)
-  {
+  function _setSlideInPx(v) {
     _slideInPx = v === true ? true : false;
+    if (_slideInPx === true) {
+      NavigationMatrix.updateOffsets();
+    }
     navigateTo();
   }
 
-  function _setSectionsSlideToTop(v)
-  {
+  function _setSectionsSlideToTop(v) {
     _sectionsSlideToTop = v === true ? true : false;
   }
 
-  function _setNearestToTop(v)
-  {
+  function _setNearestToTop(v) {
     _nearestToTop = v === true ? true : false;
   }
 
-  function _setGridNavigation(v)
-  {
+  function _setGridNavigation(v) {
     _sectionsSlideToTop = v === true ? false : true;
   }
 
-  function _setUseOverviewVariant(v)
-  {
+  function _setUseOverviewVariant(v) {
     _useOverviewVariant = v === true ? true : false;
   }
 
-  function _setTwoStepsSlide(v)
-  {
+  function _setTwoStepsSlide(v) {
     _twoStepsSlide = v === true ? true : false;
   }
 
-  function _setShowProgress(v)
-  {
+  function _setShowProgress(v) {
     _showProgress = v === true ? true : false;
-    if (_showProgress)
-    {
-      if (defaultProgress == null)
-      {
+    if (_showProgress) {
+      if (defaultProgress == null) {
         buildProgressIndicator();
       }
       updateProgress();
-    }
-    else
-    {
-      if (defaultProgress != null)
-      {
+    } else {
+      if (defaultProgress != null) {
         hideProgressIndicator();
       }
     }
   }
 
-  function _setDefaultParallaxValues(x, y)
-  {
+  function _setDefaultParallaxValues(x, y) {
     defaultParallaxX = x;
     defaultParallaxY = y == undefined ? defaultParallaxX : y;
     NavigationMatrix.update();
   }
 
-  function _setParallaxInPx(v)
-  {
+  function _setParallaxInPx(v) {
     _parallaxInPx = v === true ? true : false;
   }
 
-  function _getSectionIndex()
-  {
+  function _getSectionIndex() {
     return NavigationMatrix.getPageIndex().section;
   }
 
-  function _getPageIndex()
-  {
+  function _getPageIndex() {
     return NavigationMatrix.getPageIndex().page;
   }
 
-  function _loop(v)
-  {
+  function _loop(v) {
     _isLoopable = v === true ? true : false;
   }
 
-  function _clicker(v)
-  {
+  function _clicker(v) {
     _clickerMode = v === true ? true : false;
   }
 
-  function _enableNavigation(links, keyboard, scroll, touch)
-  {
+  function _enableNavigation(links, keyboard, scroll, touch) {
     _areLinksActive = links === false ? false : true;
     _isKeyboardActive = keyboard === false ? false : true;
     _isScrollActive = scroll === false ? false : true;
     _isTouchActive = touch === false ? false : true;
   }
 
-  function _disableNavigation(links, keyboard, scroll, touch)
-  {
+  function _disableNavigation(links, keyboard, scroll, touch) {
     _areLinksActive = links === false ? true : false;
     _isKeyboardActive = keyboard === false ? true : false;
     _isScrollActive = scroll === false ? true : false;
@@ -2590,6 +2245,20 @@ var Flowtime = (function ()
         } else if (Brav1Toolbox.hasClass(defaultProgress, CROSS_DIRECTION_CLASS) && _crossDirection !== true) {
           Brav1Toolbox.removeClass(defaultProgress, CROSS_DIRECTION_CLASS);
         }
+      }
+      //
+      NavigationMatrix.updateOffsets();
+      navigateTo();
+    }
+  }
+
+  function _setScrollTheSection(v) {
+    if (_scrollTheSection !== v) {
+      _scrollTheSection = v === true ? true : false;
+      if (!Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_SECTION_CLASS) && _scrollTheSection === true) {
+        Brav1Toolbox.addClass(ftContainer, SCROLL_THE_SECTION_CLASS);
+      } else if (Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_SECTION_CLASS) && _scrollTheSection !== true) {
+        Brav1Toolbox.removeClass(ftContainer, SCROLL_THE_SECTION_CLASS);
       }
       //
       NavigationMatrix.updateOffsets();
@@ -2675,7 +2344,9 @@ var Flowtime = (function ()
     gridNavigation: _setGridNavigation,
     nearestPageToTop: _setNearestToTop,
     rememberSectionsStatus: _setRememberSectionsStatus,
-    rememberSectionsLastPage: _setRememberSectionsLastPage
+    rememberSectionsLastPage: _setRememberSectionsLastPage,
+
+    scrollTheSection: _setScrollTheSection
   };
 
 })();

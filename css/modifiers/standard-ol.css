@@ -1,0 +1,12 @@
+.flowtime ol {
+  counter-reset: none;
+  list-style: decimal;
+}
+
+.flowtime li {
+  display: list-item;
+}
+
+.flowtime ol li:before {
+  content: "";
+}
