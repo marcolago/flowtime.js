@@ -1359,9 +1359,11 @@ var Flowtime = (function ()
   /**
    * public method to force navigation updates
    */
-  function _updateNavigation() {
+  function _updateNavigation(navigate) {
     NavigationMatrix.update();
-    onHashChange(null, true);
+    if (navigate !== false) {
+      onHashChange(null, true);
+    }
   }
 
   /**
