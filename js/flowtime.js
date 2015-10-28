@@ -1468,7 +1468,11 @@ var Flowtime = (function ()
         var stateObj = { token: h };
         var nextHash = "#/" + h;
         currentHash = nextHash;
-        window.history.pushState(stateObj, null, currentHash);
+        try {
+          window.history.pushState(stateObj, null, currentHash);
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         document.location.hash = "/" + h;
       }
