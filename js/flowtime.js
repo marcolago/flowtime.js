@@ -103,6 +103,8 @@ var Flowtime = (function ()
   var _sectionsMaxPageDepth = 0;
   var _sectionsLastPageDepth = 0;
 
+  var _showErrors = false;
+
 
   /**
    * test the base support
@@ -1340,17 +1342,23 @@ var Flowtime = (function ()
     if (h.length > 0) {
       var aHash = h.replace("#/", "").split("/");
       if (aHash.length > 0) {
-        var p = document.querySelector(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]") || document.querySelector(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
-        if (p != null) {
-          var sp = null;
-          if (aHash.length > 1) {
-            sp = p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
+        var ps = document.querySelectorAll(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]") || document.querySelectorAll(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
+        if (ps != null) {
+          for (var i = 0; i < ps.length; i++) {
+            var p = ps[i];
+            var sp = null;
+            if (aHash.length > 1) {
+              sp = p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
+            }
+            if (sp !== null) {
+              break;
+            }
           }
           if (sp == null) {
             sp = p.querySelector(PAGE_SELECTOR);
           }
-          return sp;
         }
+        return sp;
       }
     }
     return;
@@ -1474,7 +1482,9 @@ var Flowtime = (function ()
         try {
           window.history.pushState(stateObj, null, currentHash);
         } catch (error) {
-          console.log(error);
+          if (_showErrors === true) {
+            console.log(error);
+          }
         }
       } else {
         document.location.hash = "/" + h;

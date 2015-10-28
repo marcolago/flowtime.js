@@ -103,6 +103,8 @@ var Flowtime = (function ()
   var _sectionsMaxPageDepth = 0;
   var _sectionsLastPageDepth = 0;
 
+  var _showErrors = false;
+
 
   /**
    * test the base support
@@ -1337,7 +1339,6 @@ var Flowtime = (function ()
    * @param h String  the hash string to evaluate
    */
   function getElementByHash(h) {
-    console.log("getElementByHash", h);
     if (h.length > 0) {
       var aHash = h.replace("#/", "").split("/");
       if (aHash.length > 0) {
@@ -1348,7 +1349,6 @@ var Flowtime = (function ()
             var sp = null;
             if (aHash.length > 1) {
               sp = p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
-              console.log("##", i, sp);
             }
             if (sp !== null) {
               break;
@@ -1367,9 +1367,14 @@ var Flowtime = (function ()
   /**
    * public method to force navigation updates
    */
-  function _updateNavigation() {
+  function _updateNavigation(navigate) {
     NavigationMatrix.update();
-    onHashChange(null, true);
+    if (navigate !== false) {
+      onHashChange(null, true);
+    }
+    if (_showProgress === true) {
+      buildProgressIndicator();
+    }
   }
 
   /**
@@ -1474,7 +1479,13 @@ var Flowtime = (function ()
         var stateObj = { token: h };
         var nextHash = "#/" + h;
         currentHash = nextHash;
-        window.history.pushState(stateObj, null, currentHash);
+        try {
+          window.history.pushState(stateObj, null, currentHash);
+        } catch (error) {
+          if (_showErrors === true) {
+            console.log(error);
+          }
+        }
       } else {
         document.location.hash = "/" + h;
       }
@@ -1658,6 +1669,9 @@ var Flowtime = (function ()
   var progressFill = null;
 
   function buildProgressIndicator() {
+    if (defaultProgress) {
+      defaultProgress.parentNode.removeChild(defaultProgress);
+    }
     var domFragment = document.createDocumentFragment();
     // create the progress container div
     defaultProgress = document.createElement("div");
