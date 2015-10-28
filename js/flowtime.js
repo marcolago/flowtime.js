@@ -1364,6 +1364,9 @@ var Flowtime = (function ()
     if (navigate !== false) {
       onHashChange(null, true);
     }
+    if (_showProgress === true) {
+      buildProgressIndicator();
+    }
   }
 
   /**
@@ -1656,6 +1659,9 @@ var Flowtime = (function ()
   var progressFill = null;
 
   function buildProgressIndicator() {
+    if (defaultProgress) {
+      defaultProgress.parentNode.removeChild(defaultProgress);
+    }
     var domFragment = document.createDocumentFragment();
     // create the progress container div
     defaultProgress = document.createElement("div");
