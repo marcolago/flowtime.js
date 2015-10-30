@@ -25,26 +25,18 @@ var Brav1Toolbox = (function()
   /**
    * shortcut to add a listener for modern browsers and IE8-
    */
-  function _addListener(element, type, handler, useCapture)
-  {
-    if (element.addEventListener)
-    {
+  function _addListener(element, type, handler, useCapture) {
+    if (element.addEventListener) {
       element.addEventListener(type, handler, useCapture);
-    }
-    else if (element.attachEvent)
-    {
+    } else if (element.attachEvent) {
       element.attachEvent("on" + type, handler);
     }
   }
 
-  function _removeListener(element, type, handler)
-  {
-    if (element.removeEventListener)
-    {
+  function _removeListener(element, type, handler) {
+    if (element.removeEventListener) {
       element.removeEventListener(type, handler);
-    }
-    else if (element.detachEvent)
-    {
+    } else if (element.detachEvent) {
       element.detachEvent("on" + type, handler);
     }
   }
@@ -53,8 +45,7 @@ var Brav1Toolbox = (function()
    * checks if a CSS property is supported
    * including the prefixed ones
    */
-  function _testCSS(prop)
-  {
+  function _testCSS(prop) {
     return _getPrefixed(prop) != "";
   }
 
@@ -62,8 +53,7 @@ var Brav1Toolbox = (function()
    * returns the standard or the prefixed CSS property
    * use: element[Brav1Toolbox.getPrefixed(CSSProperty)];
    */
-  function _getPrefixed(prop)
-  {
+  function _getPrefixed(prop) {
     var o = styleObject || _getStyleObject();
     for (var i = 0; i < cssPrefixes.length; i++)
     {
@@ -83,10 +73,22 @@ var Brav1Toolbox = (function()
   }
 
   /**
+   * returns the CSS value
+   * use: Brav1Toolbox.getPrefixed(element, CSSProperty);
+   */
+  function _getCSSValue(element, prop) {
+    var p = _getPrefixed(prop);
+    if (window.getComputedStyle) {
+      return window.getComputedStyle(element)[p];
+    } else {
+      return element.style[p];
+    }
+  }
+
+  /**
    * returns the type of the object passed
    */
-  function _typeOf(obj)
-  {
+  function _typeOf(obj) {
     return !!obj && Object.prototype.toString.call(obj).match(/(\w+)\]/)[1];
   }
 
@@ -97,19 +99,13 @@ var Brav1Toolbox = (function()
   /**
    * adds the specified class to the specified element
    */
-  function _addClass(el, c)
-  {
-    if (el.classList)
-    {
+  function _addClass(el, c) {
+    if (el.classList) {
       el.classList.add(c);
-    }
-    else
-    {
-      if (_hasClass(el, c) == false)
-      {
+    } else {
+      if (_hasClass(el, c) == false) {
         var cl = el.className;
-        if (cl.length > 0)
-        {
+        if (cl.length > 0) {
           cl += " ";
         }
         el.className = cl + c;
@@ -120,8 +116,7 @@ var Brav1Toolbox = (function()
   /**
    * removes the specified class from the specified element
    */
-  function _removeClass(el, c)
-  {
+  function _removeClass(el, c) {
     if (el.classList)
     {
       el.classList.remove(c);
@@ -151,8 +146,7 @@ var Brav1Toolbox = (function()
   /**
    * checks if the specified class is assigned to the specified element
    */
-  function _hasClass(el, c)
-  {
+  function _hasClass(el, c) {
     if (el)
     {
       if (el.classList)
@@ -170,8 +164,7 @@ var Brav1Toolbox = (function()
   /**
    * creates and dispatch a custom event
    */
-  function _dispatchEvent(t, ps)
-  {
+  function _dispatchEvent(t, ps) {
     if (document.createEvent)
     {
       var e = document.createEvent("HTMLEvents");
@@ -187,8 +180,7 @@ var Brav1Toolbox = (function()
   /**
    * returns the absolute distance from two points
    */
-  function _distance(pA, pB)
-  {
+  function _distance(pA, pB) {
     var cX;
     var cY;
     cX = pB.x - pA.x;
@@ -205,6 +197,7 @@ var Brav1Toolbox = (function()
     dispatchEvent: _dispatchEvent,
     testCSS: _testCSS,
     getPrefixed: _getPrefixed,
+    getCSSValue: _getCSSValue,
     typeOf: _typeOf,
     addClass: _addClass,
     removeClass: _removeClass,

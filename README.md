@@ -310,6 +310,18 @@ Flowtime.setDebouncingDelay(Number value);
 
 Set the debouncing delay time in milliseconds to trigger the event used for the scroll handler.
 
+```javascript
+Flowtime.getTransitionTime(Number milliseconds);
+```
+
+Get the global navigation transition time in milliseconds.
+
+```javascript
+Flowtime.setTransitionTime(Number milliseconds);
+```
+
+Set the global navigation transition time in milliseconds. This value overrides the time specified in CSS.
+
 ### Section Navigation Options
 
 Flowtime.js comes with a lot of ways to navigate through sections; you can set up your installation with some, simple to use, options to fit your needs.

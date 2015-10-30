@@ -74,10 +74,10 @@ var Flowtime = (function ()
   var _showProgress = false;                                            // show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
   var _clickerMode = false;                                             // Used if presentation is being controlled by a "presenter" device (e.g., R400)
   var _parallaxInPx = false;                                            // if false the parallax movement is calulated in % values, if true in pixels
-  var defaultParallaxX = 50;                                            // the default parallax horizontal value used when no data-parallax value were specified
-  var defaultParallaxY = 50;                                            // the default parallax vertical value used when no data-parallax value were specified
+  var _defaultParallaxX = 50;                                            // the default parallax horizontal value used when no data-parallax value were specified
+  var _defaultParallaxY = 50;                                            // the default parallax vertical value used when no data-parallax value were specified
 
-  var parallaxEnabled = document.querySelector(".parallax") != null;    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
+  var _parallaxEnabled = document.querySelector(".parallax") != null;    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
 
   var _mouseDragEnabled = false;                                        // in enabled is possible to drag the presentation with the mouse pointer
   var _isScrollActive = true;                                           // flags to enable or disable javascript input listeners for the navigation
@@ -87,6 +87,21 @@ var Flowtime = (function ()
   var _isScrolling = false;
 
   var _debouncingDelay = 1000;
+  var _transitionTime = 500;                                            // the page transition in milliseconds (keep in sync with the CSS transition value)
+
+  (function initTransitionTime() {
+    var tt = Brav1Toolbox.getCSSValue(ftContainer, "transitionDuration");
+    var ttInt = parseFloat(tt);
+    var unit = tt.replace("" + ttInt, "");
+    if (!isNaN(ttInt) && ttInt > 0) {
+      if (unit === "s") {
+        _transitionTime = ttInt * 1000;
+      } else if (unit === "ms") {
+        _transitionTime = ttInt;
+      }
+    }
+    _setTransitionTime(_transitionTime);
+  })();
 
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
   var _navigationCallback = undefined;
@@ -181,6 +196,8 @@ var Flowtime = (function ()
         //
         if (section.getAttribute("data-id")) {
           section.setAttribute("data-id", "__" + unsafeAttr(section.getAttribute("data-id"))); // prevents attributes starting with a number
+        } else {
+          section.setAttribute("data-id", "__" + (i + 1));
         }
         section.setAttribute("data-prog", "__" + (i + 1));
         section.index = i;
@@ -226,7 +243,7 @@ var Flowtime = (function ()
      * data are stored on a multi dimensional array ordered per section and per page to easily manage the position
      */
     function setParallax(page, sectionIndex, pageIndex) {
-      if (parallaxEnabled) {
+      if (_parallaxEnabled) {
         if (parallaxElements[sectionIndex] == undefined) {
           parallaxElements[sectionIndex] = [];
         }
@@ -238,8 +255,8 @@ var Flowtime = (function ()
         if (pxs.length > 0) {
           for (var i = 0; i < pxs.length; i++) {
             var el = pxs[i];
-            var pX = defaultParallaxX;
-            var pY = defaultParallaxY;
+            var pX = _defaultParallaxX;
+            var pY = _defaultParallaxY;
             if (el.getAttribute("data-parallax") != null) {
               var pValues = el.getAttribute("data-parallax").split(",");
               pX = pY = pValues[0];
@@ -1367,14 +1384,18 @@ var Flowtime = (function ()
   /**
    * public method to force navigation updates
    */
-  function _updateNavigation(navigate) {
+  function _updateNavigation() {
+    _pauseTransitions();
+    var currentPagePreUpdate = NavigationMatrix.getCurrentPage();
     NavigationMatrix.update();
-    if (navigate !== false) {
-      onHashChange(null, true);
-    }
+    navigateTo(currentPagePreUpdate);
     if (_showProgress === true) {
       buildProgressIndicator();
     }
+    setTimeout(function() {
+      _restoreTransitions();
+    }, _transitionTime);
+    onHashChange(null, true);
   }
 
   /**
@@ -1608,7 +1629,7 @@ var Flowtime = (function ()
   }
 
   function moveParallax(dest) {
-    if (parallaxEnabled) {
+    if (_parallaxEnabled) {
       var pageIndex = NavigationMatrix.getPageIndex(dest);
       //
       var pxElements = NavigationMatrix.getParallaxElements();
@@ -2001,9 +2022,9 @@ var Flowtime = (function ()
     }
     // start navigation
     if (document.location.hash.length > 0) {
-      Brav1Toolbox.addClass(ftContainer, "no-transition");
+      _pauseTransitions();
       onHashChange(null, true);
-      Brav1Toolbox.removeClass(ftContainer, "no-transition");
+      _restoreTransitions();
     } else {
       if (_start.arguments.length > 0) {
         _gotoPage.apply(this, _start.arguments);
@@ -2012,6 +2033,14 @@ var Flowtime = (function ()
         updateProgress();
       }
     }
+  }
+
+  function _pauseTransitions() {
+    ftContainer.style[Brav1Toolbox.getPrefixed("transition-duration")] = "0ms";
+  }
+
+  function _restoreTransitions() {
+    ftContainer.style[Brav1Toolbox.getPrefixed("transition-duration")] = "" + _transitionTime / 1000 + "s";
   }
 
   /*
@@ -2198,8 +2227,8 @@ var Flowtime = (function ()
   }
 
   function _setDefaultParallaxValues(x, y) {
-    defaultParallaxX = x;
-    defaultParallaxY = y == undefined ? defaultParallaxX : y;
+    _defaultParallaxX = x;
+    _defaultParallaxY = y == undefined ? _defaultParallaxX : y;
     NavigationMatrix.update();
   }
 
@@ -2292,6 +2321,15 @@ var Flowtime = (function ()
     _debouncingDelay = n;
   }
 
+  function _setTransitionTime(milliseconds) {
+    _transitionTime = milliseconds;
+    ftContainer.style[Brav1Toolbox.getPrefixed("transition-duration")] = "" + _transitionTime + "ms";
+  }
+
+  function _getTransitionTime() {
+    return _transitionTime;
+  }
+
   function _setNavigationCallback(f) {
     _navigationCallback = f;
   }
@@ -2361,6 +2399,8 @@ var Flowtime = (function ()
     setTouchNavigation: _setTouchNavigation,
     setCrossDirection: _setCrossDirection,
     setDebouncingDelay: _setDebouncingDelay,
+    setTransitionTime: _setTransitionTime,
+    getTransitionTime: _getTransitionTime,
     onNavigation: _setNavigationCallback,
 
     gridNavigation: _setGridNavigation,
