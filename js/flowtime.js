@@ -49,6 +49,7 @@ var Flowtime = (function ()
    */
 
   var NAVIGATION_EVENT = "flowtimenavigation";
+
   /**
    * application variables
    */
@@ -59,16 +60,16 @@ var Flowtime = (function ()
   var useHash = false;                                                  // if true the engine uses only the hash change logic
   var currentHash = "";                                                 // the hash string of the current section / page pair
   var pastIndex = { section:0, page:0 };                                // section and page indexes of the past page
-  var isOverview = false;                                               // Boolean status for the overview
   var siteName = document.title;                                        // cached base string for the site title
   var overviewCachedDest;                                               // caches the destination before performing an overview zoom out for navigation back purposes
   var overviewFixedScaleFactor = 22;                                    // fixed scale factor for overview variant
   var defaultProgress = null;                                           // default progress bar reference
 
+  var _isOverview = false;                                              // Boolean status for the overview
+  var _useOverviewVariant = false;                                      // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
   var _fragmentsOnSide = false;                                         // enable or disable fragments navigation when navigating from sections
   var _fragmentsOnBack = true;                                          // shows or hide fragments when navigating back to a page
   var _slideInPx = false;                                               // calculate the slide position in px instead of %, use in case the % mode does not works
-  var _useOverviewVariant = false;                                      // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
   var _twoStepsSlide = false;                                           // not yet implemented! slides up or down before, then slides to the page
   var _isLoopable = false;
   var _showProgress = false;                                            // show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
@@ -76,19 +77,38 @@ var Flowtime = (function ()
   var _parallaxInPx = false;                                            // if false the parallax movement is calulated in % values, if true in pixels
   var _defaultParallaxX = 50;                                            // the default parallax horizontal value used when no data-parallax value were specified
   var _defaultParallaxY = 50;                                            // the default parallax vertical value used when no data-parallax value were specified
-
   var _parallaxEnabled = document.querySelector(".parallax") != null;    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
-
   var _mouseDragEnabled = false;                                        // in enabled is possible to drag the presentation with the mouse pointer
   var _isScrollActive = true;                                           // flags to enable or disable javascript input listeners for the navigation
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
   var _isScrolling = false;
-
+  var _fireEvent = true;
   var _debouncingDelay = 1000;
+  var _transitionPaused = false;
   var _transitionTime = 500;                                            // the page transition in milliseconds (keep in sync with the CSS transition value)
+  var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
+  var _navigationCallback = undefined;
+  var _transformProperty = Brav1Toolbox.getPrefixed("transform");
+  var _supportsTransform = Brav1Toolbox.testCSS("transform")
 
+  // section navigation modifiers
+
+  var _sectionsSlideToTop = false;                                      // if true navigation with right or left arrow go to the first page of the section
+  var _nearestToTop = false;
+  var _rememberSectionsStatus = false;
+  var _rememberSectionsLastPage = false;
+  var _scrollTheSection = Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_SECTION_CLASS);  // flag to set the scroll the section logic
+  var _sectionsStatus = [];
+  var _sectionsMaxPageDepth = 0;
+  var _sectionsLastPageDepth = 0;
+  var _showErrors = false;
+
+
+  /**
+   * set the transition time reading from CSS value with a fallback default
+   */
   (function initTransitionTime() {
     var tt = Brav1Toolbox.getCSSValue(ftContainer, "transitionDuration");
     var ttInt = parseFloat(tt);
@@ -102,24 +122,6 @@ var Flowtime = (function ()
     }
     _setTransitionTime(_transitionTime);
   })();
-
-  var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
-  var _navigationCallback = undefined;
-
-  // section navigation modifiers
-
-  var _sectionsSlideToTop = false;                                      // if true navigation with right or left arrow go to the first page of the section
-  var _nearestToTop = false;
-  var _rememberSectionsStatus = false;
-  var _rememberSectionsLastPage = false;
-  var _scrollTheSection = Brav1Toolbox.hasClass(ftContainer, SCROLL_THE_SECTION_CLASS);  // flag to set the scroll the section logic
-
-  var _sectionsStatus = [];
-  var _sectionsMaxPageDepth = 0;
-  var _sectionsLastPageDepth = 0;
-
-  var _showErrors = false;
-
 
   /**
    * test the base support
@@ -295,7 +297,7 @@ var Flowtime = (function ()
     function _getNextSection(top, fos) {
       var sub = sp;
       //
-      var toTop = isOverview === true ? false : top === !_sectionsSlideToTop;
+      var toTop = _isOverview === true ? false : top === !_sectionsSlideToTop;
       if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && io === false) {
         _showFragment(p, sp);
       } else {
@@ -312,7 +314,7 @@ var Flowtime = (function ()
           p = pTemp;
         }
         //
-        if (!isOverview) {
+        if (!_isOverview) {
           if (_rememberSectionsStatus === true && _sectionsStatus[p] !== undefined) {
             sub = _sectionsStatus[p];
           }
@@ -335,8 +337,8 @@ var Flowtime = (function ()
     function _getPrevSection(top, fos) {
       var sub = sp;
       //
-      var toTop = isOverview === true ? false : top === !_sectionsSlideToTop;
-      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && isOverview === false) {
+      var toTop = _isOverview === true ? false : top === !_sectionsSlideToTop;
+      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && _isOverview === false) {
         _hideFragment(p, sp);
       } else {
         var sub = 0;
@@ -353,7 +355,7 @@ var Flowtime = (function ()
           p = pTemp;
         }
         //
-        if (!isOverview) {
+        if (!_isOverview) {
           if (_rememberSectionsStatus === true && _sectionsStatus[p] >= 0) {
             sub = _sectionsStatus[p];
           }
@@ -392,7 +394,7 @@ var Flowtime = (function ()
         }
       }
       sp = sub;
-      if (!isOverview) {
+      if (!_isOverview) {
         _updateFragments();
       }
       return hiliteOrNavigate(nsp);
@@ -404,7 +406,7 @@ var Flowtime = (function ()
      * @param jump  Boolean if true jumps over the fragments directly to the next page
      */
     function _getNextPage(jump) {
-      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump !== true && isOverview === false) {
+      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump !== true && _isOverview === false) {
         _showFragment(p, sp);
       } else {
         if (sectionsArray[p][sp + 1] === undefined) {
@@ -428,7 +430,7 @@ var Flowtime = (function ()
      * @param jump  Boolean if true jumps over the fragments directly to the prev page
      */
     function _getPrevPage(jump) {
-      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && isOverview == false) {
+      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && _isOverview == false) {
         _hideFragment(p, sp);
       } else {
         if (sp == 0) {
@@ -453,7 +455,7 @@ var Flowtime = (function ()
      * @param d HTMLElement the candidate destination
      */
     function hiliteOrNavigate(d) {
-      if (isOverview == true) {
+      if (_isOverview == true) {
         _switchActivePage(d);
         return;
       } else {
@@ -903,7 +905,7 @@ var Flowtime = (function ()
           //
           if (spa !== d) {
             Brav1Toolbox.removeClass(spa, "hilite");
-            if (isOverview == false && spa !== _getCurrentPage()) {
+            if (_isOverview == false && spa !== _getCurrentPage()) {
               Brav1Toolbox.removeClass(spa, "actual");
             }
             if (i < sIndex) {
@@ -1023,7 +1025,7 @@ var Flowtime = (function ()
         }
       }
       // pages in oveview mode
-      if (isOverview) {
+      if (_isOverview) {
         var dest = e.target;
         while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS)) {
           dest = dest.parentNode;
@@ -1209,7 +1211,7 @@ var Flowtime = (function ()
     }
 
     function getInitOffset() {
-      var off = ftContainer.style[Brav1Toolbox.getPrefixed("transform")];
+      var off = ftContainer.style[_transformProperty];
       // X
       var indexX = off.indexOf("translateX(") + 11;
       var offX = off.substring(indexX, off.indexOf(")", indexX));
@@ -1318,7 +1320,7 @@ var Flowtime = (function ()
     var ticker = NaN;
     function _enable() {
       _disable();
-      if (!isOverview) {
+      if (!_isOverview) {
         ticker = setTimeout(doResizeHandler, 300);
       }
     }
@@ -1371,7 +1373,7 @@ var Flowtime = (function ()
               break;
             }
           }
-          if (sp == null) {
+          if (sp == null && p) {
             sp = p.querySelector(PAGE_SELECTOR);
           }
         }
@@ -1381,21 +1383,28 @@ var Flowtime = (function ()
     return;
   }
 
+/*
+##     ## ########  ########     ###    ######## ########    ##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ## 
+##     ## ##     ## ##     ##   ## ##      ##    ##          ###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##     ##  ##     ## ###   ## 
+##     ## ##     ## ##     ##  ##   ##     ##    ##          ####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##     ##  ##     ## ####  ## 
+##     ## ########  ##     ## ##     ##    ##    ######      ## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##     ##  ##     ## ## ## ## 
+##     ## ##        ##     ## #########    ##    ##          ##  #### #########  ##   ##   ##  ##    ##  #########    ##     ##  ##     ## ##  #### 
+##     ## ##        ##     ## ##     ##    ##    ##          ##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##     ##  ##     ## ##   ### 
+ #######  ##        ########  ##     ##    ##    ########    ##    ## ##     ##    ###    ####  ######   ##     ##    ##    ####  #######  ##    ## 
+*/
+
   /**
    * public method to force navigation updates
    */
-  function _updateNavigation() {
-    _pauseTransitions();
+  function _updateNavigation(fireEvent) {
+    _fireEvent = fireEvent === false ? false : true;
     var currentPagePreUpdate = NavigationMatrix.getCurrentPage();
     NavigationMatrix.update();
-    navigateTo(currentPagePreUpdate);
+    //
+    navigateTo(currentPagePreUpdate, false, false, false);
     if (_showProgress === true) {
       buildProgressIndicator();
     }
-    setTimeout(function() {
-      _restoreTransitions();
-    }, _transitionTime);
-    onHashChange(null, true);
   }
 
   /**
@@ -1468,8 +1477,9 @@ var Flowtime = (function ()
    * @param dest HTMLElement  the page to go to
    * @param push Boolean if true the hash string were pushed to the history API
    * @param linked Boolean if true triggers a forced update of all the fragments in the pages, used when navigating from links or overview
+   * @param withTransitions Boolean if false disables the transition during the current navigation, then reset the transitions
    */
-  function navigateTo(dest, push, linked) {
+  function navigateTo(dest, push, linked, withTransitions) {
     push = push == false ? push : true;
     // if dest doesn't exist then go to homepage
     if (!dest) {
@@ -1481,16 +1491,24 @@ var Flowtime = (function ()
       push = true;
     }
     // checks what properties use for navigation and set the style
+    if (withTransitions === false) {
+      _pauseTransitions();
+    } else if (_transitionPaused === true) {
+      _restoreTransitions();
+    }
     navigate(dest);
+    if (_transitionPaused === true) {
+      _restoreTransitions(true);
+    }
     //
     moveParallax(dest);
     //
-    if (isOverview) {
+    if (_isOverview) {
       _toggleOverview(false, false);
     }
     //
     var h = NavigationMatrix.getHash(dest);
-    if (linked == true) {
+    if (linked === true) {
       NavigationMatrix.updateFragments();
     }
     // set history properties
@@ -1535,32 +1553,39 @@ var Flowtime = (function ()
 
   }
 
+  /**
+   * fires the navigation event and, if exists, call the navigation callback
+   */
   function fireNavigationEvent() {
-    var pageIndex = NavigationMatrix.getPageIndex();
-    var eventData = {
-                      section:          NavigationMatrix.getCurrentSection(),
-                      page:             NavigationMatrix.getCurrentPage(),
-                      sectionIndex:     pageIndex.section,
-                      pageIndex:        pageIndex.page,
-                      pastSectionIndex: pastIndex.section,
-                      pastPageIndex:    pastIndex.page,
-                      prevSection:      NavigationMatrix.hasPrevSection(),
-                      nextSection:      NavigationMatrix.hasNextSection(),
-                      prevPage:         NavigationMatrix.hasPrevPage(),
-                      nextPage:         NavigationMatrix.hasNextPage(),
-                      fragment:         NavigationMatrix.getCurrentFragment(),
-                      fragmentIndex:    NavigationMatrix.getCurrentFragmentIndex(),
-                      isOverview:       isOverview,
-                      progress:         NavigationMatrix.getProgress(),
-                      total:            NavigationMatrix.getPagesTotalLength(),
-                      isLoopable:       _isLoopable,
-                      clickerMode:      _clickerMode,
-                      isAutoplay:       _isAutoplay
-                    }
-    Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT, eventData);
-    //
-    if (_navigationCallback !== undefined) {
-      _navigationCallback(eventData);
+    if (_fireEvent !== false) {
+      var pageIndex = NavigationMatrix.getPageIndex();
+      var eventData = {
+                        section:          NavigationMatrix.getCurrentSection(),
+                        page:             NavigationMatrix.getCurrentPage(),
+                        sectionIndex:     pageIndex.section,
+                        pageIndex:        pageIndex.page,
+                        pastSectionIndex: pastIndex.section,
+                        pastPageIndex:    pastIndex.page,
+                        prevSection:      NavigationMatrix.hasPrevSection(),
+                        nextSection:      NavigationMatrix.hasNextSection(),
+                        prevPage:         NavigationMatrix.hasPrevPage(),
+                        nextPage:         NavigationMatrix.hasNextPage(),
+                        fragment:         NavigationMatrix.getCurrentFragment(),
+                        fragmentIndex:    NavigationMatrix.getCurrentFragmentIndex(),
+                        isOverview:       _isOverview,
+                        progress:         NavigationMatrix.getProgress(),
+                        total:            NavigationMatrix.getPagesTotalLength(),
+                        isLoopable:       _isLoopable,
+                        clickerMode:      _clickerMode,
+                        isAutoplay:       _isAutoplay
+                      }
+      Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT, eventData);
+      //
+      if (_navigationCallback !== undefined) {
+        _navigationCallback(eventData);
+      }
+    } else {
+      _fireEvent = true;
     }
   }
 
@@ -1587,33 +1612,43 @@ var Flowtime = (function ()
       }
     }
     if (_scrollTheSection === true) {
-      if (Brav1Toolbox.testCSS("transform")) {
-        var currentSection = NavigationMatrix.getCurrentSection();
-        var outside = ftContainer;
-        var inside = currentSection;
-        //
-        if (_crossDirection === true) {
-          outside = currentSection;
-          inside = ftContainer;
-        }
+      var currentSection = NavigationMatrix.getCurrentSection();
+      var outside = ftContainer;
+      var inside = currentSection;
+      if (_crossDirection === true) {
+        outside = currentSection;
+        inside = ftContainer;
+      }
+      if (_supportsTransform) {
         //
         if (_slideInPx) {
-          outside.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px)";
+          outside.style[_transformProperty] = "translateX(" + -x + "px)";
         } else {
-          outside.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%)";
+          outside.style[_transformProperty] = "translateX(" + -x * 100 + "%)";
         }
         if (_slideInPx) {
-          inside.style[Brav1Toolbox.getPrefixed("transform")] = "translateY(" + -y + "px)";
+          inside.style[_transformProperty] = "translateY(" + -y + "px)";
         } else {
-          inside.style[Brav1Toolbox.getPrefixed("transform")] = "translateY(" + -y * 100 + "%)";
+          inside.style[_transformProperty] = "translateY(" + -y * 100 + "%)";
+        }
+      } else {
+        if (_slideInPx) {
+          outside.style.left = -x + "px";
+        } else {
+          outside.style.left = -x * 100 + "%";
+        }
+        if (_slideInPx) {
+          inside.style.top = -y + "px";
+        } else {
+          inside.style.top = -y * 100 + "%";
         }
       }
     } else {
-      if (Brav1Toolbox.testCSS("transform")) {
+      if (_supportsTransform) {
         if (_slideInPx) {
-          ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x + "px) translateY(" + -y + "px)";
+          ftContainer.style[_transformProperty] = "translateX(" + -x + "px) translateY(" + -y + "px)";
         } else {
-          ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + -x * 100 + "%) translateY(" + -y * 100 + "%)";
+          ftContainer.style[_transformProperty] = "translateX(" + -x * 100 + "%) translateY(" + -y * 100 + "%)";
         }
       } else {
         if (_slideInPx) {
@@ -1661,9 +1696,9 @@ var Flowtime = (function ()
                   unit = "px";
                 }
                 if (_crossDirection === true) {
-                  pxElement.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + pY + unit + ") translateY(" + pX + unit + ")";
+                  pxElement.style[_transformProperty] = "translateX(" + pY + unit + ") translateY(" + pX + unit + ")";
                 } else {
-                  pxElement.style[Brav1Toolbox.getPrefixed("transform")] = "translateX(" + pX + unit + ") translateY(" + pY + unit + ")";
+                  pxElement.style[_transformProperty] = "translateX(" + pX + unit + ") translateY(" + pY + unit + ")";
                 }
               }
             }
@@ -1717,6 +1752,7 @@ var Flowtime = (function ()
       defaultProgress.appendChild(pDiv);
     };
     body.appendChild(defaultProgress);
+    updateProgress();
   }
 
   function hideProgressIndicator() {
@@ -1761,7 +1797,7 @@ var Flowtime = (function ()
    * switch from the overview states
    */
   function _toggleOverview(back, navigate) {
-    if (isOverview) {
+    if (_isOverview) {
       zoomIn(back, navigate);
     } else {
       overviewCachedDest = NavigationMatrix.getCurrentPage();
@@ -1773,10 +1809,10 @@ var Flowtime = (function ()
    * set the overview state to the given value
    */
   function _setShowOverview(v, back, navigate) {
-    if (isOverview === v) {
+    if (_isOverview === v) {
       return;
     }
-    isOverview = !v;
+    _isOverview = !v;
     _toggleOverview(back, navigate);
   }
 
@@ -1784,7 +1820,7 @@ var Flowtime = (function ()
    * zoom in the view to focus on the current section / page
    */
   function zoomIn(back, navigate) {
-    isOverview = false;
+    _isOverview = false;
     Brav1Toolbox.removeClass(body, "ft-overview");
     NavigationMatrix.hideFragments();
     navigate = navigate === false ? false : true;
@@ -1801,7 +1837,7 @@ var Flowtime = (function ()
    * zoom out the view for an overview of all the sections / pages
    */
   function zoomOut() {
-    isOverview = true;
+    _isOverview = true;
     Brav1Toolbox.addClass(body, "ft-overview");
     NavigationMatrix.showFragments();
     //
@@ -1828,7 +1864,7 @@ var Flowtime = (function ()
       var offsetX = (100 - NavigationMatrix.getSectionsLength() * scale) / 2;
       var offsetY = (100 - NavigationMatrix.getPagesLength() * scale) / 2;
       //
-      ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
+      ftContainer.style[_transformProperty] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
     }
   }
 
@@ -1846,7 +1882,7 @@ var Flowtime = (function ()
         var offsetY = 50 - (scale * pIndex.page) - (scale / 2);
       }
       //
-      ftContainer.style[Brav1Toolbox.getPrefixed("transform")] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
+      ftContainer.style[_transformProperty] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
     }
   }
 
@@ -1934,7 +1970,7 @@ var Flowtime = (function ()
             }
             break;
           case 13 : // return
-            if (isOverview) {
+            if (_isOverview) {
               _gotoPage(NavigationMatrix.getCurrentHilited());
             }
             break;
@@ -2022,9 +2058,8 @@ var Flowtime = (function ()
     }
     // start navigation
     if (document.location.hash.length > 0) {
-      _pauseTransitions();
+      _pauseTransitions(true);
       onHashChange(null, true);
-      _restoreTransitions();
     } else {
       if (_start.arguments.length > 0) {
         _gotoPage.apply(this, _start.arguments);
@@ -2035,12 +2070,24 @@ var Flowtime = (function ()
     }
   }
 
-  function _pauseTransitions() {
+  function _pauseTransitions(restoreAfter) {
+    _transitionPaused = true;
     ftContainer.style[Brav1Toolbox.getPrefixed("transition-duration")] = "0ms";
+    if (restoreAfter === true) {
+      setTimeout(_restoreTransitions, _transitionTime);
+    }
   }
 
-  function _restoreTransitions() {
-    ftContainer.style[Brav1Toolbox.getPrefixed("transition-duration")] = "" + _transitionTime / 1000 + "s";
+  function _restoreTransitions(withTransitionDelay) {
+    _transitionPaused = false;
+    if (withTransitionDelay === true) {
+      setTimeout(function() {
+        ftContainer.style[Brav1Toolbox.getPrefixed("transition-duration")] = "" + _transitionTime / 1000 + "s";
+      }, _transitionTime);
+    } else {
+      ftContainer.style[Brav1Toolbox.getPrefixed("transition-duration")] = "" + _transitionTime / 1000 + "s";
+    }
+
   }
 
   /*
@@ -2052,7 +2099,7 @@ var Flowtime = (function ()
     if (d != undefined) {
       navigateTo(d);
     } else {
-      if (isOverview && _useOverviewVariant) {
+      if (_isOverview && _useOverviewVariant) {
         zoomOut();
       }
     }
@@ -2067,7 +2114,7 @@ var Flowtime = (function ()
     if (d != undefined) {
       navigateTo(d);
     } else {
-      if (isOverview && _useOverviewVariant) {
+      if (_isOverview && _useOverviewVariant) {
         zoomOut();
       }
     }
@@ -2081,7 +2128,7 @@ var Flowtime = (function ()
     if (d != undefined) {
       navigateTo(d);
     } else {
-      if (isOverview && _useOverviewVariant) {
+      if (_isOverview && _useOverviewVariant) {
         zoomOut();
       }
     }
@@ -2095,7 +2142,7 @@ var Flowtime = (function ()
     if (d != undefined) {
       navigateTo(d);
     } else {
-      if (isOverview && _useOverviewVariant) {
+      if (_isOverview && _useOverviewVariant) {
         zoomOut();
       }
     }

@@ -207,7 +207,7 @@ If you doesn’t call the `start()` method Flowtime.js starts itself but some co
 You can pass as optional parameters the same parameters that are accepted by the `gotoPage` method (see below) to let the presentation navigating to a specific page at start.
 
 ```javascript
-Flowtime.updateNavigation(Boolean navigate);
+Flowtime.updateNavigation(Boolean fireEvent);
 ```
 
 Force the update of the navigation object which stores the data about every possibile destination in the site (the sub pages).
