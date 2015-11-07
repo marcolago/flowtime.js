@@ -338,6 +338,12 @@ When navigating from section to section with left and right arrows (or swipe) yo
 If you set this to `false` you will ever go to the first page of every section instead.
 
 ```javascript
+Flowtime.backFromPageToTop(Boolean value);
+```
+
+Default `false`. If `true` when navigating to the previous section from the first page of the current section Flowtime.js always goes to the first page of the previous section.
+
+```javascript
 Flowtime.nearestPageToTop(Boolean value);
 ```
 

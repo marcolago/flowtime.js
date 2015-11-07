@@ -96,6 +96,7 @@ var Flowtime = (function ()
   // section navigation modifiers
 
   var _sectionsSlideToTop = false;                                      // if true navigation with right or left arrow go to the first page of the section
+  var _backFromPageToTop = false;                                         // if true, when going back from the first page of a section to the previous section, go to the first page of the new section
   var _nearestToTop = false;
   var _rememberSectionsStatus = false;
   var _rememberSectionsLastPage = false;
@@ -430,16 +431,16 @@ var Flowtime = (function ()
      * @param jump  Boolean if true jumps over the fragments directly to the prev page
      */
     function _getPrevPage(jump) {
-      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump != true && _isOverview == false) {
+      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump !== true && _isOverview === false) {
         _hideFragment(p, sp);
       } else {
         if (sp == 0) {
           if (sectionsArray[p - 1] != undefined) {
             p -= 1;
-            sp = sectionsArray[p].length - 1;
-          } else if (sectionsArray[p - 1] == undefined && _isLoopable == true) {
+            sp = _backFromPageToTop === true ? 0 : sectionsArray[p].length - 1;
+          } else if (sectionsArray[p - 1] == undefined && _isLoopable === true) {
             p = sectionsArray.length - 1;
-            sp = sectionsArray[p].length - 1;
+            sp = _backFromPageToTop === true ? 0 : sectionsArray[p].length - 1;
           }
         } else {
           sp = Math.max(sp - 1, 0);
@@ -2243,6 +2244,10 @@ var Flowtime = (function ()
     _sectionsSlideToTop = v === true ? true : false;
   }
 
+  function _setBackFromPageToTop(v) {
+    _backFromPageToTop = v === true ? true : false;
+  }
+
   function _setNearestToTop(v) {
     _nearestToTop = v === true ? true : false;
   }
@@ -2451,6 +2456,7 @@ var Flowtime = (function ()
     onNavigation: _setNavigationCallback,
 
     gridNavigation: _setGridNavigation,
+    backFromPageToTop: _setBackFromPageToTop,
     nearestPageToTop: _setNearestToTop,
     rememberSectionsStatus: _setRememberSectionsStatus,
     rememberSectionsLastPage: _setRememberSectionsLastPage,
