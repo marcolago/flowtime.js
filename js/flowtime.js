@@ -95,7 +95,7 @@ var Flowtime = (function ()
 
   // section navigation modifiers
 
-  var _sectionsSlideToTop = false;                                      // if true navigation with right or left arrow go to the first page of the section
+  var _gridNavigation = false;                                      // if true navigation with right or left arrow go to the first page of the section
   var _backFromPageToTop = false;                                         // if true, when going back from the first page of a section to the previous section, go to the first page of the new section
   var _nearestToTop = false;
   var _rememberSectionsStatus = false;
@@ -298,7 +298,7 @@ var Flowtime = (function ()
     function _getNextSection(top, fos) {
       var sub = sp;
       //
-      var toTop = _isOverview === true ? false : top === !_sectionsSlideToTop;
+      var toTop = _isOverview === true ? false : top;
       if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && io === false) {
         _showFragment(p, sp);
       } else {
@@ -338,7 +338,7 @@ var Flowtime = (function ()
     function _getPrevSection(top, fos) {
       var sub = sp;
       //
-      var toTop = _isOverview === true ? false : top === !_sectionsSlideToTop;
+      var toTop = _isOverview === true ? false : top;
       if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && _isOverview === false) {
         _hideFragment(p, sp);
       } else {
@@ -1170,14 +1170,14 @@ var Flowtime = (function ()
             if (_crossDirection === true) {
               _prevPage();
             } else {
-              _prevSection(false);
+              _prevSection(undefined, false);
             }
             return;
           } else if (_deltaX < 0) {
             if (_crossDirection === true) {
               _nextPage();
             } else {
-              _nextSection(false);
+              _nextSection(undefined, false);
             }
             return;
           }
@@ -1185,14 +1185,14 @@ var Flowtime = (function ()
         else {
           if (_deltaY > 0 && Math.abs(_deltaY) >= _swipeLimit) {
             if (_crossDirection === true) {
-              _prevSection(false);
+              _prevSection(undefined, false);
             } else {
               _prevPage();
             }
             return;
           } else if (_deltaY < 0) {
             if (_crossDirection === true) {
-              _nextSection(false);
+              _nextSection(undefined, false);
             } else {
               _nextPage();
             }
@@ -1278,25 +1278,25 @@ var Flowtime = (function ()
         if (_crossDirection === true) {
           _nextPage();
         } else {
-          _nextSection(e.shiftKey);
+          _nextSection(undefined, e.shiftKey);
         }
       } else if (e.deltaX < 0) {
         if (_crossDirection === true) {
           _prevPage();
         } else {
-          _prevSection(e.shiftKey);
+          _prevSection(undefined, e.shiftKey);
         }
       }
     } else {
       if (e.deltaY > 0) {
         if (_crossDirection === true) {
-          _nextSection(e.shiftKey);
+          _nextSection(undefined, e.shiftKey);
         } else {
           _nextPage();
         }
       } else if (e.deltaY < 0) {
         if (_crossDirection === true) {
-          _prevSection(e.shiftKey);
+          _prevSection(undefined, e.shiftKey);
         } else {
           _prevPage();
         }
@@ -1946,26 +1946,26 @@ var Flowtime = (function ()
             if (_crossDirection === true) {
               _prevPage(e.shiftKey);
             } else {
-              _prevSection(e.shiftKey);
+              _prevSection(null, e.shiftKey);
             }
             break;
           case 39 : // right
             if (_crossDirection === true) {
               _nextPage(e.shiftKey);
             } else {
-              _nextSection(e.shiftKey);
+              _nextSection(null, e.shiftKey);
             }
             break;
           case 38 : // up
             if (_crossDirection === true) {
-              _prevSection(e.shiftKey);
+              _prevSection(null, e.shiftKey);
             } else {
               _prevPage(e.shiftKey);
             }
             break;
           case 40 : // down
             if (_crossDirection === true) {
-              _nextSection(e.shiftKey);
+              _nextSection(null, e.shiftKey);
             } else {
               _nextPage(e.shiftKey);
             }
@@ -2095,7 +2095,11 @@ var Flowtime = (function ()
    * Public API to go to the next section
    * @param top Boolean if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
    */
-  function _nextSection(top) {
+  function _nextSection(top, alternate) {
+    top = top != undefined ? top : _gridNavigation;
+    if (alternate === true) {
+      top = !_gridNavigation;
+    }
     var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide);
     if (d != undefined) {
       navigateTo(d);
@@ -2110,7 +2114,11 @@ var Flowtime = (function ()
    * Public API to go to the prev section
    *
    */
-  function _prevSection(top) {
+  function _prevSection(top, alternate) {
+    top = top != undefined ? top : _gridNavigation;
+    if (alternate === true) {
+      top = !_gridNavigation;
+    }
     var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide);
     if (d != undefined) {
       navigateTo(d);
@@ -2240,10 +2248,6 @@ var Flowtime = (function ()
     navigateTo();
   }
 
-  function _setSectionsSlideToTop(v) {
-    _sectionsSlideToTop = v === true ? true : false;
-  }
-
   function _setBackFromPageToTop(v) {
     _backFromPageToTop = v === true ? true : false;
   }
@@ -2253,7 +2257,7 @@ var Flowtime = (function ()
   }
 
   function _setGridNavigation(v) {
-    _sectionsSlideToTop = v === true ? false : true;
+    _gridNavigation = v === true ? false : true;
   }
 
   function _setUseOverviewVariant(v) {
