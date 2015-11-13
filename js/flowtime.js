@@ -84,6 +84,8 @@ var Flowtime = (function ()
   var _isTouchActive = true;
   var _areLinksActive = true;
   var _isScrolling = false;
+  var _momentumScrollTimeout = 0;
+  var _momentumScrollDelay = 2000;
   var _fireEvent = true;
   var _debouncingDelay = 1000;
   var _transitionPaused = false;
@@ -122,6 +124,7 @@ var Flowtime = (function ()
       }
     }
     _setTransitionTime(_transitionTime);
+    _momentumScrollDelay = _transitionTime * 4;
   })();
 
   /**
@@ -1268,10 +1271,19 @@ var Flowtime = (function ()
     }
   }
 
+  function enableMomentumScroll() {
+    clearTimeout(_momentumScrollTimeout);
+    _isScrolling = false;
+  }
+
+  function disableMomentumScroll() {
+    _momentumScrollTimeout = setTimeout(enableMomentumScroll, _momentumScrollDelay);
+  }
+
   function doScrollOnce(e) {
     //
     _isScrolling = true;
-    setTimeout(function() { _isScrolling = false; }, _debouncingDelay);
+    disableMomentumScroll();
     //
     if (e.deltaY == 0) {
       if (e.deltaX > 0) {
@@ -2386,6 +2398,10 @@ var Flowtime = (function ()
     return _transitionTime;
   }
 
+  function _setMomentumScrollDelay(milliseconds) {
+    _momentumScrollDelay = milliseconds;
+  }
+
   function _setNavigationCallback(f) {
     _navigationCallback = f;
   }
@@ -2456,6 +2472,7 @@ var Flowtime = (function ()
     setCrossDirection: _setCrossDirection,
     setDebouncingDelay: _setDebouncingDelay,
     setTransitionTime: _setTransitionTime,
+    setMomentumScrollDelay: _setMomentumScrollDelay,
     getTransitionTime: _getTransitionTime,
     onNavigation: _setNavigationCallback,
 
