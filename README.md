@@ -322,6 +322,14 @@ Flowtime.setTransitionTime(Number milliseconds);
 
 Set the global navigation transition time in milliseconds. This value overrides the time specified in CSS.
 
+```javascript
+Flowtime.setMomentumScrollDelay(Number milliseconds);
+```
+
+Set the delay time used to ignore the scrollwheel events fired by the momentum scroll on MacOS.
+The default value is 4 times the default transition time.
+Tweak this value to fit your needs.
+
 ### Section Navigation Options
 
 Flowtime.js comes with a lot of ways to navigate through sections; you can set up your installation with some, simple to use, options to fit your needs.
