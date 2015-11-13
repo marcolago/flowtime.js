@@ -39,32 +39,32 @@ This frameworks doesn’t style your presentations or sites for you but it takes
 But for the ones who need a ready-to-use tool it comes with a default theme that you can edit or you can add new themes just by linking your css files.
 
 **Alternate Horizontal Layout**
-The default layout for Flowtime.js has sections arranged side by side horizontally and pages stacked vertically in each section.
-You can use the alternate layout where section stacked vertically and pages arranged horizontally by adding the class `ft-cross`to the Flowtime element in the HTML document.
+The default layout has sections arranged side by side horizontally and pages stacked vertically in each section.
+You can use the alternate layout with sections stacked vertically and pages arranged horizontally by adding the class `ft-cross` to the Flowtime element in the HTML document.
 See **How to Build the Markup** section for an example.
 
 **Multiple Controls Navigation**.
-You can navigate through pages via links, keyboard or deep-linking.
+You can navigate through pages via links, keyboard, mouse, gestures or deep-linking.
 Links are managed using the href value targeting a formatted hash destination; see the demos source code for more examples.
 Keyboard navigation is based on arrow keys with the Shift key as a modifier to jump over fragments or sections, see the command list:
 
-- **Down or Up Arrows**: navigate to the previous or the next page. This is the main navigation input; the entire content is navigable using this keys only. If there are fragments in the page every input shows or hides a fragment.
-- **Shift + Down or Up Arrows**: navigate to the prev o next page jumping all the fragments.
-- **Left or Right Arrows**: navigate to the prev or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the higher available index (see [Section Navigation Options](#section-navigation-options) for more options).
-- **Shift + Left or Right Arrows**: Navigate to the first page of the previous or next section.
+- **Down or Up Arrows**: navigate to the next or previous page. This is the main navigation action; the entire content is navigable using this keys only. If there are fragments in the page every input shows or hides a fragment.
+- **Shift + Down or Up Arrows**: navigate to the next or previous page jumping all the fragments.
+- **Left or Right Arrows**: navigate to the previous or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the higher available index (see [Section Navigation Options](#section-navigation-options) for more options).
+- **Shift + Left or Right Arrows**: navigate to the first page of the previous or next section.
 - **Page Up**: navigates to the first page of the current section.
 - **Page Down**: navigates to the last page of the current section.
-- **Home**: navigates to the first page of the presentation.
-- **End**: navigates to the last page of the presentation.
+- **Home**: navigates to the first page of the presentation/website.
+- **End**: navigates to the last page of the presentation/website.
 - **ESC**: toggles the overview mode.
 
 **Fragments Support**.
-Navigate step by step in a page or jump directly to the next or previous page.
-You can hide or show every single fragment with special behaviour managed and styled by CSS classes and you can even nest fragments.
+It’s possibile to navigate fragments step by step in a page or jump directly to the next or previous page.
+You can hide or show every single fragment with special behaviour managed and styled by CSS classes, and you can even nest fragments.
 
 **Overview Mode**.
 Overview mode allows you to look at the entire site/presentation structure in a single view or from a distant point of view (alternate version).
-When in overview mode you can navigate to a page by click on it or using the arrow keys and **then press Return to go**.
+When in overview mode you can navigate to a page by click on it or using the arrow keys and **then pressing Return key**.
 
 **History Management**.
 Flowtime.js is built on top of the **HTML History APIs** so you can navigate using the browser’s back and forward buttons and deep-link a page for sharing.
@@ -72,19 +72,19 @@ Flowtime.js is a client side only framework so if you want to optimize SEO you h
 If the History APIs were not available the framework degrades well using the hashchange event.
 
 **Transitions**.
-Flowtime.js animate the page transition using **native CSS3 transitions**. Where transitions were not available (IE9) the page change is immediate but works.
+Flowtime.js animates the page transition using **native CSS3 transitions**. Where transitions were not available (IE9) the page change is immediate but works as expected.
 
 **Parallax Support**
-Integrated native parallax support based on CSS3 transformations and configurable by data- attributes.
+Integrated native parallax support based on CSS3 transformations and configurable by adding `data-` attributes.
 
 **Browser Support**
 Flowtime.js is tested and works on **every modern desktop browser and IE9 and above**.
-Where the basic support is not available the framework degrades to a native scrolling with anchor links but the full page fluid layouts remains intact.
+Where the basic support is not available the framework degrades to the native scrolling with anchor links, but the full page fluid layouts remains intact.
 
 ## How to Build the Markup
 
-Markup for Flowtime.js is really simple and easy to learn.
-All you have to do is wrap some divs in a parent `<div class="flowtime">`, then, marking up the section with `class="ft-section"` and the single page with `class="ft-page"`.
+The markup of Flowtime.js is really simple and easy to learn.
+All you have to do is wrap some elements in a `<div class="flowtime"> parent. Then create the sections applying `class="ft-section"` and the single pages applying `class="ft-page"`.
 To better understand the markup take a look at this snippet:
 
 ```html
@@ -123,7 +123,7 @@ Even if you have only single slides ordered in a row you have to nest the pages 
 
 ### Titles and Pages URL
 
-Flowtime.js sets automatically the title in the browser’s tab on navigation reading it from the first `h1` on the page. If you want to override a title or use a different string instead of the heading content you can set a `data-title` attribute to the page.
+Flowtime.js automatically sets the title in the browser’s tab on navigation reading it from the first `h1` on the page. If you want to override a title, or use a different string instead of the heading content, you can set a `data-title` attribute to the page.
 You can add the `data-title` attribute both to `ft-section` and to `ft-page` elements; if a `data-title` attribute was found on a section it will be used to write the title in the browser tab with this schema:
 
 `<title> text content [ | data-title on ft-section ] | h1 text content or data-title on ft-page`
@@ -159,7 +159,7 @@ To better understand the use of data attributes here it is an example:
 
 ### Fragments
 
-If you want to delay the showing and navigate single parts in a page just put the class `ft-fragment` on the element you want to delay. Here it is an example.
+If you want to reveal single elements of a page just add the class `ft-fragment` on the elements you want to discover step by step. Here it is an example.
 
 ```html
     <div class="flowtime">
@@ -173,8 +173,8 @@ If you want to delay the showing and navigate single parts in a page just put th
 ```
 
 You can also add some classes to trigger special behaviours for fragments.
-The `step` class partially fades out a fragment when the next one is selected; for example: `<p class="ft-fragment step">`
-The `shy` class completely hides a fragment when it lose the focus; for example: `<p class="ft-fragment shy">`
+The `step` class partially fades out a fragment when the next one is selected; use: `<p class="ft-fragment step">`
+The `shy` class completely hides a fragment when it lose the focus; use: `<p class="ft-fragment shy">`
 
 ### Parallax
 
@@ -185,8 +185,8 @@ If you want to enable the parallax effect on some elements add a `parallax` clas
       <div class="ft-section" data-id="section-1">
         <div class="ft-page" data-id="page-1">
             <p class="parallax">Parallaxed element. Will use the default lengths.</p>
-            <p class="parallax" data-parallax="100,150">Parallaxed element. Will use the data-parallax attribute values.</p>
-            <p class="parallax" data-parallax="200">Parallaxed element. Will use the data-parallax attribute value; x and y will be the same length.</p>
+            <p class="parallax" data-parallax="100,150">Parallaxed element. Will use the `data-parallax` attribute values.</p>
+            <p class="parallax" data-parallax="200">Parallaxed element. Will use the `data-parallax` attribute value; x and y will be the same length.</p>
         </div>
       </div>
     </div>
@@ -194,7 +194,7 @@ If you want to enable the parallax effect on some elements add a `parallax` clas
 
 ## Javascript API
 
-Flowtime.js comes with configuration APIs useful for customizing the experience and the installation and with navigation APIs for controlling navigation and get the state of the application.
+Flowtime.js has a lot of useful **configuration APIs**, for customizing the experience and the installation, and **navigation APIs**, for controlling navigation and get the state of the application.
 
 ### Configuration API
 
@@ -202,7 +202,7 @@ Flowtime.js comes with configuration APIs useful for customizing the experience 
 Flowtime.start();
 ```
 
-Starts the application logic. This method is optional unless you change some configuration parameters.
+Starts the application logic with custom options. Calling this method is optional (but highly reccommended) unless you change some configuration parameters.
 If you doesn’t call the `start()` method Flowtime.js starts itself but some configuration parameters will be applied only after the first navigation action.
 You can pass as optional parameters the same parameters that are accepted by the `gotoPage` method (see below) to let the presentation navigating to a specific page at start.
 
