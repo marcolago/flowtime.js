@@ -718,11 +718,7 @@ Every animation in Flowtime.js is managed with native CSS3 transitions so if you
 ```css
   .ft-fragment {
     opacity: 0;
-         -o-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-        -ms-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-       -moz-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-    -webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
-            transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+    transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
   }
 
   .ft-fragment.revealed, .ft-fragment.revealed-temp {
@@ -743,20 +739,14 @@ To customize the way the thumbnails in overview mode look when idle, hovered and
   /* default progress page thumb */
 
   .ft-page-thumb {
-       -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
+    box-sizing: border-box;
     width: 1rem;
     height: 0.7rem;
     margin-right: 1px;
     margin-bottom: 1px;
     background-color: rgba(0,0,0,0.7);
     cursor: pointer;
-         -o-transition: background-color 0.5s;
-        -ms-transition: background-color 0.5s;
-       -moz-transition: background-color 0.5s;
-    -webkit-transition: background-color 0.5s;
-            transition: background-color 0.5s;
+    transition: background-color 0.5s;
   }
 
   .ft-page-thumb:hover {
