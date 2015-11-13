@@ -2,7 +2,7 @@
 
 ### Flowtime.js is a framework for easily build HTML presentations or websites.
 
-You can take a look at the [sample presentation](http://flowtime-js.marcolago.com) to quick learn about the possibilities:
+You can take a look at the [sample presentation](http://marcolago.github.io/flowtime.js/) to quick learn about the possibilities:
 
 **For more information check the [wiki](https://github.com/marcolago/flowtime.js/wiki)**
 - [Browser Support](https://github.com/marcolago/flowtime.js/wiki/Browser-Support)
@@ -338,8 +338,8 @@ Flowtime.js comes with a lot of ways to navigate through sections; you can set u
 Flowtime.gridNavigation(Boolean value);
 ```
 
-[Grid Navigation True (default) Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/default/)  
-[Grid Navigation False Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/grid-navigation-false/)
+[Grid Navigation True (default) Demo](http://marcolago.github.io/flowtime.js//examples/section-navigation-options/default/)  
+[Grid Navigation False Demo](http://marcolago.github.io/flowtime.js//examples/section-navigation-options/grid-navigation-false/)
 
 Default `true`. The default behaviour out-of-the-box.
 When navigating from section to section with left and right arrows (or swipe) you will go to the same page index of the previous or next sections, if available, or to the nearest (highest number) page if the section is shorter.
@@ -355,7 +355,7 @@ Default `false`. If `true` when navigating to the previous section from the firs
 Flowtime.nearestPageToTop(Boolean value);
 ```
 
-[Nearest Page To Top Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/nearest-page-to-top/)
+[Nearest Page To Top Demo](http://marcolago.github.io/flowtime.js//examples/section-navigation-options/nearest-page-to-top/)
 
 Default `false`. If `true` when navigating to a section that is shorter than the current one Flowtime.js always goes to the first page of the new section.
 This does not affect the navigation to sections longer than, or as, the current section.
@@ -364,7 +364,7 @@ This does not affect the navigation to sections longer than, or as, the current 
 Flowtime.rememberSectionsStatus(Boolean value);
 ```
 
-[Remember Sections Status Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/remember-sections-status/)
+[Remember Sections Status Demo](http://marcolago.github.io/flowtime.js//examples/section-navigation-options/remember-sections-status/)
 
 Default `false`. If `true` Flowtime.js will remember the last page visited in every section and, when navigating from section to section, will go to the last page visited for that section.
 This setting overrides the `gridNavigation` one only for previously visited sections but use the `gridNavigation` and `nearestPageToTop` values for sections not visited yet.
@@ -373,7 +373,7 @@ This setting overrides the `gridNavigation` one only for previously visited sect
 Flowtime.rememberSectionsLastPage(Boolean value);
 ```
 
-[Remember Sections Last Page Demo](http://flowtime-js.marcolago.com/examples/section-navigation-options/remember-sections-last-page/)
+[Remember Sections Last Page Demo](http://marcolago.github.io/flowtime.js//examples/section-navigation-options/remember-sections-last-page/)
 
 Default `false`. If `true` Flowtime.js will remember the last page visited in the last section and stores this value for horizontal navigation purposes. It’s similar to the `gridNavigation(true)` setting but when navigating from a section with less pages to a section with the at least as page as the index stored Flowtime.js goes to the index stored and not to the adjacent page.
 This setting overrides the `rememberSectionsStatus` one.
@@ -382,7 +382,7 @@ This setting overrides the `rememberSectionsStatus` one.
 Flowtime.scrollTheSection(Boolean value);
 ```
 
-[Scroll the Section Demo](http://flowtime-js.marcolago.com/examples/scroll-the-section/)
+[Scroll the Section Demo](http://marcolago.github.io/flowtime.js//examples/scroll-the-section/)
 
 Default `false`. If `true` Flowtime.js will scroll only the current section and not the entire Flowtime wrapper. This could improve the performance while scrolling and is a nice effect if the wrapper doen not fill the screen.
 
