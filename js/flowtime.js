@@ -195,18 +195,23 @@ var Flowtime = (function ()
       sections = ftContainer.querySelectorAll(".flowtime > " + SECTION_SELECTOR);
       allPages = ftContainer.querySelectorAll(".flowtime " + PAGE_SELECTOR);
       //
-      for (var i = sectionDataIdMax; i < sections.length; i++) {
+      for (var i = 0; i < sections.length; i++) {
         var pagesArray = [];
         var section = sections[i];
         fragmentsArray[i] = [];
         fr[i] = [];
         //
+        sectionDataIdMax += 1;
         if (section.getAttribute("data-id")) {
           section.setAttribute("data-id", "__" + unsafeAttr(section.getAttribute("data-id"))); // prevents attributes starting with a number
         } else {
-          section.setAttribute("data-id", "__" + (i + 1));
+          section.setAttribute("data-id", "__" + sectionDataIdMax);
         }
-        section.setAttribute("data-prog", "__" + (i + 1));
+        if (section.getAttribute("data-prog")) {
+          section.setAttribute("data-prog", "__" + unsafeAttr(section.getAttribute("data-prog"))); // prevents attributes starting with a number
+        } else {
+          section.setAttribute("data-prog", "__" + sectionDataIdMax);
+        }
         section.index = i;
         section.setAttribute("id", "");
         //
@@ -220,7 +225,11 @@ var Flowtime = (function ()
           } else {
             _sp.setAttribute("data-id", "__" + (ii + 1));
           }
-          _sp.setAttribute("data-prog", "__" + (ii + 1));
+          if (_sp.getAttribute("data-prog")) {
+            _sp.setAttribute("data-prog", "__" + unsafeAttr(_sp.getAttribute("data-prog"))); // prevents attributes starting with a number
+          } else {
+            _sp.setAttribute("data-prog", "__" + (ii + 1));
+          }
           _sp.index = ii;
           _sp.setAttribute("id", "");
           // set data-title attributes to pages that doesn't have one and have at least an h1 heading element inside
@@ -240,7 +249,6 @@ var Flowtime = (function ()
           fr[i][ii] = -1;
         }
         sectionsArray.push(pagesArray);
-        sectionDataIdMax = i;
       }
       //
       sectionsLength = sections.length; // sets the sections max number for overview purposes
@@ -860,7 +868,7 @@ var Flowtime = (function ()
      * get a composed hash based on current section and page
      */
     function _getHash(d) {
-      if (d != undefined) {
+      if (d) {
         sp = _getPageIndex(d).page;
         p = _getPageIndex(d).section;
       }
@@ -1378,13 +1386,13 @@ var Flowtime = (function ()
     if (h.length > 0) {
       var aHash = h.replace("#/", "").split("/");
       if (aHash.length > 0) {
-        var ps = document.querySelectorAll(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]") || document.querySelectorAll(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
+        var ps = document.querySelectorAll(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]" || document.querySelectorAll(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]"));
         if (ps != null) {
           for (var i = 0; i < ps.length; i++) {
             var p = ps[i];
             var sp = null;
             if (aHash.length > 1) {
-              sp = p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]");
+              sp = p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]");
             }
             if (sp !== null) {
               break;
@@ -1452,7 +1460,15 @@ var Flowtime = (function ()
    * otherwise will be returned the data-prog attribute
    */
   function getPageId(d) {
-    return (d.getAttribute("data-id") != null ? d.getAttribute("data-id").replace(/__/, "") : d.getAttribute("data-prog").replace(/__/, ""));
+    var tempId = d.getAttribute("data-id");
+    var tempProg = d.getAttribute("data-prog");
+    var ret = "";
+    if (tempId != null) {
+      ret = tempId.replace(/__/, "");
+    } else if (tempProg != null) {
+      ret = tempProg.replace(/__/, "");
+    }
+    return ret;
   }
 
   /**

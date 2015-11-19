@@ -56,8 +56,8 @@
 <body class="">
 
   <div class="flowtime">
-    <div class="ft-section" data-title="Auto IDs Demo">
-      <div class="ft-page">
+    <div class="ft-section" data-id="section" data-title="Auto IDs Demo">
+      <div class="ft-page" data-id="page">
           <h1>title</h1>
           <p>Lorem ipsum 1.</p>
       </div>
@@ -72,7 +72,7 @@
             <h1>title</h1>
             <p>Lorem ipsum 3.</p>
         </div>
-        <div class="ft-page">
+        <div class="ft-page" data-id="page b">
             <h1>title</h1>
             <p>Lorem ipsum 4.</p>
         </div>
@@ -92,9 +92,10 @@
 
   <div class="titles">
     <ul>
-      <li><a href="#/1/1">page-1</a></li>
-      <li><a href="#/2/2">page-4</a></li>
-      <li><a href="#/3/2">page-6</a></li>
+      <li><a href="#/1/1">Section 1 - Page 1 (#/1/1)</a></li>
+      <li><a href="#/2/2">Section 2 - Page 2 (#/2/2)</a></li>
+      <li><a href="#/3/2">Section 3 - Page 2 (#/3/2)</a></li>
+      <li><a href="#" class="add">Add a new section before the first one</a></li>
     </ul>
   </div>
 
@@ -127,12 +128,19 @@
     //
     //
 
-    Flowtime.addEventListener("flowtimenavigation", onNavigation, false);
-
-    function onNavigation(e)
-    {
+    var sectionHTML = '<div class="ft-section"><div class="ft-page"><h1>title</h1><p>Lorem ipsum NEW 1.</p></div><div class="ft-page" data-id="new page"><h1>title</h1><p>Lorem ipsum NEW 2.</p></div></div>';
+    var addLink = document.querySelector(".add");
+    addLink.addEventListener("click", onAdd);
+    function onAdd(e) {
+      addLink.removeEventListener("click", onAdd);
+      document.querySelector(".flowtime").insertAdjacentHTML('afterbegin', sectionHTML);
+      Flowtime.updateNavigation();
+      setTimeout(function() {
+        addLink.setAttribute("href", "#/4/4");
+        addLink.innerHTML = "New Section - Page 1"
+      }, Flowtime.getTransitionTime());
     }
-
+    
     // starts the application with configuration options
     Flowtime.start();
   </script>
