@@ -1386,7 +1386,9 @@ var Flowtime = (function ()
     if (h.length > 0) {
       var aHash = h.replace("#/", "").split("/");
       if (aHash.length > 0) {
-        var ps = document.querySelectorAll(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]" || document.querySelectorAll(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]"));
+        var dataProgSection = document.querySelectorAll(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
+        var dataIdSection = document.querySelectorAll(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]");
+        var ps = dataProgSection.length > 0 ? dataProgSection : dataIdSection;
         if (ps != null) {
           for (var i = 0; i < ps.length; i++) {
             var p = ps[i];
