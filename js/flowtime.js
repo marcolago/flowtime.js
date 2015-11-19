@@ -64,6 +64,7 @@ var Flowtime = (function ()
   var overviewCachedDest;                                               // caches the destination before performing an overview zoom out for navigation back purposes
   var overviewFixedScaleFactor = 22;                                    // fixed scale factor for overview variant
   var defaultProgress = null;                                           // default progress bar reference
+  var sectionDataIdMax = 0;
 
   var _isOverview = false;                                              // Boolean status for the overview
   var _useOverviewVariant = false;                                      // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
@@ -194,7 +195,7 @@ var Flowtime = (function ()
       sections = ftContainer.querySelectorAll(".flowtime > " + SECTION_SELECTOR);
       allPages = ftContainer.querySelectorAll(".flowtime " + PAGE_SELECTOR);
       //
-      for (var i = 0; i < sections.length; i++) {
+      for (var i = sectionDataIdMax; i < sections.length; i++) {
         var pagesArray = [];
         var section = sections[i];
         fragmentsArray[i] = [];
@@ -216,6 +217,8 @@ var Flowtime = (function ()
           var _sp = pages[ii];
           if (_sp.getAttribute("data-id")) {
             _sp.setAttribute("data-id", "__" + unsafeAttr(_sp.getAttribute("data-id"))); // prevents attributes starting with a number
+          } else {
+            _sp.setAttribute("data-id", "__" + (ii + 1));
           }
           _sp.setAttribute("data-prog", "__" + (ii + 1));
           _sp.index = ii;
@@ -237,6 +240,7 @@ var Flowtime = (function ()
           fr[i][ii] = -1;
         }
         sectionsArray.push(pagesArray);
+        sectionDataIdMax = i;
       }
       //
       sectionsLength = sections.length; // sets the sections max number for overview purposes
