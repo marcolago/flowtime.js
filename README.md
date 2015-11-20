@@ -1,6 +1,6 @@
 ![Flowtime.js](https://github.com/marcolago/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
-### Flowtime.js is a framework for easily build HTML presentations or websites.
+### Flowtime.js is a framework for easily building HTML presentations or websites.
 
 You can take a look at the [sample presentation](http://marcolago.github.io/flowtime.js/) to quick learn about the possibilities:
 
@@ -8,6 +8,17 @@ You can take a look at the [sample presentation](http://marcolago.github.io/flow
 - [Browser Support](https://github.com/marcolago/flowtime.js/wiki/Browser-Support)
 - [Made with Flowtime.js](https://github.com/marcolago/flowtime.js/wiki/Made-With-Flowtime.js)
 - [Credits and Thanks](https://github.com/marcolago/flowtime.js/wiki/Credits-and-Thanks)
+
+### If You Find Flowtime.js Useful
+
+If you used Flowtime.js to build a website, a webapp or a presentation, consider to do one or more of these things.
+
+ - Spread the word.  
+ - Let me know where I can see your project (and tell me if I can add to the [Made with Flowtime.js](https://github.com/marcolago/flowtime.js/wiki/Made-With-Flowtime.js) page). 
+ - [Open an issue](https://github.com/marcolago/flowtime.js/issues) to report a bug or to request a feature.
+ - If you wish to donate:  
+[![paypal](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9TW923Y3US7LG)
+
 
 ## Build presentations online with Flowtime.js and SlideCaptain
 
