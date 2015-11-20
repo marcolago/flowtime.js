@@ -26,23 +26,23 @@ var Flowtime = (function ()
   /**
    * application constants
    */
-  var SECTION_CLASS                                           = "ft-section";
-  var SECTION_SELECTOR                                        = "." + SECTION_CLASS;
-  var PAGE_CLASS                                              = "ft-page";
-  var PAGE_SELECTOR                                           = "." + PAGE_CLASS;
-  var FRAGMENT_CLASS                                          = "ft-fragment";
-  var FRAGMENT_SELECTOR                                       = "." + FRAGMENT_CLASS;
-  var FRAGMENT_REVEALED_CLASS                                 = "revealed";
-  var FRAGMENT_ACTUAL_CLASS                                   = "actual";
-  var FRAGMENT_REVEALED_TEMP_CLASS                            = "revealed-temp";
-  var DEFAULT_PROGRESS_CLASS                                  = "ft-default-progress";
-  var DEFAULT_PROGRESS_SELECTOR                               = "." + DEFAULT_PROGRESS_CLASS;
-  var SECTION_THUMB_CLASS                                     = "ft-section-thumb";
-  var SECTION_THUMB_SELECTOR                                  = "." + SECTION_THUMB_CLASS;
-  var PAGE_THUMB_CLASS                                        = "ft-page-thumb";
-  var PAGE_THUMB_SELECTOR                                     = "." + PAGE_THUMB_CLASS;
-  var CROSS_DIRECTION_CLASS                                   = "ft-cross";
-  var SCROLL_THE_SECTION_CLASS                                = "ft-scroll-the-section";
+  var SECTION_CLASS                = "ft-section";
+  var SECTION_SELECTOR             = "." + SECTION_CLASS;
+  var PAGE_CLASS                   = "ft-page";
+  var PAGE_SELECTOR                = "." + PAGE_CLASS;
+  var FRAGMENT_CLASS               = "ft-fragment";
+  var FRAGMENT_SELECTOR            = "." + FRAGMENT_CLASS;
+  var FRAGMENT_REVEALED_CLASS      = "revealed";
+  var FRAGMENT_ACTUAL_CLASS        = "actual";
+  var FRAGMENT_REVEALED_TEMP_CLASS = "revealed-temp";
+  var DEFAULT_PROGRESS_CLASS       = "ft-default-progress";
+  var DEFAULT_PROGRESS_SELECTOR    = "." + DEFAULT_PROGRESS_CLASS;
+  var SECTION_THUMB_CLASS          = "ft-section-thumb";
+  var SECTION_THUMB_SELECTOR       = "." + SECTION_THUMB_CLASS;
+  var PAGE_THUMB_CLASS             = "ft-page-thumb";
+  var PAGE_THUMB_SELECTOR          = "." + PAGE_THUMB_CLASS;
+  var CROSS_DIRECTION_CLASS        = "ft-cross";
+  var SCROLL_THE_SECTION_CLASS     = "ft-scroll-the-section";
 
   /**
    * events
@@ -53,34 +53,34 @@ var Flowtime = (function ()
   /**
    * application variables
    */
-  var ftContainer = document.querySelector(".flowtime");                // cached reference to .flowtime element
-  var ftParent = ftContainer.parentNode;                                // cached reference to .flowtime parent element
-  var html = document.querySelector("html");                            // cached reference to html element
-  var body = document.querySelector("body");                            // cached reference to body element
-  var useHash = false;                                                  // if true the engine uses only the hash change logic
-  var currentHash = "";                                                 // the hash string of the current section / page pair
-  var pastIndex = { section:0, page:0 };                                // section and page indexes of the past page
-  var siteName = document.title;                                        // cached base string for the site title
-  var overviewCachedDest;                                               // caches the destination before performing an overview zoom out for navigation back purposes
-  var overviewFixedScaleFactor = 22;                                    // fixed scale factor for overview variant
-  var defaultProgress = null;                                           // default progress bar reference
-  var sectionDataIdMax = 0;
-
-  var _isOverview = false;                                              // Boolean status for the overview
-  var _useOverviewVariant = false;                                      // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
-  var _fragmentsOnSide = false;                                         // enable or disable fragments navigation when navigating from sections
-  var _fragmentsOnBack = true;                                          // shows or hide fragments when navigating back to a page
-  var _slideInPx = false;                                               // calculate the slide position in px instead of %, use in case the % mode does not works
-  var _twoStepsSlide = false;                                           // not yet implemented! slides up or down before, then slides to the page
-  var _isLoopable = false;
-  var _showProgress = false;                                            // show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
-  var _clickerMode = false;                                             // Used if presentation is being controlled by a "presenter" device (e.g., R400)
-  var _parallaxInPx = false;                                            // if false the parallax movement is calulated in % values, if true in pixels
-  var _defaultParallaxX = 50;                                            // the default parallax horizontal value used when no data-parallax value were specified
-  var _defaultParallaxY = 50;                                            // the default parallax vertical value used when no data-parallax value were specified
-  var _parallaxEnabled = document.querySelector(".parallax") != null;    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
-  var _mouseDragEnabled = false;                                        // in enabled is possible to drag the presentation with the mouse pointer
-  var _isScrollActive = true;                                           // flags to enable or disable javascript input listeners for the navigation
+  var ftContainer = document.querySelector(".flowtime");                                 // cached reference to .flowtime element
+  var ftParent = ftContainer.parentNode;                                                 // cached reference to .flowtime parent element
+  var html = document.querySelector("html");                                             // cached reference to html element
+  var body = document.querySelector("body");                                             // cached reference to body element
+  var useHash = false;                                                                   // if true the engine uses only the hash change logic
+  var currentHash = "";                                                                  // the hash string of the current section / page pair
+  var pastIndex = { section:0, page:0 };                                                 // section and page indexes of the past page
+  var siteName = document.title;                                                         // cached base string for the site title
+  var overviewCachedDest;                                                                // caches the destination before performing an overview zoom out for navigation back purposes
+  var overviewFixedScaleFactor = 22;                                                     // fixed scale factor for overview variant
+  var defaultProgress = null;                                                            // default progress bar reference
+  var sectionDataIdMax = 0;                
+                 
+  var _isOverview = false;                                                               // Boolean status for the overview
+  var _useOverviewVariant = false;                                                       // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
+  var _fragmentsOnSide = false;                                                          // enable or disable fragments navigation when navigating from sections
+  var _fragmentsOnBack = true;                                                           // shows or hide fragments when navigating back to a page
+  var _slideInPx = false;                                                                // calculate the slide position in px instead of %, use in case the % mode does not works
+  var _twoStepsSlide = false;                                                            // not yet implemented! slides up or down before, then slides to the page
+  var _isLoopable = false;                 
+  var _showProgress = false;                                                             // show or hide the default progress indicator (leave false if you want to implement a custom progress indicator)
+  var _clickerMode = false;                                                              // Used if presentation is being controlled by a "presenter" device (e.g., R400)
+  var _parallaxInPx = false;                                                             // if false the parallax movement is calulated in % values, if true in pixels
+  var _defaultParallaxX = 50;                                                            // the default parallax horizontal value used when no data-parallax value were specified
+  var _defaultParallaxY = 50;                                                            // the default parallax vertical value used when no data-parallax value were specified
+  var _parallaxEnabled = document.querySelector(".parallax") != null;                    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
+  var _mouseDragEnabled = false;                                                         // in enabled is possible to drag the presentation with the mouse pointer
+  var _isScrollActive = true;                                                            // flags to enable or disable javascript input listeners for the navigation
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
@@ -90,16 +90,16 @@ var Flowtime = (function ()
   var _fireEvent = true;
   var _debouncingDelay = 1000;
   var _transitionPaused = false;
-  var _transitionTime = 500;                                            // the page transition in milliseconds (keep in sync with the CSS transition value)
-  var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);  // flag to set the cross direction layout and logic
+  var _transitionTime = 500;                                                             // the page transition in milliseconds (keep in sync with the CSS transition value)
+  var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);       // flag to set the cross direction layout and logic
   var _navigationCallback = undefined;
   var _transformProperty = Brav1Toolbox.getPrefixed("transform");
   var _supportsTransform = Brav1Toolbox.testCSS("transform")
 
   // section navigation modifiers
 
-  var _gridNavigation = false;                                      // if true navigation with right or left arrow go to the first page of the section
-  var _backFromPageToTop = false;                                         // if true, when going back from the first page of a section to the previous section, go to the first page of the new section
+  var _gridNavigation = false;                                                           // if true navigation with right or left arrow go to the first page of the section
+  var _backFromPageToTop = false;                                                        // if true, when going back from the first page of a section to the previous section, go to the first page of the new section
   var _nearestToTop = false;
   var _rememberSectionsStatus = false;
   var _rememberSectionsLastPage = false;
@@ -1277,10 +1277,37 @@ var Flowtime = (function ()
   var scrollTimeout = NaN;
 
   function onMouseScroll(e) {
-    e.preventDefault();
+    var t = e.target;
+    if (checkIfScrollable(t) === true) {
+      _isScrollActive = false;
+    } else {
+      _isScrollActive = true;
+    }
     if (_isScrolling === false && _isScrollActive === true) {
+      //e.preventDefault();
       doScrollOnce(e);
     }
+  }
+
+  function checkIfScrollable(element) {
+    var isScrollable = false
+    var el = element;
+    while (el.className.indexOf("ft-page") < 0) {
+      if (el.scrollHeight > el.clientHeight - 1) {
+        isScrollable = true;
+      }
+      el = el.parentNode;
+    }
+    if (el.className.indexOf("ft-page") != -1 && el.scrollHeight > el.clientHeight - 1) {
+      isScrollable = true;
+    }
+    if (isScrollable === true) {
+      if (el.scrollHeight - el.scrollTop === el.clientHeight || (el.scrollTop === 0 && el.alreadyScrolled && el.alreadyScrolled === true)) {
+        isScrollable = false;
+      }
+      el.alreadyScrolled = true;
+    }
+    return isScrollable;
   }
 
   function enableMomentumScroll() {
@@ -1595,24 +1622,24 @@ var Flowtime = (function ()
     if (_fireEvent !== false) {
       var pageIndex = NavigationMatrix.getPageIndex();
       var eventData = {
-                        section:          NavigationMatrix.getCurrentSection(),
-                        page:             NavigationMatrix.getCurrentPage(),
-                        sectionIndex:     pageIndex.section,
-                        pageIndex:        pageIndex.page,
-                        pastSectionIndex: pastIndex.section,
-                        pastPageIndex:    pastIndex.page,
-                        prevSection:      NavigationMatrix.hasPrevSection(),
-                        nextSection:      NavigationMatrix.hasNextSection(),
-                        prevPage:         NavigationMatrix.hasPrevPage(),
-                        nextPage:         NavigationMatrix.hasNextPage(),
-                        fragment:         NavigationMatrix.getCurrentFragment(),
-                        fragmentIndex:    NavigationMatrix.getCurrentFragmentIndex(),
-                        isOverview:       _isOverview,
-                        progress:         NavigationMatrix.getProgress(),
-                        total:            NavigationMatrix.getPagesTotalLength(),
-                        isLoopable:       _isLoopable,
-                        clickerMode:      _clickerMode,
-                        isAutoplay:       _isAutoplay
+                        section          : NavigationMatrix.getCurrentSection(),
+                        page             : NavigationMatrix.getCurrentPage(),
+                        sectionIndex     : pageIndex.section,
+                        pageIndex        : pageIndex.page,
+                        pastSectionIndex : pastIndex.section,
+                        pastPageIndex    : pastIndex.page,
+                        prevSection      : NavigationMatrix.hasPrevSection(),
+                        nextSection      : NavigationMatrix.hasNextSection(),
+                        prevPage         : NavigationMatrix.hasPrevPage(),
+                        nextPage         : NavigationMatrix.hasNextPage(),
+                        fragment         : NavigationMatrix.getCurrentFragment(),
+                        fragmentIndex    : NavigationMatrix.getCurrentFragmentIndex(),
+                        isOverview       : _isOverview,
+                        progress         : NavigationMatrix.getProgress(),
+                        total            : NavigationMatrix.getPagesTotalLength(),
+                        isLoopable       : _isLoopable,
+                        clickerMode      : _clickerMode,
+                        isAutoplay       : _isAutoplay
                       }
       Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT, eventData);
       //
@@ -2440,71 +2467,71 @@ var Flowtime = (function ()
    * return object for public methods
    */
   return {
-    start: _start,
-    updateNavigation: _updateNavigation,
+    start                    : _start,
+    updateNavigation         : _updateNavigation,
 
-    nextSection: _nextSection,
-    prevSection: _prevSection,
-    next: _nextPage,
-    prev: _prevPage,
-    nextFragment: _nextPage,
-    prevFragment: _prevPage,
-    gotoPage: _gotoPage,
-    gotoHome: _gotoHome,
-    gotoTop: _gotoTop,
-    gotoBottom: _gotoBottom,
-    gotoEnd: _gotoEnd,
+    nextSection              : _nextSection,
+    prevSection              : _prevSection,
+    next                     : _nextPage,
+    prev                     : _prevPage,
+    nextFragment             : _nextPage,
+    prevFragment             : _prevPage,
+    gotoPage                 : _gotoPage,
+    gotoHome                 : _gotoHome,
+    gotoTop                  : _gotoTop,
+    gotoBottom               : _gotoBottom,
+    gotoEnd                  : _gotoEnd,
 
-    toggleOverview: _toggleOverview,
-    showOverview: _setShowOverview,
-    fragmentsOnSide: _setFragmentsOnSide,
-    fragmentsOnBack: _setFragmentsOnBack,
-    useHistory: _setUseHistory,
-    slideInPx: _setSlideInPx,
-    useOverviewVariant: _setUseOverviewVariant,
-    twoStepsSlide: _setTwoStepsSlide,
-    showProgress: _setShowProgress,
-    defaultParallaxValues: _setDefaultParallaxValues,
-    parallaxInPx: _setParallaxInPx,
+    toggleOverview           : _toggleOverview,
+    showOverview             : _setShowOverview,
+    fragmentsOnSide          : _setFragmentsOnSide,
+    fragmentsOnBack          : _setFragmentsOnBack,
+    useHistory               : _setUseHistory,
+    slideInPx                : _setSlideInPx,
+    useOverviewVariant       : _setUseOverviewVariant,
+    twoStepsSlide            : _setTwoStepsSlide,
+    showProgress             : _setShowProgress,
+    defaultParallaxValues    : _setDefaultParallaxValues,
+    parallaxInPx             : _setParallaxInPx,
 
-    addEventListener: _addEventListener,
-    getDefaultProgress: _getDefaultProgress,
+    addEventListener         : _addEventListener,
+    getDefaultProgress       : _getDefaultProgress,
 
-    getSection: NavigationMatrix.getCurrentSection,
-    getPage: NavigationMatrix.getCurrentPage,
-    getSectionIndex: _getSectionIndex,
-    getPageIndex: _getPageIndex,
-    getPrevSection: NavigationMatrix.getPrevSectionObject,
-    getNextSection: NavigationMatrix.getNextSectionObject,
-    getPrevPage: NavigationMatrix.getPrevPageObject,
-    getNextPage: NavigationMatrix.getNextPageObject,
-    autoplay: _autoplay,
-    play: _play,
-    pause: _pause,
-    stop: _stop,
-    loop: _loop,
-    clicker: _clicker,
-    mouseDragEnabled: _setMouseDrag,
-    enableNavigation : _enableNavigation,
-    disableNavigation: _disableNavigation,
-    setLinksNavigation: _setLinksNavigation,
-    setKeyboardNavigation: _setKeyboardNavigation,
-    setScrollNavigation: _setScrollNavigation,
-    setTouchNavigation: _setTouchNavigation,
-    setCrossDirection: _setCrossDirection,
-    setDebouncingDelay: _setDebouncingDelay,
-    setTransitionTime: _setTransitionTime,
-    setMomentumScrollDelay: _setMomentumScrollDelay,
-    getTransitionTime: _getTransitionTime,
-    onNavigation: _setNavigationCallback,
+    getSection               : NavigationMatrix.getCurrentSection,
+    getPage                  : NavigationMatrix.getCurrentPage,
+    getSectionIndex          : _getSectionIndex,
+    getPageIndex             : _getPageIndex,
+    getPrevSection           : NavigationMatrix.getPrevSectionObject,
+    getNextSection           : NavigationMatrix.getNextSectionObject,
+    getPrevPage              : NavigationMatrix.getPrevPageObject,
+    getNextPage              : NavigationMatrix.getNextPageObject,
+    autoplay                 : _autoplay,
+    play                     : _play,
+    pause                    : _pause,
+    stop                     : _stop,
+    loop                     : _loop,
+    clicker                  : _clicker,
+    mouseDragEnabled         : _setMouseDrag,
+    enableNavigation         : _enableNavigation,
+    disableNavigation        : _disableNavigation,
+    setLinksNavigation       : _setLinksNavigation,
+    setKeyboardNavigation    : _setKeyboardNavigation,
+    setScrollNavigation      : _setScrollNavigation,
+    setTouchNavigation       : _setTouchNavigation,
+    setCrossDirection        : _setCrossDirection,
+    setDebouncingDelay       : _setDebouncingDelay,
+    setTransitionTime        : _setTransitionTime,
+    setMomentumScrollDelay   : _setMomentumScrollDelay,
+    getTransitionTime        : _getTransitionTime,
+    onNavigation             : _setNavigationCallback,
 
-    gridNavigation: _setGridNavigation,
-    backFromPageToTop: _setBackFromPageToTop,
-    nearestPageToTop: _setNearestToTop,
-    rememberSectionsStatus: _setRememberSectionsStatus,
-    rememberSectionsLastPage: _setRememberSectionsLastPage,
+    gridNavigation           : _setGridNavigation,
+    backFromPageToTop        : _setBackFromPageToTop,
+    nearestPageToTop         : _setNearestToTop,
+    rememberSectionsStatus   : _setRememberSectionsStatus,
+    rememberSectionsLastPage : _setRememberSectionsLastPage,
 
-    scrollTheSection: _setScrollTheSection
+    scrollTheSection         : _setScrollTheSection
   };
 
 })();
