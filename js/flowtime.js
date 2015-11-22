@@ -81,6 +81,7 @@ var Flowtime = (function ()
   var _parallaxEnabled = document.querySelector(".parallax") != null;                    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
   var _mouseDragEnabled = false;                                                         // in enabled is possible to drag the presentation with the mouse pointer
   var _isScrollActive = true;                                                            // flags to enable or disable javascript input listeners for the navigation
+  var _isScrollable = true;                                                             
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
@@ -94,7 +95,11 @@ var Flowtime = (function ()
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);       // flag to set the cross direction layout and logic
   var _navigationCallback = undefined;
   var _transformProperty = Brav1Toolbox.getPrefixed("transform");
-  var _supportsTransform = Brav1Toolbox.testCSS("transform")
+  var _supportsTransform = Brav1Toolbox.testCSS("transform");
+  var xGlobal = 0;
+  var yGlobal = 0;
+  var xGlobalDelta = 0;
+  var yGlobalDelta = 0;
 
   // section navigation modifiers
 
@@ -148,6 +153,10 @@ var Flowtime = (function ()
    */
   if (browserSupport) {
     Brav1Toolbox.addClass(ftParent, "ft-absolute-nav");
+  }
+
+  window.onload = function() {
+    NavigationMatrix.updateOffsets();
   }
 
 /*
@@ -294,14 +303,40 @@ var Flowtime = (function ()
       return parallaxElements;
     }
 
+    /*
+##     ## ########  ########     ###    ######## ########  #######  ######## ########  ######  ######## ########  ######  
+##     ## ##     ## ##     ##   ## ##      ##    ##       ##     ## ##       ##       ##    ## ##          ##    ##    ## 
+##     ## ##     ## ##     ##  ##   ##     ##    ##       ##     ## ##       ##       ##       ##          ##    ##       
+##     ## ########  ##     ## ##     ##    ##    ######   ##     ## ######   ######    ######  ######      ##     ######  
+##     ## ##        ##     ## #########    ##    ##       ##     ## ##       ##             ## ##          ##          ## 
+##     ## ##        ##     ## ##     ##    ##    ##       ##     ## ##       ##       ##    ## ##          ##    ##    ## 
+ #######  ##        ########  ##     ##    ##    ########  #######  ##       ##        ######  ########    ##     ######  
+    */
+
     /**
      * cache the position for every page, useful when navigatin in pixels or when attaching a page after scrolling
      */
     function _updateOffsets () {
+      console.log("_updateOffsets");
+      xGlobal = ftContainer.offsetLeft;
+      yGlobal = ftContainer.offsetTop;
       for (var i = 0; i < allPages.length; i++) {
         var _sp = allPages[i];
-        _sp.x = _sp.offsetLeft + _sp.parentNode.offsetLeft;
-        _sp.y = _sp.offsetTop + _sp.parentNode.offsetTop;
+        var _spParent = _sp.offsetParent;
+        //
+        if (i === 0) {
+          xGlobalDelta = _sp.offsetLeft - xGlobal;
+          yGlobalDelta = _sp.offsetTop - yGlobal;
+        }
+        //  _
+        if (_crossDirection === true) {
+          _sp.x = _sp.offsetLeft - (xGlobal + xGlobalDelta);
+          _sp.y = _spParent.offsetTop;
+        } else {
+          _sp.x = _spParent.offsetLeft;
+          _sp.y = _sp.offsetTop - (yGlobal + yGlobalDelta);
+        }
+         
       }
     }
 
@@ -1278,12 +1313,10 @@ var Flowtime = (function ()
 
   function onMouseScroll(e) {
     var t = e.target;
-    if (checkIfScrollable(t) === true) {
-      _isScrollActive = false;
-    } else {
-      _isScrollActive = true;
-    }
-    if (_isScrolling === false && _isScrollActive === true) {
+    _isScrollable = checkIfScrollable(t);
+    console.log(checkIfScrollable(t), _isScrollActive, _isScrollable);
+    var _isScrollActiveTemp = _isScrollable === true ? false : _isScrollActive;
+    if (_isScrolling === false && _isScrollActiveTemp === true) {
       //e.preventDefault();
       doScrollOnce(e);
     }
@@ -1292,7 +1325,7 @@ var Flowtime = (function ()
   function checkIfScrollable(element) {
     var isScrollable = false
     var el = element;
-    while (el.className.indexOf("ft-page") < 0) {
+    while (el.className && el.className.indexOf("ft-page") < 0) {
       if (el.scrollHeight > el.clientHeight - 1) {
         isScrollable = true;
       }
@@ -1651,6 +1684,16 @@ var Flowtime = (function ()
     }
   }
 
+/*
+##    ##    ###    ##     ## ####  ######      ###    ######## ######## 
+###   ##   ## ##   ##     ##  ##  ##    ##    ## ##      ##    ##       
+####  ##  ##   ##  ##     ##  ##  ##         ##   ##     ##    ##       
+## ## ## ##     ## ##     ##  ##  ##   #### ##     ##    ##    ######   
+##  #### #########  ##   ##   ##  ##    ##  #########    ##    ##       
+##   ### ##     ##   ## ##    ##  ##    ##  ##     ##    ##    ##       
+##    ## ##     ##    ###    ####  ######   ##     ##    ##    ######## 
+*/
+
   /**
    * check the availability of transform CSS property
    * if transform is not available then fallbacks to position absolute behaviour
@@ -1674,33 +1717,34 @@ var Flowtime = (function ()
       }
     }
     if (_scrollTheSection === true) {
-      var currentSection = NavigationMatrix.getCurrentSection();
+      var sectionDest = dest.parentNode;
       var outside = ftContainer;
-      var inside = currentSection;
+      var inside = sectionDest;
       if (_crossDirection === true) {
-        outside = currentSection;
+        outside = sectionDest;
         inside = ftContainer;
       }
       if (_supportsTransform) {
         //
         if (_slideInPx) {
-          outside.style[_transformProperty] = "translateX(" + -x + "px)";
+          console.log(x);
+          outside.style[_transformProperty] = "translateX(" + (-x) + "px)";
         } else {
           outside.style[_transformProperty] = "translateX(" + -x * 100 + "%)";
         }
         if (_slideInPx) {
-          inside.style[_transformProperty] = "translateY(" + -y + "px)";
+          inside.style[_transformProperty] = "translateY(" + (-y) + "px)";
         } else {
-          inside.style[_transformProperty] = "translateY(" + -y * 100 + "%)";
+          inside.style[_transformProperty] = "translateY(" + (-y) * 100 + "%)";
         }
       } else {
         if (_slideInPx) {
-          outside.style.left = -x + "px";
+          outside.style.left = (x) + "px";
         } else {
           outside.style.left = -x * 100 + "%";
         }
         if (_slideInPx) {
-          inside.style.top = -y + "px";
+          inside.style.top = (y) + "px";
         } else {
           inside.style.top = -y * 100 + "%";
         }
@@ -1708,17 +1752,17 @@ var Flowtime = (function ()
     } else {
       if (_supportsTransform) {
         if (_slideInPx) {
-          ftContainer.style[_transformProperty] = "translateX(" + -x + "px) translateY(" + -y + "px)";
+          ftContainer.style[_transformProperty] = "translateX(" + (-x) + "px) translateY(" + (-y) + "px)";
         } else {
-          ftContainer.style[_transformProperty] = "translateX(" + -x * 100 + "%) translateY(" + -y * 100 + "%)";
+          ftContainer.style[_transformProperty] = "translateX(" + (-x) * 100 + "%) translateY(" + (-y) * 100 + "%)";
         }
       } else {
         if (_slideInPx) {
-          ftContainer.style.top = -y + "px";
-          ftContainer.style.left = -x + "px";
+          ftContainer.style.top = (-y) + "px";
+          ftContainer.style.left = (-x) + "px";
         } else {
-          ftContainer.style.top = -y * 100 + "%";
-          ftContainer.style.left = -x * 100 + "%";
+          ftContainer.style.top = (-y) * 100 + "%";
+          ftContainer.style.left = (-x) * 100 + "%";
         }
       }
     }

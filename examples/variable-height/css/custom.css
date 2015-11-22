@@ -1,0 +1,23 @@
+.one   { background-color: red;    }
+.two   { background-color: green;  }
+.three { background-color: blue;   }
+.four  { background-color: yellow; }
+
+.flowtime {
+  width: 80%;
+  margin-left: 10vw;
+  margin-top: 10vh;
+}
+
+.ft-page {
+  width: 90%;
+  height: auto;
+  max-height: calc(80vh - 5%);
+  margin: 5%;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.ft-overview .ft-page {
+  max-height: inherit;
+}
