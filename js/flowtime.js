@@ -317,7 +317,6 @@ var Flowtime = (function ()
      * cache the position for every page, useful when navigatin in pixels or when attaching a page after scrolling
      */
     function _updateOffsets () {
-      console.log("_updateOffsets");
       xGlobal = ftContainer.offsetLeft;
       yGlobal = ftContainer.offsetTop;
       for (var i = 0; i < allPages.length; i++) {
@@ -1314,7 +1313,6 @@ var Flowtime = (function ()
   function onMouseScroll(e) {
     var t = e.target;
     _isScrollable = checkIfScrollable(t);
-    console.log(checkIfScrollable(t), _isScrollActive, _isScrollable);
     var _isScrollActiveTemp = _isScrollable === true ? false : _isScrollActive;
     if (_isScrolling === false && _isScrollActiveTemp === true) {
       //e.preventDefault();
@@ -1727,7 +1725,6 @@ var Flowtime = (function ()
       if (_supportsTransform) {
         //
         if (_slideInPx) {
-          console.log(x);
           outside.style[_transformProperty] = "translateX(" + (-x) + "px)";
         } else {
           outside.style[_transformProperty] = "translateX(" + -x * 100 + "%)";
