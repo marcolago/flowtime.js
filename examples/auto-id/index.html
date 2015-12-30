@@ -128,18 +128,33 @@
     //
     //
 
-    var sectionHTML = '<div class="ft-section"><div class="ft-page"><h1>Section NEW - Page 1</h1><p>Overall Page NEW 1.</p></div><div class="ft-page" data-id="new page"><h1>Section NEW - Page 2</h1><p>Overall Page NEW 2.</p></div></div>';
+    var newSectionCounter = 1;
+
     var addLink = document.querySelector(".add");
+    
     addLink.addEventListener("click", onAdd);
     function onAdd(e) {
-      addLink.removeEventListener("click", onAdd);
-      document.querySelector(".flowtime").insertAdjacentHTML('afterbegin', sectionHTML);
-      Flowtime.updateNavigation();
-      setTimeout(function() {
-        addLink.setAttribute("href", "#/4/4");
-        addLink.innerHTML = "Section NEW - Page 1"
-      }, Flowtime.getTransitionTime());
+      console.log(e.nextSection);
+      if (e.nextSection === false) {
+        addLink.removeEventListener("click", onAdd);
+
+        Flowtime.disableNavigation();
+        setTimeout(function() {
+          var sectionHTML = '<div class="ft-section"><div class="ft-page"><h1>Section NEW ' + newSectionCounter + ' - Page 1</h1><p>Overall Page NEW 1.</p></div><div class="ft-page" data-id="new page"><h1> Section NEW - Page 2</h1><p>Overall Page NEW 2.</p></div></div>';
+          newSectionCounter += 1;
+          document.querySelector(".flowtime").insertAdjacentHTML('beforeend', sectionHTML);
+          
+          Flowtime.updateNavigation();
+          setTimeout(function() {
+            addLink.setAttribute("href", "#/4/4");
+            addLink.innerHTML = "Section NEW - Page 1"
+          }, Flowtime.getTransitionTime());
+          Flowtime.enableNavigation();
+        }, 1000);
+      }
     }
+
+    Flowtime.onNavigation(onAdd);
 
     // starts the application with configuration options
     Flowtime.start();
