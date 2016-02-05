@@ -96,6 +96,8 @@ var Flowtime = (function ()
   var _navigationCallback = undefined;
   var _transformProperty = Brav1Toolbox.getPrefixed("transform");
   var _supportsTransform = Brav1Toolbox.testCSS("transform");
+  var _toSectionsFromPages = true;                                                       // if false prevents the previous page and next page commands from navigating to previous and next sections
+
   var xGlobal = 0;
   var yGlobal = 0;
   var xGlobalDelta = 0;
@@ -453,6 +455,7 @@ var Flowtime = (function ()
     /**
      * returns the next page in navigation
      * if the next page is not in the current section array returns the first page in the next section array
+     * if _toSectionsFromPages is false and the next page is not in the current section then returns false
      * @param jump  Boolean if true jumps over the fragments directly to the next page
      */
     function _getNextPage(jump) {
@@ -460,7 +463,9 @@ var Flowtime = (function ()
         _showFragment(p, sp);
       } else {
         if (sectionsArray[p][sp + 1] === undefined) {
-          if (sectionsArray[p + 1] !== undefined) {
+          if (_toSectionsFromPages === false) {
+            return false;
+          } else if (sectionsArray[p + 1] !== undefined) {
             p += 1;
             sp = 0;
           } else if (sectionsArray[p + 1] === undefined && _isLoopable === true) {
@@ -477,6 +482,7 @@ var Flowtime = (function ()
     /**
      * returns the prev page in navigation
      * if the prev page is not in the current section array returns the last page in the prev section array
+     * if _toSectionsFromPages is false and the prev page is not in the current section then returns false
      * @param jump  Boolean if true jumps over the fragments directly to the prev page
      */
     function _getPrevPage(jump) {
@@ -484,7 +490,9 @@ var Flowtime = (function ()
         _hideFragment(p, sp);
       } else {
         if (sp == 0) {
-          if (sectionsArray[p - 1] != undefined) {
+          if (_toSectionsFromPages === false) {
+            return false;
+          } else if (sectionsArray[p - 1] != undefined) {
             p -= 1;
             sp = _backFromPageToTop === true ? 0 : sectionsArray[p].length - 1;
           } else if (sectionsArray[p - 1] == undefined && _isLoopable === true) {
@@ -2236,6 +2244,9 @@ var Flowtime = (function ()
    */
   function _nextPage(jump) {
     var d = NavigationMatrix.getNextPage(jump);
+    if (d === false) {
+      return;
+    }
     if (d != undefined) {
       navigateTo(d);
     } else {
@@ -2250,6 +2261,9 @@ var Flowtime = (function ()
    */
   function _prevPage(jump) {
     var d = NavigationMatrix.getPrevPage(jump);
+    if (d === false) {
+      return;
+    }
     if (d != undefined) {
       navigateTo(d);
     } else {
@@ -2504,6 +2518,10 @@ var Flowtime = (function ()
     _rememberSectionsLastPage = v === true ? true : false;
   }
 
+  function _setToSectionsFromPages(v) {
+    _toSectionsFromPages = v === false ? false : true;
+  }
+
   /**
    * return object for public methods
    */
@@ -2572,7 +2590,8 @@ var Flowtime = (function ()
     rememberSectionsStatus   : _setRememberSectionsStatus,
     rememberSectionsLastPage : _setRememberSectionsLastPage,
 
-    scrollTheSection         : _setScrollTheSection
+    scrollTheSection         : _setScrollTheSection,
+    toSectionsFromPages      : _setToSectionsFromPages
   };
 
 })();
