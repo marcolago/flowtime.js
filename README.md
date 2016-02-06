@@ -397,6 +397,13 @@ Flowtime.scrollTheSection(Boolean value);
 
 Default `false`. If `true` Flowtime.js will scroll only the current section and not the entire Flowtime wrapper. This could improve the performance while scrolling and is a nice effect if the wrapper doen not fill the screen.
 
+```javascript
+Flowtime.toSectionsFromPages(Boolean value);
+```
+
+Default `true`. If `false` Flowtime.js will prevent next and previous page navigation via keyboard, mouse and scroll or via navigation APIs nextPage and prevPage, to go to the next or previous section.
+To go to the next or previous section you have to use section’s navigation options via keyboard, mouse and scroll or via APIs nextSection and prevSection or targeting a specific page.
+
 ### Navigation API
 
 ```javascript
