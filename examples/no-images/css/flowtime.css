@@ -1,0 +1,254 @@
+/* STRUCTURE */
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    -webkit-text-size-adjust:none;
+  }
+
+  body {
+  }
+
+  .flowtime {
+    font-size: 0;       /* removes the white spaces between inline-block elements */
+                /* WARNING! this technique does non remove the white-space in Safari for Windows */
+                /* unless you use this hack: http://absolide.tumblr.com/post/36597829434/safari-inline-block-white-spaces-bug-fix */
+                /* you can use any other white-space removal technique as per: http://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
+    white-space: nowrap;  /* disable the wrapping of the space between articles */
+    width: 100%;
+    height: 100%;
+        -ms-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+        -ms-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        -ms-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+    -webkit-transition: -webkit-transform 0.5s cubic-bezier(.77, .10, .22, 1);
+       transition:         transform 0.5s cubic-bezier(.77, .10, .22, 1);
+
+  }
+
+  .flowtime.no-transition {
+    -webkit-transition: -webkit-transform 0s;
+       transition: transform 0s;
+  }
+
+/* SECTIONS (COLUMNS) */
+
+  /* base section */
+  .ft-section {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: translateZ(0);
+  }
+
+  /* section and section thumb alignment */
+  .ft-section,
+  .ft-section-thumb {
+    font-size: 16px;    /* reset the regular font size, in the old way… */
+    font-size: 1rem;    /* and in the modern way */
+    white-space: normal;
+    display: inline-block;  /* let the block elements stay on the same line */
+                /* used together the white-space: nowrap; declaration */
+                /* the elements doesn't break the line */
+    vertical-align: top;  /* fix the default alignement for the inline-block elements (default: baseline) */
+                /* if different from "top" set Flowtime.slideWithPx(true) */
+  }
+
+  .ft-scroll-the-section .ft-section {
+    transition: transform 0.5s cubic-bezier(.77, .10, .22, 1);
+  }
+
+  .ft-cross .ft-section,
+  .ft-cross .ft-section-thumb {
+    font-size: 0;
+    line-height: 1;
+    white-space: nowrap;
+    display: block;
+  }
+
+/* PAGES */
+
+  /* base page */
+  .ft-page {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: auto;
+    /**
+     * GPU acceleration disabled to drop down memory consuption on tablet and smartphones
+     */
+    /*
+        -ms-transform: translateZ(0);
+       -moz-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+    */
+  }
+
+  .ft-cross .ft-page,
+  .ft-cross .ft-page-thumb {
+    font-size: 16px;    /* reset the regular font size, in the old way… */
+    font-size: 1rem;    /* and in the modern way */
+    white-space: normal;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  /**
+   * GPU acceleration enabled only on the pages involved in the slide animation to ensure no glitches on transition
+   */
+  .ft-page.actual,
+  .ft-page.actual-out {
+    z-index: 100;
+        -ms-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+  }
+
+  /* pages in overview mode */
+  .ft-overview .ft-page {
+    opacity: 0.5;
+    cursor: pointer;
+    -webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+       transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+        -ms-transform: scale(0.95);
+    -webkit-transform: scale(0.95);
+            transform: scale(0.95);
+        -ms-transform-origin: 50% 50%;
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+  }
+
+  .ft-overview .ft-page * {
+    pointer-events: none;
+  }
+
+/* JAVASCRIPT NAVIGATION HOOKS */
+
+  .ft-absolute-nav {
+    overflow: hidden;
+  }
+
+
+  .ft-absolute-nav .flowtime {
+    position: absolute;
+  }
+
+/* EYE CANDY OVERRIDABLE CLASSES AND PROPERTIES */
+
+/* FRAGMENTS */
+
+  .ft-fragment {
+    opacity: 0;
+    -webkit-transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+       transition: all 0.3s cubic-bezier(.77, .10, .22, 1);
+        -ms-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+  }
+
+  .ft-fragment.revealed.step {
+    opacity: 0.3;
+  }
+
+  .ft-fragment.revealed.shy {
+    opacity: 0;
+  }
+
+  .ft-fragment.revealed,
+  .ft-fragment.revealed-temp,
+  .ft-fragment.revealed.actual {
+    opacity: 1;
+  }
+
+/* DEFAULT PROGRESS */
+
+  .ft-default-progress {
+    position: fixed;
+    bottom: 16px;
+    bottom: 1rem;
+    right: 16px;
+    right: 1rem;
+    z-index: 1000;
+    opacity: 0.3;
+    -webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+       transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+  }
+
+  .ft-default-progress:hover {
+    opacity: 1;
+  }
+
+  /* default progress disappears when in overview mode */
+  .ft-overview .ft-default-progress {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* default progress page thumb */
+  .ft-page-thumb {
+    box-sizing: border-box;
+    width: 1rem;
+    height: 0.7rem;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    background-color: rgba(0,0,0,0.7);
+    cursor: pointer;
+    -webkit-transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+       transition: all 0.5s cubic-bezier(.77, .10, .22, 1);
+  }
+
+  .ft-page-thumb:hover {
+    background-color: rgba(255,255,255,0.7);
+  }
+
+  .ft-page-thumb.actual {
+    background-color: rgba(255,255,255,0.5);
+    border: 1px solid #ffffff;
+  }
+
+  /* overview mode page highlighting */
+
+  .ft-overview .ft-page.actual {
+    opacity: 0.25;
+  }
+
+  .ft-overview .ft-page.hilite {
+    opacity: 1;
+  }
+
+  .ft-overview .ft-page:hover {
+    opacity: 1;
+  }
+
+/* HARDWARE ACCELERATED ELEMENTS */
+/* I've not used * because causes issues with current Chrome */
+
+  img {
+        -ms-transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        -ms-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+  }
+
+/* PARALLAX MANAGEMENT */
+
+  .parallax {
+    position: relative;
+    -webkit-transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
+       transition: all 0.5s cubic-bezier(.50, .10, .50, 1);
+  }
+
+  .ft-overview .parallax {
+        -ms-transform: translateZ(0) !important;
+    -webkit-transform: translateZ(0) !important;
+            transform: translateZ(0) !important;
+  }
