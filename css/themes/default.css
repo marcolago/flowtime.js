@@ -265,12 +265,6 @@ body {
 	text-shadow: 1px 2px 0 #000000, 1px -1px 0 rgba(0,0,0,0.3), -1px -1px 0 rgba(0,0,0,0.3), -1px 1px 0 rgba(0,0,0,0.3)
 }
 
-.flowtime sup {
-	font-size: 0.7em;
-	position: relative;
-	top: -0.5em;
-}
-
 /* links and focus */
 
 .flowtime a,
