@@ -95,7 +95,7 @@ Where the basic support is not available the framework degrades to the native sc
 ## How to Build the Markup
 
 The markup of Flowtime.js is really simple and easy to learn.
-All you have to do is wrap some elements in a `<div class="flowtime"> parent. Then create the sections applying `class="ft-section"` and the single pages applying `class="ft-page"`.
+All you have to do is wrap some elements in a `<div class="flowtime">` parent. Then create the sections applying `class="ft-section"` and the single pages applying `class="ft-page"`.
 To better understand the markup take a look at this snippet:
 
 ```html
