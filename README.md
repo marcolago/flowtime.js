@@ -92,6 +92,20 @@ Integrated native parallax support based on CSS3 transformations and configurabl
 Flowtime.js is tested and works on **every modern desktop browser and IE9 and above**.
 Where the basic support is not available the framework degrades to the native scrolling with anchor links, but the full page fluid layouts remains intact.
 
+## How to build minified Flowtime.js
+
+You need `node js`, `npm` and `grunt` installed in order to build a minified version of Flowtime.js. You can install dependencies with:
+
+```
+npm install
+```
+
+And doing the minified build with:
+
+```
+grunt
+```
+
 ## How to Include Flowtime.js in Your Projects
 
 **Include the required CSS** inside the `<head>` tag in your document.
