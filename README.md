@@ -92,6 +92,26 @@ Integrated native parallax support based on CSS3 transformations and configurabl
 Flowtime.js is tested and works on **every modern desktop browser and IE9 and above**.
 Where the basic support is not available the framework degrades to the native scrolling with anchor links, but the full page fluid layouts remains intact.
 
+## How to Include Flowtime.js in Your Projects
+
+**Include the required CSS** inside the `<head>` tag in your document.
+You have to include the `css/flowtime.css` file and a theme CSS file; Flowtime.js comes with the `css/themes/default.css` theme.  
+**Optional**: you can also add some modifiers, like the Standard Ordered List one, from `css/modifiers/standard-ol.css`.
+
+If you want to contribute to Flowtime.js development you can write your own theme or modifier and make a pull request.
+
+**Include the required JavaScript files** at the bottom of your document, just before the `</body>` tag.
+You have to include both the `js/brav1toolbox.js` and `js/flowtime.js` files in this exact order:
+```html
+<script src="js/brav1toolbox.js"></script>
+<script src="js/flowtime.js"></script>
+```
+
+or the single `js/flowtime.min.js` file:
+```html
+<script src="js/flowtime.min.js"></script>
+```
+
 ## How to Build the Markup
 
 The markup of Flowtime.js is really simple and easy to learn.
