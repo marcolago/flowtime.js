@@ -94,16 +94,15 @@ Where the basic support is not available the framework degrades to the native sc
 
 ## How to build minified Flowtime.js
 
-You need `node js`, `npm` and `grunt` installed in order to build a minified version of Flowtime.js. You can install dependencies with:
-
+You need **[node.js](https://nodejs.org/)**, **[npm](https://www.npmjs.com/)** and **[grunt](http://gruntjs.com/)** installed in order to build a minified version of Flowtime.js and to autoprefix CSS files.  
+You can install dependencies running
 ```
 npm install
 ```
 
-And doing the minified build with:
-
+To create the minified build and autoprefixed CSS just run
 ```
-grunt
+grunt 
 ```
 
 ## How to Include Flowtime.js in Your Projects
