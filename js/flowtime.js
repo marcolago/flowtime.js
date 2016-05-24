@@ -393,7 +393,6 @@ var Flowtime = (function ()
       if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && _isOverview === false) {
         _hideFragment(p, sp);
       } else {
-        var sub = 0;
         sub = 0;
         if (toTop === true && p - 1 >= 0) {
           sub = 0;
@@ -605,7 +604,7 @@ var Flowtime = (function ()
             if (ip > p)
             {
               // previous section
-              for (var f = frsp.length - 1; f >= 0; f--)
+              for (f = frsp.length - 1; f >= 0; f--)
               {
                 _hideFragment(ip, isp, f);
               }
@@ -613,7 +612,7 @@ var Flowtime = (function ()
             else if (ip < p)
             {
               // next section
-              for (var f = 0; f < frsp.length; f++)
+              for (f = 0; f < frsp.length; f++)
               {
                 _showFragment(ip, isp, f);
               }
@@ -624,7 +623,7 @@ var Flowtime = (function ()
               if (isp > sp)
               {
                 // previous page
-                for (var f = frsp.length - 1; f >= 0; f--)
+                for (f = frsp.length - 1; f >= 0; f--)
                 {
                   _hideFragment(ip, isp, f);
                 }
@@ -632,7 +631,7 @@ var Flowtime = (function ()
               else if (isp < sp)
               {
                 // next page
-                for (var f = 0; f < frsp.length; f++)
+                for (f = 0; f < frsp.length; f++)
                 {
                   _showFragment(ip, isp, f);
                 }
@@ -642,14 +641,14 @@ var Flowtime = (function ()
                 // same page
                 if (_fragmentsOnBack === true && (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page))
                 {
-                  for (var f = 0; f < frsp.length; f++)
+                  for (f = 0; f < frsp.length; f++)
                   {
                     _showFragment(ip, isp, f);
                   }
                 }
                 else
                 {
-                  for (var f = frsp.length - 1; f >= 0; f--)
+                  for (f = frsp.length - 1; f >= 0; f--)
                   {
                     _hideFragment(ip, isp, f);
                   }
@@ -1084,13 +1083,13 @@ var Flowtime = (function ()
       }
       // pages in oveview mode
       if (_isOverview) {
-        var dest = e.target;
-        while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS)) {
-          dest = dest.parentNode;
+        var target = e.target;
+        while (target && !Brav1Toolbox.hasClass(target, PAGE_CLASS)) {
+          target = target.parentNode;
         }
-        if (Brav1Toolbox.hasClass(dest, PAGE_CLASS)) {
+        if (Brav1Toolbox.hasClass(target, PAGE_CLASS)) {
           e.preventDefault();
-          navigateTo(dest, null, true);
+          navigateTo(target, null, true);
         }
       }
       // thumbs in the default progress indicator
@@ -1832,7 +1831,6 @@ var Flowtime = (function ()
   ##        ##    ##  ##     ## ##    ##  ##    ##  ##       ##    ## ##    ##
   ##        ##     ##  #######   ######   ##     ## ########  ######   ######
 */
-  var defaultProgress = null;
   var progressFill = null;
 
   function buildProgressIndicator() {
@@ -1963,15 +1961,16 @@ var Flowtime = (function ()
   function overviewZoomTypeA(out) {
     // ftContainer scale version
     if (out) {
+      var scaleX, scaleY;
       if (_crossDirection === true) {
-        var scaleY = 100 / NavigationMatrix.getSectionsLength();
-        var scaleX = 100 / NavigationMatrix.getPagesLength();
+        scaleY = 100 / NavigationMatrix.getSectionsLength();
+        scaleX = 100 / NavigationMatrix.getPagesLength();
       } else {
-        var scaleX = 100 / NavigationMatrix.getSectionsLength();
-        var scaleY = 100 / NavigationMatrix.getPagesLength();
+        scaleX = 100 / NavigationMatrix.getSectionsLength();
+        scaleY = 100 / NavigationMatrix.getPagesLength();
       }
       //
-      var scale = Math.min(scaleX, scaleY) * 0.9;
+      scale = Math.min(scaleX, scaleY) * 0.9;
       var offsetX = (100 - NavigationMatrix.getSectionsLength() * scale) / 2;
       var offsetY = (100 - NavigationMatrix.getPagesLength() * scale) / 2;
       //
@@ -1982,15 +1981,16 @@ var Flowtime = (function ()
   function overviewZoomTypeB(out) {
     // ftContainer scale alternative version
     if (out) {
-      var scale = overviewFixedScaleFactor; // Math.min(scaleX, scaleY) * 0.9;
+      scale = overviewFixedScaleFactor; // Math.min(scaleX, scaleY) * 0.9;
       var pIndex = NavigationMatrix.getPageIndex();
       //
+      var offsetY, offsetX;
       if (_crossDirection === true) {
-        var offsetY = 50 - (scale * pIndex.section) - (scale / 2);
-        var offsetX = 50 - (scale * pIndex.page) - (scale / 2);
+        offsetY = 50 - (scale * pIndex.section) - (scale / 2);
+        offsetX = 50 - (scale * pIndex.page) - (scale / 2);
       } else {
-        var offsetX = 50 - (scale * pIndex.section) - (scale / 2);
-        var offsetY = 50 - (scale * pIndex.page) - (scale / 2);
+        offsetX = 50 - (scale * pIndex.section) - (scale / 2);
+        offsetY = 50 - (scale * pIndex.page) - (scale / 2);
       }
       //
       ftContainer.style[_transformProperty] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
@@ -2283,6 +2283,7 @@ var Flowtime = (function ()
   function _gotoPage() {
     var args = _gotoPage.arguments;
     if (args.length > 0) {
+      var spd = null;
       if (args.length == 1) {
         if (Brav1Toolbox.typeOf(args[0]) === "Object") {
           var o = args[0];
@@ -2291,7 +2292,7 @@ var Flowtime = (function ()
           if (p !== null && p !== undefined) {
             var pd = document.querySelector(SECTION_SELECTOR + "[data-id=" + safeAttr(p) + "]");
             if (sp !== null && sp !== undefined) {
-              var spd = pd.querySelector(PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
+              spd = pd.querySelector(PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
               if (spd !== null) {
                 navigateTo(spd);
                 return;
@@ -2303,7 +2304,7 @@ var Flowtime = (function ()
         }
       }
       if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0) {
-        var spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
+        spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
         navigateTo(spd);
         return;
       }
