@@ -1454,10 +1454,11 @@ var Flowtime = (function ()
         var dataProgSection = document.querySelectorAll(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
         var dataIdSection = document.querySelectorAll(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]");
         var ps = dataProgSection.length > 0 ? dataProgSection : dataIdSection;
+        var sp = null;
+        var p = null;
         if (ps !== null) {
           for (var i = 0; i < ps.length; i++) {
-            var p = ps[i];
-            var sp = null;
+            p = ps[i];
             if (aHash.length > 1) {
               sp = p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]");
             }
