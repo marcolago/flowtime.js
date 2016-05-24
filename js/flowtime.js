@@ -159,7 +159,7 @@ var Flowtime = (function ()
 
   window.onload = function() {
     NavigationMatrix.updateOffsets();
-  }
+  };
 
 /*
   ##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ## ##     ##    ###    ######## ########  #### ##     ##
@@ -656,7 +656,7 @@ var Flowtime = (function ()
                 }
                 if (_fragmentsOnBack == false)
                 {
-                  fr[ip][isp] = -1
+                  fr[ip][isp] = -1;
                 }
                 else
                 {
@@ -666,7 +666,7 @@ var Flowtime = (function ()
                   }
                   else
                   {
-                    fr[ip][isp] = -1
+                    fr[ip][isp] = -1;
                   }
                 }
               }
@@ -1038,7 +1038,7 @@ var Flowtime = (function ()
       hasPrevPage: _hasPrevPage,
       updateOffsets: _updateOffsets,
       getParallaxElements: _getParallaxElements
-    }
+    };
   })();
 
 /*
@@ -1329,7 +1329,7 @@ var Flowtime = (function ()
   }
 
   function checkIfScrollable(element) {
-    var isScrollable = false
+    var isScrollable = false;
     var el = element;
     while (el.className && el.className.indexOf("ft-page") < 0) {
       if (el.scrollHeight > el.clientHeight - 1) {
@@ -1431,7 +1431,7 @@ var Flowtime = (function ()
     return {
       enable: _enable,
       disable: _disable
-    }
+    };
   })();
 
 /*
@@ -1517,7 +1517,7 @@ var Flowtime = (function ()
       if (NavigationMatrix.getCurrentSection().getAttribute("data-title") != null) {
         t += " | " + NavigationMatrix.getCurrentSection().getAttribute("data-title");
       }
-      t += " | " + ht
+      t += " | " + ht;
     }
     document.title = t;
   }
@@ -1679,7 +1679,7 @@ var Flowtime = (function ()
                         isLoopable       : _isLoopable,
                         clickerMode      : _clickerMode,
                         isAutoplay       : _isAutoplay
-                      }
+                      };
       Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT, eventData);
       //
       if (_navigationCallback !== undefined) {
@@ -1786,7 +1786,7 @@ var Flowtime = (function ()
             var pxPage = pxSection[ii];
             if (pxPage != undefined) {
               for (var iii = 0; iii < pxPage.length; iii++) {
-                var pxElement = pxPage[iii]
+                var pxElement = pxPage[iii];
                 var pX = 0;
                 var pY = 0;
                 // sections
@@ -1851,7 +1851,7 @@ var Flowtime = (function ()
         pDiv.className = SECTION_THUMB_CLASS;
         Brav1Toolbox.addClass(pDiv, "thumb-section-" + i);
       // loop through pages
-      var spArray = NavigationMatrix.getPages(i)
+      var spArray = NavigationMatrix.getPages(i);
       for (var ii = 0; ii < spArray.length; ii++) {
         var spDiv = document.createElement("div");
           spDiv.className = PAGE_THUMB_CLASS;
@@ -1859,9 +1859,9 @@ var Flowtime = (function ()
           spDiv.setAttribute("data-page", "__" + ii);
           Brav1Toolbox.addClass(spDiv, "thumb-page-" + ii);
           pDiv.appendChild(spDiv);
-      };
+      }
       defaultProgress.appendChild(pDiv);
-    };
+    }
     body.appendChild(defaultProgress);
     updateProgress();
   }
@@ -1982,7 +1982,7 @@ var Flowtime = (function ()
   function overviewZoomTypeB(out) {
     // ftContainer scale alternative version
     if (out) {
-      var scale = overviewFixedScaleFactor // Math.min(scaleX, scaleY) * 0.9;
+      var scale = overviewFixedScaleFactor; // Math.min(scaleX, scaleY) * 0.9;
       var pIndex = NavigationMatrix.getPageIndex();
       //
       if (_crossDirection === true) {
@@ -2117,7 +2117,7 @@ var Flowtime = (function ()
    */
   function _autoplay(status, delay, autostart, skipFragments) {
     autoplayDelay = isNaN(parseInt(delay)) ? autoplayDelay : delay;
-    autoplaySkipFragments = skipFragments === true || false
+    autoplaySkipFragments = skipFragments === true || false;
     if (status == true && autostart !== false) {
       _play();
     }
