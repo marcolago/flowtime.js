@@ -78,7 +78,7 @@ var Flowtime = (function ()
   var _parallaxInPx = false;                                                             // if false the parallax movement is calulated in % values, if true in pixels
   var _defaultParallaxX = 50;                                                            // the default parallax horizontal value used when no data-parallax value were specified
   var _defaultParallaxY = 50;                                                            // the default parallax vertical value used when no data-parallax value were specified
-  var _parallaxEnabled = document.querySelector(".parallax") != null;                    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
+  var _parallaxEnabled = document.querySelector(".parallax") !== null;                    // performance tweak, if there is no elements with .parallax class disable the dom manipulation to boost performances
   var _mouseDragEnabled = false;                                                         // in enabled is possible to drag the presentation with the mouse pointer
   var _isScrollActive = true;                                                            // flags to enable or disable javascript input listeners for the navigation
   var _isScrollable = true;                                                             
@@ -93,7 +93,6 @@ var Flowtime = (function ()
   var _transitionPaused = false;
   var _transitionTime = 500;                                                             // the page transition in milliseconds (keep in sync with the CSS transition value)
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);       // flag to set the cross direction layout and logic
-  var _navigationCallback = undefined;
   var _transformProperty = Brav1Toolbox.getPrefixed("transform");
   var _supportsTransform = Brav1Toolbox.testCSS("transform");
   var _toSectionsFromPages = true;                                                       // if false prevents the previous page and next page commands from navigating to previous and next sections
@@ -159,7 +158,7 @@ var Flowtime = (function ()
 
   window.onload = function() {
     NavigationMatrix.updateOffsets();
-  }
+  };
 
 /*
   ##    ##    ###    ##     ## ####  ######      ###    ######## ####  #######  ##    ## ##     ##    ###    ######## ########  #### ##     ##
@@ -246,7 +245,7 @@ var Flowtime = (function ()
           // set data-title attributes to pages that doesn't have one and have at least an h1 heading element inside
           if (!_sp.getAttribute("data-title")) {
             var heading = _sp.querySelector("h1");
-            if (heading != null && heading.textContent.lenght != "") {
+            if (heading !== null && heading.textContent.lenght !== "") {
               _sp.setAttribute("data-title", heading.textContent);
             }
           }
@@ -273,10 +272,10 @@ var Flowtime = (function ()
      */
     function setParallax(page, sectionIndex, pageIndex) {
       if (_parallaxEnabled) {
-        if (parallaxElements[sectionIndex] == undefined) {
+        if (parallaxElements[sectionIndex] === undefined) {
           parallaxElements[sectionIndex] = [];
         }
-        if (parallaxElements[sectionIndex][pageIndex] == undefined) {
+        if (parallaxElements[sectionIndex][pageIndex] === undefined) {
           parallaxElements[sectionIndex][pageIndex] = [];
         }
         //
@@ -286,7 +285,7 @@ var Flowtime = (function ()
             var el = pxs[i];
             var pX = _defaultParallaxX;
             var pY = _defaultParallaxY;
-            if (el.getAttribute("data-parallax") != null) {
+            if (el.getAttribute("data-parallax") !== null) {
               var pValues = el.getAttribute("data-parallax").split(",");
               pX = pY = pValues[0];
               if (pValues.length > 1) {
@@ -360,7 +359,7 @@ var Flowtime = (function ()
           sub = sp;
         }
         var pTemp = Math.min(p + 1, sectionsArray.length - 1);
-        if (_isLoopable == true && pTemp === p) {
+        if (_isLoopable === true && pTemp === p) {
           p = 0;
         } else {
           p = pTemp;
@@ -393,7 +392,6 @@ var Flowtime = (function ()
       if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && _isOverview === false) {
         _hideFragment(p, sp);
       } else {
-        var sub = 0;
         sub = 0;
         if (toTop === true && p - 1 >= 0) {
           sub = 0;
@@ -489,13 +487,13 @@ var Flowtime = (function ()
       if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump !== true && _isOverview === false) {
         _hideFragment(p, sp);
       } else {
-        if (sp == 0) {
+        if (sp === 0) {
           if (_toSectionsFromPages === false) {
             return false;
-          } else if (sectionsArray[p - 1] != undefined) {
+          } else if (sectionsArray[p - 1] !== undefined) {
             p -= 1;
             sp = _backFromPageToTop === true ? 0 : sectionsArray[p].length - 1;
-          } else if (sectionsArray[p - 1] == undefined && _isLoopable === true) {
+          } else if (sectionsArray[p - 1] === undefined && _isLoopable === true) {
             p = sectionsArray.length - 1;
             sp = _backFromPageToTop === true ? 0 : sectionsArray[p].length - 1;
           }
@@ -513,7 +511,7 @@ var Flowtime = (function ()
      * @param d HTMLElement the candidate destination
      */
     function hiliteOrNavigate(d) {
-      if (_isOverview == true) {
+      if (_isOverview === true) {
         _switchActivePage(d);
         return;
       } else {
@@ -530,7 +528,7 @@ var Flowtime = (function ()
      * @param f Number  the fragment index (optional)
      */
     function _showFragment(fp, fsp, f) {
-      if (f != undefined) {
+      if (f !== undefined) {
         fr[fp][fsp] = f;
       }
       else {
@@ -552,7 +550,7 @@ var Flowtime = (function ()
      * @param f Number  the fragment index (optional)
      */
     function _hideFragment(fp, fsp, f) {
-      if (f != undefined) {
+      if (f !== undefined) {
         fr[fp][fsp] = f;
       } else {
         f = fr[fp][fsp];
@@ -605,7 +603,7 @@ var Flowtime = (function ()
             if (ip > p)
             {
               // previous section
-              for (var f = frsp.length - 1; f >= 0; f--)
+              for (f = frsp.length - 1; f >= 0; f--)
               {
                 _hideFragment(ip, isp, f);
               }
@@ -613,7 +611,7 @@ var Flowtime = (function ()
             else if (ip < p)
             {
               // next section
-              for (var f = 0; f < frsp.length; f++)
+              for (f = 0; f < frsp.length; f++)
               {
                 _showFragment(ip, isp, f);
               }
@@ -624,7 +622,7 @@ var Flowtime = (function ()
               if (isp > sp)
               {
                 // previous page
-                for (var f = frsp.length - 1; f >= 0; f--)
+                for (f = frsp.length - 1; f >= 0; f--)
                 {
                   _hideFragment(ip, isp, f);
                 }
@@ -632,7 +630,7 @@ var Flowtime = (function ()
               else if (isp < sp)
               {
                 // next page
-                for (var f = 0; f < frsp.length; f++)
+                for (f = 0; f < frsp.length; f++)
                 {
                   _showFragment(ip, isp, f);
                 }
@@ -640,23 +638,23 @@ var Flowtime = (function ()
               else if (isp == sp)
               {
                 // same page
-                if (_fragmentsOnBack == true && (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page))
+                if (_fragmentsOnBack === true && (pastIndex.section > NavigationMatrix.getPageIndex().section || pastIndex.page > NavigationMatrix.getPageIndex().page))
                 {
-                  for (var f = 0; f < frsp.length; f++)
+                  for (f = 0; f < frsp.length; f++)
                   {
                     _showFragment(ip, isp, f);
                   }
                 }
                 else
                 {
-                  for (var f = frsp.length - 1; f >= 0; f--)
+                  for (f = frsp.length - 1; f >= 0; f--)
                   {
                     _hideFragment(ip, isp, f);
                   }
                 }
-                if (_fragmentsOnBack == false)
+                if (_fragmentsOnBack === false)
                 {
-                  fr[ip][isp] = -1
+                  fr[ip][isp] = -1;
                 }
                 else
                 {
@@ -666,7 +664,7 @@ var Flowtime = (function ()
                   }
                   else
                   {
-                    fr[ip][isp] = -1
+                    fr[ip][isp] = -1;
                   }
                 }
               }
@@ -751,7 +749,7 @@ var Flowtime = (function ()
     function _getPageIndex(d) {
       var pIndex = p;
       var spIndex = sp;
-      if (d != undefined) {
+      if (d !== undefined) {
         pIndex = d.parentNode.index; //parseInt(d.parentNode.getAttribute("data-prog").replace(/__/, "")) - 1;
         spIndex = d.index; //parseInt(d.getAttribute("data-prog").replace(/__/, "")) - 1;
       }
@@ -895,7 +893,7 @@ var Flowtime = (function ()
      * get a progress value calculated on the total number of pages
      */
     function _getProgress() {
-      if (p == 0 && sp == 0) {
+      if (p === 0 && sp === 0) {
         return 0;
       }
       var c = 0;
@@ -963,7 +961,7 @@ var Flowtime = (function ()
           //
           if (spa !== d) {
             Brav1Toolbox.removeClass(spa, "hilite");
-            if (_isOverview == false && spa !== _getCurrentPage()) {
+            if (_isOverview === false && spa !== _getCurrentPage()) {
               Brav1Toolbox.removeClass(spa, "actual");
             }
             if (i < sIndex) {
@@ -1038,7 +1036,7 @@ var Flowtime = (function ()
       hasPrevPage: _hasPrevPage,
       updateOffsets: _updateOffsets,
       getParallaxElements: _getParallaxElements
-    }
+    };
   })();
 
 /*
@@ -1084,13 +1082,13 @@ var Flowtime = (function ()
       }
       // pages in oveview mode
       if (_isOverview) {
-        var dest = e.target;
-        while (dest && !Brav1Toolbox.hasClass(dest, PAGE_CLASS)) {
-          dest = dest.parentNode;
+        var target = e.target;
+        while (target && !Brav1Toolbox.hasClass(target, PAGE_CLASS)) {
+          target = target.parentNode;
         }
-        if (Brav1Toolbox.hasClass(dest, PAGE_CLASS)) {
+        if (Brav1Toolbox.hasClass(target, PAGE_CLASS)) {
           e.preventDefault();
-          navigateTo(dest, null, true);
+          navigateTo(target, null, true);
         }
       }
       // thumbs in the default progress indicator
@@ -1108,7 +1106,7 @@ var Flowtime = (function ()
    * uses native history API to manage navigation
    * but uses the # for client side navigation on return
    */
-  if (useHash == false && window.history.pushState) {
+  if (useHash === false && window.history.pushState) {
     window.onpopstate = onPopState;
   }
   else {
@@ -1329,7 +1327,7 @@ var Flowtime = (function ()
   }
 
   function checkIfScrollable(element) {
-    var isScrollable = false
+    var isScrollable = false;
     var el = element;
     while (el.className && el.className.indexOf("ft-page") < 0) {
       if (el.scrollHeight > el.clientHeight - 1) {
@@ -1363,7 +1361,7 @@ var Flowtime = (function ()
     _isScrolling = true;
     disableMomentumScroll();
     //
-    if (e.deltaY == 0) {
+    if (e.deltaY === 0) {
       if (e.deltaX > 0) {
         if (_crossDirection === true) {
           _nextPage();
@@ -1431,7 +1429,7 @@ var Flowtime = (function ()
     return {
       enable: _enable,
       disable: _disable
-    }
+    };
   })();
 
 /*
@@ -1455,10 +1453,11 @@ var Flowtime = (function ()
         var dataProgSection = document.querySelectorAll(SECTION_SELECTOR + "[data-prog=__" + aHash[0] + "]");
         var dataIdSection = document.querySelectorAll(SECTION_SELECTOR + "[data-id=__" + aHash[0] + "]");
         var ps = dataProgSection.length > 0 ? dataProgSection : dataIdSection;
-        if (ps != null) {
+        var sp = null;
+        var p = null;
+        if (ps !== null) {
           for (var i = 0; i < ps.length; i++) {
-            var p = ps[i];
-            var sp = null;
+            p = ps[i];
             if (aHash.length > 1) {
               sp = p.querySelector(PAGE_SELECTOR + "[data-prog=__" + aHash[1] + "]") || p.querySelector(PAGE_SELECTOR + "[data-id=__" + aHash[1] + "]");
             }
@@ -1466,7 +1465,7 @@ var Flowtime = (function ()
               break;
             }
           }
-          if (sp == null && p) {
+          if (sp === null && p) {
             sp = p.querySelector(PAGE_SELECTOR);
           }
         }
@@ -1508,16 +1507,16 @@ var Flowtime = (function ()
   function setTitle(h) {
     var t = siteName;
     var ht = NavigationMatrix.getCurrentPage().getAttribute("data-title");
-    if (ht == null) {
+    if (ht === null) {
       var hs = h.split("/");
       for (var i = 0; i < hs.length; i++) {
         t += " | " + hs[i];
       }
     } else {
-      if (NavigationMatrix.getCurrentSection().getAttribute("data-title") != null) {
+      if (NavigationMatrix.getCurrentSection().getAttribute("data-title") !== null) {
         t += " | " + NavigationMatrix.getCurrentSection().getAttribute("data-title");
       }
-      t += " | " + ht
+      t += " | " + ht;
     }
     document.title = t;
   }
@@ -1531,9 +1530,9 @@ var Flowtime = (function ()
     var tempId = d.getAttribute("data-id");
     var tempProg = d.getAttribute("data-prog");
     var ret = "";
-    if (tempId != null) {
+    if (tempId !== null) {
       ret = tempId.replace(/__/, "");
-    } else if (tempProg != null) {
+    } else if (tempProg !== null) {
       ret = tempProg.replace(/__/, "");
     }
     return ret;
@@ -1581,10 +1580,10 @@ var Flowtime = (function ()
    * @param withTransitions Boolean if false disables the transition during the current navigation, then reset the transitions
    */
   function navigateTo(dest, push, linked, withTransitions) {
-    push = push == false ? push : true;
+    push = push === false ? push : true;
     // if dest doesn't exist then go to homepage
     if (!dest) {
-      if (NavigationMatrix.getCurrentPage() != null) {
+      if (NavigationMatrix.getCurrentPage() !== null) {
         dest = NavigationMatrix.getCurrentPage();
       } else {
         dest = document.querySelector(PAGE_SELECTOR);
@@ -1615,7 +1614,7 @@ var Flowtime = (function ()
     // set history properties
     var pageIndex = NavigationMatrix.getPageIndex(dest);
     if (pastIndex.section != pageIndex.section || pastIndex.page != pageIndex.page) {
-      if (pushHistory != null && push != false && NavigationMatrix.getCurrentFragmentIndex() == -1) {
+      if (pushHistory !== null && push !== false && NavigationMatrix.getCurrentFragmentIndex() === -1) {
         var stateObj = { token: h };
         var nextHash = "#/" + h;
         currentHash = nextHash;
@@ -1679,7 +1678,7 @@ var Flowtime = (function ()
                         isLoopable       : _isLoopable,
                         clickerMode      : _clickerMode,
                         isAutoplay       : _isAutoplay
-                      }
+                      };
       Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT, eventData);
       //
       if (_navigationCallback !== undefined) {
@@ -1781,12 +1780,12 @@ var Flowtime = (function ()
       var pxElements = NavigationMatrix.getParallaxElements();
       for (var i = 0; i < pxElements.length; i++) {
         var pxSection = pxElements[i];
-        if (pxSection != undefined) {
+        if (pxSection !== undefined) {
           for (var ii = 0; ii < pxSection.length; ii++) {
             var pxPage = pxSection[ii];
-            if (pxPage != undefined) {
+            if (pxPage !== undefined) {
               for (var iii = 0; iii < pxPage.length; iii++) {
-                var pxElement = pxPage[iii]
+                var pxElement = pxPage[iii];
                 var pX = 0;
                 var pY = 0;
                 // sections
@@ -1832,7 +1831,6 @@ var Flowtime = (function ()
   ##        ##    ##  ##     ## ##    ##  ##    ##  ##       ##    ## ##    ##
   ##        ##     ##  #######   ######   ##     ## ########  ######   ######
 */
-  var defaultProgress = null;
   var progressFill = null;
 
   function buildProgressIndicator() {
@@ -1851,7 +1849,7 @@ var Flowtime = (function ()
         pDiv.className = SECTION_THUMB_CLASS;
         Brav1Toolbox.addClass(pDiv, "thumb-section-" + i);
       // loop through pages
-      var spArray = NavigationMatrix.getPages(i)
+      var spArray = NavigationMatrix.getPages(i);
       for (var ii = 0; ii < spArray.length; ii++) {
         var spDiv = document.createElement("div");
           spDiv.className = PAGE_THUMB_CLASS;
@@ -1859,22 +1857,22 @@ var Flowtime = (function ()
           spDiv.setAttribute("data-page", "__" + ii);
           Brav1Toolbox.addClass(spDiv, "thumb-page-" + ii);
           pDiv.appendChild(spDiv);
-      };
+      }
       defaultProgress.appendChild(pDiv);
-    };
+    }
     body.appendChild(defaultProgress);
     updateProgress();
   }
 
   function hideProgressIndicator() {
-    if (defaultProgress != null) {
+    if (defaultProgress !== null) {
       body.removeChild(defaultProgress);
       defaultProgress = null;
     }
   }
 
   function updateProgress() {
-    if (defaultProgress != null) {
+    if (defaultProgress !== null) {
       var spts = defaultProgress.querySelectorAll(PAGE_THUMB_SELECTOR);
       for (var i = 0; i < spts.length; i++) {
         var spt = spts[i];
@@ -1935,8 +1933,8 @@ var Flowtime = (function ()
     Brav1Toolbox.removeClass(body, "ft-overview");
     NavigationMatrix.hideFragments();
     navigate = navigate === false ? false : true;
-    if (navigate == true) {
-      if (back == true) {
+    if (navigate === true) {
+      if (back === true) {
         navigateTo(overviewCachedDest);
       } else {
         navigateTo();
@@ -1952,7 +1950,7 @@ var Flowtime = (function ()
     Brav1Toolbox.addClass(body, "ft-overview");
     NavigationMatrix.showFragments();
     //
-    if (_useOverviewVariant == false) {
+    if (_useOverviewVariant === false) {
       overviewZoomTypeA(true);
     } else {
       overviewZoomTypeB(true);
@@ -1963,15 +1961,16 @@ var Flowtime = (function ()
   function overviewZoomTypeA(out) {
     // ftContainer scale version
     if (out) {
+      var scaleX, scaleY;
       if (_crossDirection === true) {
-        var scaleY = 100 / NavigationMatrix.getSectionsLength();
-        var scaleX = 100 / NavigationMatrix.getPagesLength();
+        scaleY = 100 / NavigationMatrix.getSectionsLength();
+        scaleX = 100 / NavigationMatrix.getPagesLength();
       } else {
-        var scaleX = 100 / NavigationMatrix.getSectionsLength();
-        var scaleY = 100 / NavigationMatrix.getPagesLength();
+        scaleX = 100 / NavigationMatrix.getSectionsLength();
+        scaleY = 100 / NavigationMatrix.getPagesLength();
       }
       //
-      var scale = Math.min(scaleX, scaleY) * 0.9;
+      scale = Math.min(scaleX, scaleY) * 0.9;
       var offsetX = (100 - NavigationMatrix.getSectionsLength() * scale) / 2;
       var offsetY = (100 - NavigationMatrix.getPagesLength() * scale) / 2;
       //
@@ -1982,15 +1981,16 @@ var Flowtime = (function ()
   function overviewZoomTypeB(out) {
     // ftContainer scale alternative version
     if (out) {
-      var scale = overviewFixedScaleFactor // Math.min(scaleX, scaleY) * 0.9;
+      scale = overviewFixedScaleFactor; // Math.min(scaleX, scaleY) * 0.9;
       var pIndex = NavigationMatrix.getPageIndex();
       //
+      var offsetY, offsetX;
       if (_crossDirection === true) {
-        var offsetY = 50 - (scale * pIndex.section) - (scale / 2);
-        var offsetX = 50 - (scale * pIndex.page) - (scale / 2);
+        offsetY = 50 - (scale * pIndex.section) - (scale / 2);
+        offsetX = 50 - (scale * pIndex.page) - (scale / 2);
       } else {
-        var offsetX = 50 - (scale * pIndex.section) - (scale / 2);
-        var offsetY = 50 - (scale * pIndex.page) - (scale / 2);
+        offsetX = 50 - (scale * pIndex.section) - (scale / 2);
+        offsetY = 50 - (scale * pIndex.page) - (scale / 2);
       }
       //
       ftContainer.style[_transformProperty] = "translate(" + offsetX + "%, " + offsetY + "%) scale(" + scale/100 + ", " + scale/100 + ")";
@@ -2117,8 +2117,8 @@ var Flowtime = (function ()
    */
   function _autoplay(status, delay, autostart, skipFragments) {
     autoplayDelay = isNaN(parseInt(delay)) ? autoplayDelay : delay;
-    autoplaySkipFragments = skipFragments === true || false
-    if (status == true && autostart !== false) {
+    autoplaySkipFragments = skipFragments === true || false;
+    if (status === true && autostart !== false) {
       _play();
     }
   }
@@ -2164,7 +2164,7 @@ var Flowtime = (function ()
    */
   function _start() {
     // init and configuration
-    if (_showProgress && defaultProgress == null) {
+    if (_showProgress && defaultProgress === null) {
       buildProgressIndicator();
     }
     // start navigation
@@ -2206,12 +2206,12 @@ var Flowtime = (function ()
    * @param top Boolean if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
    */
   function _nextSection(top, alternate) {
-    top = top != undefined ? top : _gridNavigation;
+    top = top !== undefined ? top : _gridNavigation;
     if (alternate === true) {
       top = !_gridNavigation;
     }
     var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide);
-    if (d != undefined) {
+    if (d !== undefined) {
       navigateTo(d);
     } else {
       if (_isOverview && _useOverviewVariant) {
@@ -2225,12 +2225,12 @@ var Flowtime = (function ()
    *
    */
   function _prevSection(top, alternate) {
-    top = top != undefined ? top : _gridNavigation;
+    top = top !== undefined ? top : _gridNavigation;
     if (alternate === true) {
       top = !_gridNavigation;
     }
     var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide);
-    if (d != undefined) {
+    if (d !== undefined) {
       navigateTo(d);
     } else {
       if (_isOverview && _useOverviewVariant) {
@@ -2247,7 +2247,7 @@ var Flowtime = (function ()
     if (d === false) {
       return;
     }
-    if (d != undefined) {
+    if (d !== undefined) {
       navigateTo(d);
     } else {
       if (_isOverview && _useOverviewVariant) {
@@ -2264,7 +2264,7 @@ var Flowtime = (function ()
     if (d === false) {
       return;
     }
-    if (d != undefined) {
+    if (d !== undefined) {
       navigateTo(d);
     } else {
       if (_isOverview && _useOverviewVariant) {
@@ -2283,27 +2283,28 @@ var Flowtime = (function ()
   function _gotoPage() {
     var args = _gotoPage.arguments;
     if (args.length > 0) {
+      var spd = null;
       if (args.length == 1) {
         if (Brav1Toolbox.typeOf(args[0]) === "Object") {
           var o = args[0];
           var p = o.section;
           var sp = o.page;
-          if (p != null && p != undefined) {
+          if (p !== null && p !== undefined) {
             var pd = document.querySelector(SECTION_SELECTOR + "[data-id=" + safeAttr(p) + "]");
-            if (sp != null && sp != undefined) {
-              var spd = pd.querySelector(PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
-              if (spd != null) {
+            if (sp !== null && sp !== undefined) {
+              spd = pd.querySelector(PAGE_SELECTOR + "[data-id=" + safeAttr(sp) + "]");
+              if (spd !== null) {
                 navigateTo(spd);
                 return;
               }
             }
           }
-        } else if (args[0].nodeName != undefined) {
+        } else if (args[0].nodeName !== undefined) {
           navigateTo(args[0], null, true);
         }
       }
       if (Brav1Toolbox.typeOf(args[0]) === "Number" || args[0] === 0) {
-        var spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
+        spd = NavigationMatrix.getPageByIndex(args[1], args[0]);
         navigateTo(spd);
         return;
       }
@@ -2387,12 +2388,12 @@ var Flowtime = (function ()
   function _setShowProgress(v) {
     _showProgress = v === true ? true : false;
     if (_showProgress) {
-      if (defaultProgress == null) {
+      if (defaultProgress === null) {
         buildProgressIndicator();
       }
       updateProgress();
     } else {
-      if (defaultProgress != null) {
+      if (defaultProgress !== null) {
         hideProgressIndicator();
       }
     }
@@ -2400,7 +2401,7 @@ var Flowtime = (function ()
 
   function _setDefaultParallaxValues(x, y) {
     _defaultParallaxX = x;
-    _defaultParallaxY = y == undefined ? _defaultParallaxX : y;
+    _defaultParallaxY = y === undefined ? _defaultParallaxX : y;
     NavigationMatrix.update();
   }
 
