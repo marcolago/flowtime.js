@@ -93,7 +93,6 @@ var Flowtime = (function ()
   var _transitionPaused = false;
   var _transitionTime = 500;                                                             // the page transition in milliseconds (keep in sync with the CSS transition value)
   var _crossDirection = Brav1Toolbox.hasClass(ftContainer, CROSS_DIRECTION_CLASS);       // flag to set the cross direction layout and logic
-  var _navigationCallback = undefined;
   var _transformProperty = Brav1Toolbox.getPrefixed("transform");
   var _supportsTransform = Brav1Toolbox.testCSS("transform");
   var _toSectionsFromPages = true;                                                       // if false prevents the previous page and next page commands from navigating to previous and next sections
