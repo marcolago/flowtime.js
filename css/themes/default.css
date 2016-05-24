@@ -356,6 +356,10 @@ body {
 	text-align: left;
 }
 
+.flowtime .stacked-center img {
+	display: inline-block;
+}
+
 /* media queries */
 
 @media screen and (min-height: 41em) and (min-width: 80em)
