@@ -10,3 +10,4 @@ js/brav1toolbox.min.js
 *.sublime-project
 *.sublime-workspace
 *.dev.*
+flows/

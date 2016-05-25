@@ -10,7 +10,7 @@ insert_final_newline = true
 
 # Set default charset
 # 2 space indentation
-[*.{js,json}]
+[*.{js,json,css}]
 charset = utf-8
 indent_style = space
 indent_size = 2
