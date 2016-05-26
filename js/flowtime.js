@@ -114,8 +114,8 @@ var Flowtime = (function ()
   var _sectionsMaxPageDepth = 0;
   var _sectionsLastPageDepth = 0;
   var _showErrors = false;
-  
-  var _navigationCallback;
+
+  var _navigationCallback = null;
 
 
   /**
@@ -1683,7 +1683,7 @@ var Flowtime = (function ()
                       };
       Brav1Toolbox.dispatchEvent(NAVIGATION_EVENT, eventData);
       //
-      if (_navigationCallback !== undefined) {
+      if (_navigationCallback !== null) {
         _navigationCallback(eventData);
       }
     } else {
