@@ -114,6 +114,8 @@ var Flowtime = (function ()
   var _sectionsMaxPageDepth = 0;
   var _sectionsLastPageDepth = 0;
   var _showErrors = false;
+  
+  var _navigationCallback;
 
 
   /**
