@@ -2208,7 +2208,7 @@ var Flowtime = (function ()
    * @param top Boolean if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
    */
   function _nextSection(top, alternate) {
-    top = top !== undefined ? top : _gridNavigation;
+    top = top !== null ? top : _gridNavigation;
     if (alternate === true) {
       top = !_gridNavigation;
     }
@@ -2227,7 +2227,7 @@ var Flowtime = (function ()
    *
    */
   function _prevSection(top, alternate) {
-    top = top !== undefined ? top : _gridNavigation;
+    top = top !== null ? top : _gridNavigation;
     if (alternate === true) {
       top = !_gridNavigation;
     }
