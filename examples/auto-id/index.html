@@ -135,14 +135,14 @@
     addLink.addEventListener("click", onAdd);
     function onAdd(e) {
       console.log(e.nextSection);
-      if (e.nextSection === false) {
+      if (e.nextSection !== true) {
         addLink.removeEventListener("click", onAdd);
 
         Flowtime.disableNavigation();
         setTimeout(function() {
           var sectionHTML = '<div class="ft-section"><div class="ft-page"><h1>Section NEW ' + newSectionCounter + ' - Page 1</h1><p>Overall Page NEW 1.</p></div><div class="ft-page" data-id="new page"><h1> Section NEW - Page 2</h1><p>Overall Page NEW 2.</p></div></div>';
           newSectionCounter += 1;
-          document.querySelector(".flowtime").insertAdjacentHTML('beforeend', sectionHTML);
+          document.querySelector(".flowtime").insertAdjacentHTML('afterbegin', sectionHTML);
           
           Flowtime.updateNavigation();
           setTimeout(function() {
@@ -153,8 +153,6 @@
         }, 1000);
       }
     }
-
-    Flowtime.onNavigation(onAdd);
 
     // starts the application with configuration options
     Flowtime.start();
