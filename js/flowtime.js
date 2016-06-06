@@ -209,11 +209,12 @@ var Flowtime = (function ()
       //
       for (var i = 0; i < sections.length; i++) {
         var pagesArray = [];
-        var section = sections[i];
         fragmentsArray[i] = [];
         fr[i] = [];
-        //
         sectionDataIdMax += 1;
+        //
+        // set data-id and data-prog attributes to sections to manage the navigation
+        var section = sections[i];
         if (section.getAttribute("data-id")) {
           section.setAttribute("data-id", "__" + unsafeAttr(section.getAttribute("data-id"))); // prevents attributes starting with a number
         } else {
@@ -225,38 +226,39 @@ var Flowtime = (function ()
           section.setAttribute("data-prog", "__" + sectionDataIdMax);
         }
         section.index = i;
-        section.setAttribute("id", "");
+        // remove the standard ID section.setAttribute("id", "");
         //
+        // set data-id and data-prog attributes to pages to manage the navigation
         pages = section.querySelectorAll(PAGE_SELECTOR);
         pagesTotalLength += pages.length;
         pagesLength = Math.max(pagesLength, pages.length); // sets the pages max number for overview purposes
         for (var ii = 0; ii < pages.length; ii++) {
-          var _sp = pages[ii];
-          if (_sp.getAttribute("data-id")) {
-            _sp.setAttribute("data-id", "__" + unsafeAttr(_sp.getAttribute("data-id"))); // prevents attributes starting with a number
+          var page = pages[ii];
+          if (page.getAttribute("data-id")) {
+            page.setAttribute("data-id", "__" + unsafeAttr(page.getAttribute("data-id"))); // prevents attributes starting with a number
           } else {
-            _sp.setAttribute("data-id", "__" + (ii + 1));
+            page.setAttribute("data-id", "__" + (ii + 1));
           }
-          if (_sp.getAttribute("data-prog")) {
-            _sp.setAttribute("data-prog", "__" + unsafeAttr(_sp.getAttribute("data-prog"))); // prevents attributes starting with a number
+          if (page.getAttribute("data-prog")) {
+            page.setAttribute("data-prog", "__" + unsafeAttr(page.getAttribute("data-prog"))); // prevents attributes starting with a number
           } else {
-            _sp.setAttribute("data-prog", "__" + (ii + 1));
+            page.setAttribute("data-prog", "__" + (ii + 1));
           }
-          _sp.index = ii;
-          _sp.setAttribute("id", "");
+          page.index = ii;
+          // remove the standard ID page.setAttribute("id", "");
           // set data-title attributes to pages that doesn't have one and have at least an h1 heading element inside
-          if (!_sp.getAttribute("data-title")) {
-            var heading = _sp.querySelector("h1");
+          if (!page.getAttribute("data-title")) {
+            var heading = page.querySelector("h1");
             if (heading !== null && heading.textContent.lenght !== "") {
-              _sp.setAttribute("data-title", heading.textContent);
+              page.setAttribute("data-title", heading.textContent);
             }
           }
           // store parallax data on elements
-          setParallax(_sp, i, ii);
+          setParallax(page, i, ii);
           //
-          pagesArray.push(_sp);
+          pagesArray.push(page);
           //
-          var subFragments = _sp.querySelectorAll(FRAGMENT_SELECTOR);
+          var subFragments = page.querySelectorAll(FRAGMENT_SELECTOR);
           fragmentsArray[i][ii] = subFragments;
           fr[i][ii] = -1;
         }
