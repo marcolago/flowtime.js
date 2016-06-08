@@ -85,6 +85,8 @@ var Flowtime = (function ()
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
+  var _sectionNavigation = true;
+  var _pageNavigation = true;
   var _isScrolling = false;
   var _momentumScrollTimeout = 0;
   var _momentumScrollDelay = 2000;
@@ -2210,16 +2212,18 @@ var Flowtime = (function ()
    * @param top Boolean if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
    */
   function _nextSection(top, alternate) {
-    top = top !== null ? top : _gridNavigation;
-    if (alternate === true) {
-      top = !_gridNavigation;
-    }
-    var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide);
-    if (d !== undefined) {
-      navigateTo(d);
-    } else {
-      if (_isOverview && _useOverviewVariant) {
-        zoomOut();
+    if (_sectionNavigation === true) {
+      top = top !== null ? top : _gridNavigation;
+      if (alternate === true) {
+        top = !_gridNavigation;
+      }
+      var d = NavigationMatrix.getNextSection(top, _fragmentsOnSide);
+      if (d !== undefined) {
+        navigateTo(d);
+      } else {
+        if (_isOverview && _useOverviewVariant) {
+          zoomOut();
+        }
       }
     }
   }
@@ -2229,16 +2233,18 @@ var Flowtime = (function ()
    *
    */
   function _prevSection(top, alternate) {
-    top = top !== null ? top : _gridNavigation;
-    if (alternate === true) {
-      top = !_gridNavigation;
-    }
-    var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide);
-    if (d !== undefined) {
-      navigateTo(d);
-    } else {
-      if (_isOverview && _useOverviewVariant) {
-        zoomOut();
+    if (_sectionNavigation === true) {
+      top = top !== null ? top : _gridNavigation;
+      if (alternate === true) {
+        top = !_gridNavigation;
+      }
+      var d = NavigationMatrix.getPrevSection(top, _fragmentsOnSide);
+      if (d !== undefined) {
+        navigateTo(d);
+      } else {
+        if (_isOverview && _useOverviewVariant) {
+          zoomOut();
+        }
       }
     }
   }
@@ -2247,15 +2253,17 @@ var Flowtime = (function ()
    * Public API to go to the next page
    */
   function _nextPage(jump) {
-    var d = NavigationMatrix.getNextPage(jump);
-    if (d === false) {
-      return;
-    }
-    if (d !== undefined) {
-      navigateTo(d);
-    } else {
-      if (_isOverview && _useOverviewVariant) {
-        zoomOut();
+    if (_pageNavigation === true) {
+      var d = NavigationMatrix.getNextPage(jump);
+      if (d === false) {
+        return;
+      }
+      if (d !== undefined) {
+        navigateTo(d);
+      } else {
+        if (_isOverview && _useOverviewVariant) {
+          zoomOut();
+        }
       }
     }
   }
@@ -2264,15 +2272,17 @@ var Flowtime = (function ()
    * Public API to go to the prev page
    */
   function _prevPage(jump) {
-    var d = NavigationMatrix.getPrevPage(jump);
-    if (d === false) {
-      return;
-    }
-    if (d !== undefined) {
-      navigateTo(d);
-    } else {
-      if (_isOverview && _useOverviewVariant) {
-        zoomOut();
+    if (_pageNavigation === true) {
+      var d = NavigationMatrix.getPrevPage(jump);
+      if (d === false) {
+        return;
+      }
+      if (d !== undefined) {
+        navigateTo(d);
+      } else {
+        if (_isOverview && _useOverviewVariant) {
+          zoomOut();
+        }
       }
     }
   }
@@ -2325,13 +2335,17 @@ var Flowtime = (function ()
   }
 
   function _gotoTop() {
-    var pageIndex = NavigationMatrix.getPageIndex();
-    _gotoPage(pageIndex.section, 0);
+    if (_pageNavigation === true) {
+      var pageIndex = NavigationMatrix.getPageIndex();
+      _gotoPage(pageIndex.section, 0);
+    }
   }
 
   function _gotoBottom() {
-    var pageIndex = NavigationMatrix.getPageIndex();
-    _gotoPage(pageIndex.section, NavigationMatrix.getPages(pageIndex.section).length - 1);
+    if (_pageNavigation === true) {
+      var pageIndex = NavigationMatrix.getPageIndex();
+      _gotoPage(pageIndex.section, NavigationMatrix.getPages(pageIndex.section).length - 1);
+    }
   }
 
   function _addEventListener(type, handler, useCapture) {
@@ -2441,6 +2455,22 @@ var Flowtime = (function ()
     _isKeyboardActive = keyboard === false ? true : false;
     _isScrollActive = scroll === false ? true : false;
     _isTouchActive = touch === false ? true : false;
+  }
+
+  function _enableSectionNavigation() {
+    _sectionNavigation = true;
+  }
+
+  function _disableSectionNavigation() {
+    _sectionNavigation = false;
+  }
+
+  function _enablePageNavigation() {
+    _pageNavigation = true;
+  }
+
+  function _disablePageNavigation() {
+    _pageNavigation = false;
   }
 
   function _setLinksNavigation(v) {
@@ -2578,6 +2608,10 @@ var Flowtime = (function ()
     mouseDragEnabled         : _setMouseDrag,
     enableNavigation         : _enableNavigation,
     disableNavigation        : _disableNavigation,
+    enableSectionNavigation  : _enableSectionNavigation,
+    disableSectionNavigation : _disableSectionNavigation,
+    enablePageNavigation     : _enablePageNavigation,
+    disablePageNavigation    : _disablePageNavigation,
     setLinksNavigation       : _setLinksNavigation,
     setKeyboardNavigation    : _setKeyboardNavigation,
     setScrollNavigation      : _setScrollNavigation,

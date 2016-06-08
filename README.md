@@ -566,13 +566,29 @@ Enables (`true`) or disables (`false`) the keyboard navigation logic. If you dis
 Flowtime.setScrollNavigation(Boolean enable);
 ```
 
-Enables (`true`) or disables (`false`) the links navigation logic. If you disable the links navigation you will not be able to change slide via mouse scrollwheel or trackpad scroll gestures.
+Enables (`true`) or disables (`false`) the scroll navigation logic. If you disable the scroll navigation you will not be able to change slide via mouse scrollwheel or trackpad scroll gestures.
 
 ```javascript
 Flowtime.setTouchNavigation(Boolean enable);
 ```
 
-Enables (`true`) or disables (`false`) the links navigation logic. If you disable the links navigation you will not be able to change slide via touch swipe gestures.
+Enables (`true`) or disables (`false`) the touch navigation logic. If you disable the touch navigation you will not be able to change slide via touch swipe gestures.
+
+```javascript
+Flowtime.enableSectionNavigation();
+Flowtime.disableSectionNavigation();
+```
+
+Enables or disables the section navigation for every kind of input.
+The section navigation is enabled by default.
+
+```javascript
+Flowtime.enablePageNavigation();
+Flowtime.disablePageNavigation();
+```
+
+Enables or disables the page navigation for every kind of input.
+The page navigation is enabled by default.
 
 ### Data API
 
