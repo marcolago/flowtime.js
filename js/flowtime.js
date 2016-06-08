@@ -85,8 +85,10 @@ var Flowtime = (function ()
   var _isKeyboardActive = true;
   var _isTouchActive = true;
   var _areLinksActive = true;
-  var _sectionNavigation = true;
-  var _pageNavigation = true;
+  var _sectionNavigationPrev = true;
+  var _sectionNavigationNext = true;
+  var _pageNavigationPrev = true;
+  var _pageNavigationNext = true;
   var _isScrolling = false;
   var _momentumScrollTimeout = 0;
   var _momentumScrollDelay = 2000;
@@ -2212,7 +2214,7 @@ var Flowtime = (function ()
    * @param top Boolean if true the next section will be the first page in the next array; if false the next section will be the same index page in the next array
    */
   function _nextSection(top, alternate) {
-    if (_sectionNavigation === true) {
+    if (_sectionNavigationNext === true) {
       top = top !== null ? top : _gridNavigation;
       if (alternate === true) {
         top = !_gridNavigation;
@@ -2233,7 +2235,7 @@ var Flowtime = (function ()
    *
    */
   function _prevSection(top, alternate) {
-    if (_sectionNavigation === true) {
+    if (_sectionNavigationPrev === true) {
       top = top !== null ? top : _gridNavigation;
       if (alternate === true) {
         top = !_gridNavigation;
@@ -2253,7 +2255,7 @@ var Flowtime = (function ()
    * Public API to go to the next page
    */
   function _nextPage(jump) {
-    if (_pageNavigation === true) {
+    if (_pageNavigationNext === true) {
       var d = NavigationMatrix.getNextPage(jump);
       if (d === false) {
         return;
@@ -2272,7 +2274,7 @@ var Flowtime = (function ()
    * Public API to go to the prev page
    */
   function _prevPage(jump) {
-    if (_pageNavigation === true) {
+    if (_pageNavigationPrev === true) {
       var d = NavigationMatrix.getPrevPage(jump);
       if (d === false) {
         return;
@@ -2335,14 +2337,14 @@ var Flowtime = (function ()
   }
 
   function _gotoTop() {
-    if (_pageNavigation === true) {
+    if (_pageNavigationPrev === true) {
       var pageIndex = NavigationMatrix.getPageIndex();
       _gotoPage(pageIndex.section, 0);
     }
   }
 
   function _gotoBottom() {
-    if (_pageNavigation === true) {
+    if (_pageNavigationNext === true) {
       var pageIndex = NavigationMatrix.getPageIndex();
       _gotoPage(pageIndex.section, NavigationMatrix.getPages(pageIndex.section).length - 1);
     }
@@ -2457,20 +2459,24 @@ var Flowtime = (function ()
     _isTouchActive = touch === false ? true : false;
   }
 
-  function _enableSectionNavigation() {
-    _sectionNavigation = true;
+  function _enableSectionNavigation(prev, next) {
+    _sectionNavigationPrev = prev === false ? false : true;
+    _sectionNavigationNext = next === false ? false : true;
   }
 
-  function _disableSectionNavigation() {
-    _sectionNavigation = false;
+  function _disableSectionNavigation(prev, next) {
+    _sectionNavigationPrev = prev === false ? true : false;
+    _sectionNavigationNext = next === false ? true : false;
   }
 
-  function _enablePageNavigation() {
-    _pageNavigation = true;
+  function _enablePageNavigation(prev, next) {
+    _pageNavigationPrev = prev === false ? false : true;
+    _pageNavigationNext = next === false ? false : true;
   }
 
-  function _disablePageNavigation() {
-    _pageNavigation = false;
+  function _disablePageNavigation(prev, next) {
+    _pageNavigationPrev = prev === false ? true : false;
+    _pageNavigationNext = next === false ? true : false;
   }
 
   function _setLinksNavigation(v) {
