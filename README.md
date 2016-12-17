@@ -151,7 +151,7 @@ If you want to use the alternate layout you have to add the class `ft-cross`to t
     </div>
 ```
 
-Every single page is a full window view-or a single slide if you prefer—and it’s a relative formatting context.
+Every single page is a full window view — or a single slide if you prefer — and it’s a relative formatting context.
 Even if you have only single slides ordered in a row you have to nest the pages in sections; take a look at this markup which creates two slides one aside the other:
 
 ```html
