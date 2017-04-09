@@ -100,6 +100,7 @@ var Flowtime = (function ()
   var _transformProperty = Brav1Toolbox.getPrefixed("transform");
   var _supportsTransform = Brav1Toolbox.testCSS("transform");
   var _toSectionsFromPages = true;                                                       // if false prevents the previous page and next page commands from navigating to previous and next sections
+  var _updateURL = true;                                                                 // if false the browser URL does not update when navigating
 
   var xGlobal = 0;
   var yGlobal = 0;
@@ -1622,7 +1623,7 @@ var Flowtime = (function ()
     // set history properties
     var pageIndex = NavigationMatrix.getPageIndex(dest);
     if (pastIndex.section != pageIndex.section || pastIndex.page != pageIndex.page) {
-      if (pushHistory !== null && push !== false && NavigationMatrix.getCurrentFragmentIndex() === -1) {
+      if (_updateURL === true && pushHistory !== null && push !== false && NavigationMatrix.getCurrentFragmentIndex() === -1) {
         var stateObj = { token: h };
         var nextHash = "#/" + h;
         currentHash = nextHash;
@@ -1633,7 +1634,7 @@ var Flowtime = (function ()
             console.log(error);
           }
         }
-      } else {
+      } else if (_updateURL === true) {
         document.location.hash = "/" + h;
       }
     }
@@ -2563,6 +2564,13 @@ var Flowtime = (function ()
     _toSectionsFromPages = v === false ? false : true;
   }
 
+  function _setUpdateURL(v) {
+    _updateURL = v === false ? false : true;
+    if (_updateURL === false) {
+      document.location.hash = "";
+    }
+  }
+
   /**
    * return object for public methods
    */
@@ -2593,6 +2601,7 @@ var Flowtime = (function ()
     showProgress             : _setShowProgress,
     defaultParallaxValues    : _setDefaultParallaxValues,
     parallaxInPx             : _setParallaxInPx,
+    updateURL                : _setUpdateURL,
 
     addEventListener         : _addEventListener,
     getDefaultProgress       : _getDefaultProgress,

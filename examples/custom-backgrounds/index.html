@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US" class="ie ie6 lt-ie9">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US" class="ie ie7 lt-ie9">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US" class="ie ie8 lt-ie9">
+<![endif]-->
+<!--[if gte IE 9]>
+<html lang="en-US" class="ie ie9">
+<![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="en-US" class="">
+<!--<![endif]-->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0 minimal-ui">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="author" content="marcolago">
+
+	<meta name="description" content="Flowtime.js is an open source framework for easily build HTML presentations or websites. It’s built with web standards in mind and on top of a solid full page grid layout powered by CSS3 hardware accelerated transition and comes with a complete set of Javascript API for deep customization.">
+
+	<title>Flowtime.js - Custom Backgrounds Demo</title>
+	<link rel="stylesheet" href="../../assets/css/reset.css">
+	<link rel="stylesheet" href="../../css/flowtime.css">
+	<link rel="stylesheet" href="../../css/themes/default.css">
+	<link rel="stylesheet" href="css/custom-backgrounds.css">
+	
+</head>
+<body class="">
+	
+	<div class="flowtime">
+		<div class="ft-section" data-id="section-1">
+			<div class="ft-page page-1">
+				<h1>Custom Backgrounds Demo</h1>
+				<p>This presentation is a test to show a different background on every page.</p>
+			</div>
+			<div class="ft-page page-2">
+				<h1>Ok. It Works!</h1>
+				<p>Just a P element.</a>.</p>
+			</div>
+		</div>
+		<div class="ft-section" data-id="section-2">
+			<div class="ft-page page-3">
+				<h1>Custom Backgrounds Demo Section 2</h1>
+				<p>Just another P element</p>
+			</div>
+			<div class="ft-page page-4">
+				<h1>Ok. It Works! Again!</h1>
+				<p>Ok, this is the last P element.</p>
+			</div>
+		</div>
+	</div>
+	
+	<script src="../../js/brav1toolbox.js"></script>
+	<script src="../../js/flowtime.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-1228618-10']);
+		_gaq.push(['_trackPageview']);
+		_gaq.push(['_trackEvent', 'Flowtime', 'Landing', document.title]);
+		(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+		//
+		//
+		// Configuration API test
+		Flowtime.showProgress(true);
+		// Flowtime.fragmentsOnSide(true);
+		// Flowtime.fragmentsOnBack(true);
+		// Flowtime.useHistory(false);
+		// Flowtime.slideInPx(true);
+		// Flowtime.sectionsSlideToTop(true);
+		// Flowtime.gridNavigation(false);
+		// Flowtime.useOverviewVariant(true);
+		// Flowtime.parallaxInPx(true);
+
+		// starts the application with configuration options
+		Flowtime.start();
+	</script>
+	
+	<script>
+	 // custom code here
+	</script>
+</body>
+</html>

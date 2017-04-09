@@ -1,0 +1,17 @@
+.ft-page {
+	background-position: center center;
+	background-size: cover;
+}
+
+.page-1 {
+	background-image: url(https://images.unsplash.com/photo-1469614369149-4f0c1468c331);
+}
+.page-2 {
+	background-image: url(https://images.unsplash.com/photo-1468259275383-c4f1b88d5772);
+}
+.page-3 {
+	background-image: url(https://images.unsplash.com/photo-1457419655743-2e0acc6b5122);
+}
+.page-4 {
+	background-image: url(https://images.unsplash.com/photo-1457200246108-d9d4abc27953);
+}

@@ -579,8 +579,8 @@ Flowtime.enableSectionNavigation(Boolean prev, Boolean next);
 Flowtime.disableSectionNavigation(Boolean prev, Boolean next);
 ```
 
-Enables or disables the section navigation for every kind of input.
-You can choose to enable or disable a single direction setting `prev` and `next` parameters.
+Enables or disables the section navigation for keyboard, scroll and touch inputs.  
+You can choose to enable or disable a single direction setting `prev` and `next` parameters.  
 The section navigation is enabled by default.
 
 ```javascript
@@ -588,8 +588,8 @@ Flowtime.enablePageNavigation(Boolean prev, Boolean next);
 Flowtime.disablePageNavigation(Boolean prev, Boolean next);
 ```
 
-Enables or disables the page navigation for every kind of input.
-You can choose to enable or disable a single direction setting `prev` and `next` parameters.
+Enables or disables the page navigation for keyboard, scroll and touch inputs.  
+You can choose to enable or disable a single direction setting `prev` and `next` parameters.  
 The page navigation is enabled by default.
 
 ### Data API
