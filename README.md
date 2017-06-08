@@ -33,7 +33,7 @@ SlideCaptain is developed by [Engawa](http://engawa.de/).
 - **May 20 2014**
     - Added new section navigation modifiers. See [Section Navigation Options](#section-navigation-options) for the updates.
 
-- **May 12 2013**
+- **May 12 2014**
     - Added the autoplay configuration functions and `start()`, `pause()` and `stop()` methods. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
     - Now the presentations is loopable both for page and section navigation. ([#18](https://github.com/marcolago/flowtime.js/issues/18))
 
