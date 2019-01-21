@@ -1,6 +1,6 @@
-![Flowtime.js](https://github.com/marcolago/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
+![Flowtime.js](https://github.com/libralibra/flowtime.js/blob/master/img/change1.PNG "Change")
 
-### This project is a fork of [Flowtime.js](http://marcolago.github.io/flowtime.js/).
+### This project is a fork of [Flowtime.js](https://github.com/marcolago/flowtime.js).
 
 Flowtime.js is a very impressive framework for building HTML-based presentations. I forked this project for making some changes:
 - add a title bar to show previous & next page title and link (actually this is from the original documentation, but the capability is not shown by default)
