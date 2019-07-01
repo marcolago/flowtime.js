@@ -70,7 +70,7 @@ Keyboard navigation is based on arrow keys with the Shift key as a modifier to j
 - **ESC**: toggles the overview mode.
 
 **Fragments Support**.
-It’s possibile to navigate fragments step by step in a page or jump directly to the next or previous page.
+It’s possible to navigate fragments step by step in a page or jump directly to the next or previous page.
 You can hide or show every single fragment with special behaviour managed and styled by CSS classes, and you can even nest fragments.
 
 **Overview Mode**.
@@ -246,7 +246,7 @@ Flowtime.js has a lot of useful **configuration APIs**, for customizing the expe
 Flowtime.start();
 ```
 
-Starts the application logic with custom options. Calling this method is optional (but highly reccommended) unless you change some configuration parameters.
+Starts the application logic with custom options. Calling this method is optional (but highly recommended) unless you change some configuration parameters.
 If you doesn’t call the `start()` method Flowtime.js starts itself but some configuration parameters will be applied only after the first navigation action.
 You can pass as optional parameters the same parameters that are accepted by the `gotoPage` method (see below) to let the presentation navigating to a specific page at start.
 
@@ -254,7 +254,7 @@ You can pass as optional parameters the same parameters that are accepted by the
 Flowtime.updateNavigation(Boolean fireEvent);
 ```
 
-Force the update of the navigation object which stores the data about every possibile destination in the site (the sub pages).
+Force the update of the navigation object which stores the data about every possible destination in the site (the sub pages).
 If you change the number of sub pages at runtime call this method after the DOM manipulation.
 When you update the navigation the `navigationevent` is fired. If you do not want to fire the event (or call the navigation callback) just pass `false` as a value.
 
@@ -314,7 +314,7 @@ If you only pass the `x` value the `y` value will be the same.
 Flowtime.parallaxInPx(Boolean usePx);
 ```
 
-Default `false`. By default all the parallax length are computed in % units. If true the lenght expressed in `defaultParallaxValues` and in `data-parallax` attributes will be computed in pixels.
+Default `false`. By default all the parallax length are computed in % units. If true the length expressed in `defaultParallaxValues` and in `data-parallax` attributes will be computed in pixels.
 
 ```javascript
 Flowtime.autoplay(Boolean status, [Number delay], [Boolean autostart], [Boolean skipFragments]);
