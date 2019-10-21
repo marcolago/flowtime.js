@@ -140,7 +140,7 @@ To better understand the markup take a look at this snippet:
     </div>
 ```
 
-If you want to use the alternate layout you have to add the class `ft-cross`to the Flowtime element and Flowtime.js takes care of the rest:
+If you want to use the alternate layout you have to add the class `ft-cross` to the Flowtime element and Flowtime.js takes care of the rest:
 
 ```html
     <div class="flowtime ft-cross">
@@ -203,7 +203,7 @@ To better understand the use of data attributes here it is an example:
 
 ### Fragments
 
-If you want to reveal single elements of a page just add the class `ft-fragment` on the elements you want to discover step by step. Here it is an example.
+If you want to reveal single elements of a page just add the class `ft-fragment` on the elements you want to discover step by step. Here is an example.
 
 ```html
     <div class="flowtime">
@@ -222,7 +222,7 @@ The `shy` class completely hides a fragment when it lose the focus; use: `<p cla
 
 ### Parallax
 
-If you want to enable the parallax effect on some elements add a `parallax` class to these elements and, optionally, sets the parallax distance value adding a `data-parallax` attribute specifying the `x` and `y` values separated by a comma. If you doesn˙t specify a `data-parallax` attribute will be used the default lengths.
+If you want to enable the parallax effect on some elements add a `parallax` class to these elements and, optionally, set the parallax distance value adding a `data-parallax` attribute specifying the `x` and `y` values separated by a comma. If you don't specify a `data-parallax` attribute the default lengths will be used.
 
 ```html
     <div class="flowtime">
@@ -266,8 +266,8 @@ Default `false`. Show the default progress when in page mode (the standard conte
 The default progress is a miniature of the structure placed in the lower left corner with the current page highlighted.
 Clicking on a page thumb in the default progress indicator triggers the navigation to that page.
 The default value is false, so if you wanto to show the progress you have to call `Flowtime.showProgress(true);` and then start the presentation.
-Calling this API during the navigation cause the progress to appear or disappear manipulating the DOM so watch out for performance issues.
-You are not limited to the default progress indicator. If you want to buil your own progress bar or another indicator with a custom logic you can listen for the navigation events and use the event properties (check out the event section).
+Calling this API during the navigation causes the progress to appear or disappear manipulating the DOM so watch out for performance issues.
+You are not limited to the default progress indicator. If you want to build your own progress bar or another indicator with a custom logic you can listen for the navigation events and use the event properties (check out the event section).
 
 ```javascript
 Flowtime.fragmentsOnSide(Boolean show);
@@ -763,7 +763,7 @@ The callback function receive the same navigation data object as the event handl
 ## Customizing and Styling Default Components and Behaviours
 
 As said before Flowtime.js comes with some default components like the two overview variants and a progress indicator.
-You can change the way this parts appears editing or overwriting some CSS properties.
+You can change the way these parts appears editing or overwriting some CSS properties.
 
 ### Calculating the Completion Percentage for Custom Visualization
 
@@ -778,7 +778,7 @@ In the `flowtimenavigation` event handler calculate the progress in % using this
 ```
 
 The first page of the first section **ever returns 0 as progress value**.
-`progress` and `total` values does not consider fragments.
+`progress` and `total` values do not consider fragments.
 
 ### Customize the Fragments Animation
 
