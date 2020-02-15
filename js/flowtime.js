@@ -358,7 +358,7 @@ var Flowtime = (function ()
       var sub = sp;
       //
       var toTop = _isOverview === true ? false : top;
-      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && io === false) {
+      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && _isOverview === false) {
         _showFragment(p, sp);
       } else {
         sub = 0;
