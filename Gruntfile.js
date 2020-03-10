@@ -58,5 +58,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-autoprefixer');
 
   // Default task
-  grunt.registerTask('default', ['concat', 'autoprefixer', 'uglify']);
+  grunt.registerTask('default', ['autoprefixer', 'concat', 'uglify']);
 };

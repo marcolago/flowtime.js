@@ -283,6 +283,12 @@ Flowtime.fragmentsOnBack(Boolean show);
 Default `true`. Shows or hide the fragments when navigating back from a section to a page with fragments inside.
 
 ```javascript
+Flowtime.fragmentsAlwaysOnOnceRevealed(Boolean show);
+```
+
+Default `false`. Keeps already revealed fragments always on when navigating back and forward. Works in both directions and with both `Flowtime.fragmentsOnSide` and `Flowtime.fragmentsOnBack`.
+
+```javascript
 Flowtime.useHistory(Boolean use);
 ```
 

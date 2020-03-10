@@ -153,18 +153,25 @@
             transform: translateZ(0);
   }
 
-  .ft-fragment.revealed.step {
+  .ft-fragment.revealed.step,
+  .ft-fragment.revealed-once.step {
     opacity: 0.3;
   }
 
-  .ft-fragment.revealed.shy {
+  .ft-fragment.revealed.shy,
+  .ft-fragment.revealed-once.shy {
     opacity: 0;
   }
 
   .ft-fragment.revealed,
   .ft-fragment.revealed-temp,
-  .ft-fragment.revealed.actual {
+  .ft-fragment.revealed.actual,
+  .ft-fragment.revealed-once {
     opacity: 1;
+  }
+
+  .ft-fragment.revealed-once {
+    opacity: 1 !important;
   }
 
 /* DEFAULT PROGRESS */

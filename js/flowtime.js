@@ -35,6 +35,7 @@ var Flowtime = (function ()
   var FRAGMENT_REVEALED_CLASS      = "revealed";
   var FRAGMENT_ACTUAL_CLASS        = "actual";
   var FRAGMENT_REVEALED_TEMP_CLASS = "revealed-temp";
+  var FRAGMENT_REVEALED_ONCE_CLASS = "revealed-once";
   var DEFAULT_PROGRESS_CLASS       = "ft-default-progress";
   var DEFAULT_PROGRESS_SELECTOR    = "." + DEFAULT_PROGRESS_CLASS;
   var SECTION_THUMB_CLASS          = "ft-section-thumb";
@@ -70,6 +71,7 @@ var Flowtime = (function ()
   var _useOverviewVariant = false;                                                       // use an alternate overview layout and navigation (experimental - useful in case of rendering issues)
   var _fragmentsOnSide = false;                                                          // enable or disable fragments navigation when navigating from sections
   var _fragmentsOnBack = true;                                                           // shows or hide fragments when navigating back to a page
+  var _fragmentsAlwaysOnOnceRevealed = false;                                            // keeps already revealed fragments always on when navigating back and forward
   var _slideInPx = false;                                                                // calculate the slide position in px instead of %, use in case the % mode does not works
   var _twoStepsSlide = false;                                                            // not yet implemented! slides up or down before, then slides to the page
   var _isLoopable = false;                 
@@ -358,8 +360,24 @@ var Flowtime = (function ()
       var sub = sp;
       //
       var toTop = _isOverview === true ? false : top;
-      if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && _isOverview === false) {
-        _showFragment(p, sp);
+
+      var onceRevealedCounter = undefined;
+      var theresFragment = fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && toTop !== true && _isOverview === false;
+      if (_fragmentsAlwaysOnOnceRevealed === true) {
+        onceRevealedCounter = 0;
+        for (var i = 0; i < fragmentsArray[p][sp].length; i++) {
+          if (fragmentsArray[p][sp][i].classList.contains(FRAGMENT_REVEALED_ONCE_CLASS) === true) {
+            onceRevealedCounter += 1;
+          }
+        }
+        if (onceRevealedCounter >= fragmentsArray[p][sp].length) {
+          theresFragment = false;
+        }
+      }
+
+
+      if (theresFragment) {
+        _showFragment(p, sp, onceRevealedCounter);
       } else {
         sub = 0;
         if (toTop === true && p + 1 <= sectionsArray.length - 1) {
@@ -399,7 +417,14 @@ var Flowtime = (function ()
       //
       var toTop = _isOverview === true ? false : top;
       if (fos === true && fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && toTop !== true && _isOverview === false) {
-        _hideFragment(p, sp);
+
+        if (fragmentsArray[p][sp][fr[p][sp]].classList.contains("revealed-once") === true) {
+          fr[p][sp] = -1;
+          _getPrevSection(top, fos);
+        } else {
+          _hideFragment(p, sp);
+        }
+
       } else {
         sub = 0;
         if (toTop === true && p - 1 >= 0) {
@@ -466,8 +491,22 @@ var Flowtime = (function ()
      * @param jump  Boolean if true jumps over the fragments directly to the next page
      */
     function _getNextPage(jump) {
-      if (fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump !== true && _isOverview === false) {
-        _showFragment(p, sp);
+      var onceRevealedCounter = undefined;
+      var theresFragment = fragmentsArray[p][sp].length > 0 && fr[p][sp] < fragmentsArray[p][sp].length - 1 && jump !== true && _isOverview === false;
+      if (_fragmentsAlwaysOnOnceRevealed === true) {
+        onceRevealedCounter = 0;
+        for (var i = 0; i < fragmentsArray[p][sp].length; i++) {
+          if (fragmentsArray[p][sp][i].classList.contains(FRAGMENT_REVEALED_ONCE_CLASS) === true) {
+            onceRevealedCounter += 1;
+          }
+        }
+        if (onceRevealedCounter >= fragmentsArray[p][sp].length) {
+          theresFragment = false;
+        }
+      }
+
+      if (theresFragment) {
+        _showFragment(p, sp, onceRevealedCounter);
       } else {
         if (sectionsArray[p][sp + 1] === undefined) {
           if (_toSectionsFromPages === false) {
@@ -494,7 +533,14 @@ var Flowtime = (function ()
      */
     function _getPrevPage(jump) {
       if (fragmentsArray[p][sp].length > 0 && fr[p][sp] >= 0 && jump !== true && _isOverview === false) {
-        _hideFragment(p, sp);
+
+        if (fragmentsArray[p][sp][fr[p][sp]].classList.contains("revealed-once") === true) {
+          fr[p][sp] = -1;
+          _getPrevPage(jump);
+        } else {
+          _hideFragment(p, sp);
+        }
+
       } else {
         if (sp === 0) {
           if (_toSectionsFromPages === false) {
@@ -543,11 +589,16 @@ var Flowtime = (function ()
       else {
         f = fr[fp][fsp] += 1;
       }
+      var currentFragment = fragmentsArray[fp][fsp][f];
+      //
       for (var i = 0; i <= f; i++) {
         Brav1Toolbox.addClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_CLASS);
         Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_ACTUAL_CLASS);
+        if (_fragmentsAlwaysOnOnceRevealed === true) {
+          Brav1Toolbox.addClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_ONCE_CLASS);
+        }
       }
-      Brav1Toolbox.addClass(fragmentsArray[fp][fsp][f], FRAGMENT_ACTUAL_CLASS);
+      Brav1Toolbox.addClass(currentFragment, FRAGMENT_ACTUAL_CLASS);
     }
 
     /**
@@ -565,11 +616,11 @@ var Flowtime = (function ()
         f = fr[fp][fsp];
       }
       for (var i = 0; i < fragmentsArray[fp][fsp].length; i++) {
-        if (i >= f) {
-          Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_CLASS);
-          Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_TEMP_CLASS);
-        }
-        Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_ACTUAL_CLASS);
+          if (i >= f) {
+            Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_CLASS);
+            Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_REVEALED_TEMP_CLASS);
+          }
+          Brav1Toolbox.removeClass(fragmentsArray[fp][fsp][i], FRAGMENT_ACTUAL_CLASS);
       }
       f -= 1;
       if (f >= 0) {
@@ -585,6 +636,7 @@ var Flowtime = (function ()
     function _showFragments() {
       for (var i = 0; i < fragments.length; i++) {
         Brav1Toolbox.addClass(fragments[i], FRAGMENT_REVEALED_TEMP_CLASS);
+        fragments[i].onceRevealed = true;
       }
     }
 
@@ -2374,6 +2426,10 @@ var Flowtime = (function ()
     _fragmentsOnBack = v === true ? true : false;
   }
 
+  function _setFragmentsAlwaysOnOnceRevealed(v) {
+    _fragmentsAlwaysOnOnceRevealed = v === true ? true : false;
+  }
+
   function _setUseHistory(v){
     pushHistory = v === true ? true : false;
   }
@@ -2594,6 +2650,7 @@ var Flowtime = (function ()
     showOverview             : _setShowOverview,
     fragmentsOnSide          : _setFragmentsOnSide,
     fragmentsOnBack          : _setFragmentsOnBack,
+    fragmentsAlwaysOnOnceRevealed          : _setFragmentsAlwaysOnOnceRevealed,
     useHistory               : _setUseHistory,
     slideInPx                : _setSlideInPx,
     useOverviewVariant       : _setUseOverviewVariant,
