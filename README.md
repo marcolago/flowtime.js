@@ -19,15 +19,6 @@ If you used Flowtime.js to build a website, a webapp or a presentation, consider
  - If you wish to donate:  
 [![paypal](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9TW923Y3US7LG)
 
-
-## Build presentations online with Flowtime.js and SlideCaptain
-
-Flowtime.js is the slide engine used by [SlideCaptain](http://slidecaptain.com/).
-If you prefer a WYSIWYG editor or you feel not comfortable with plain HTML you can try [SlideCaptain](http://slidecaptain.com/): a powerful web app for building well-structured presentations in your browser.
-SlideCaptain adds many features to Flowtime.js like MathJax™ support and PDF export tool .
-
-SlideCaptain is developed by [Engawa](http://engawa.de/).
-
 ## Major Updates
 
 - **May 20 2014**
