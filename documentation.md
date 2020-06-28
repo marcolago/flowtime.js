@@ -1,3 +1,5 @@
+![Flowtime.js](https://github.com/marcolago/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
+
 # Flowtime.js Documentation
 
 ## How to build minified Flowtime.js
