@@ -33,7 +33,7 @@ But for the ones who need a ready-to-use tool it comes with a default theme that
 **Alternate Horizontal Layout**
 The default layout has sections arranged side by side horizontally and pages stacked vertically in each section.
 You can use the alternate layout with sections stacked vertically and pages arranged horizontally by adding the class `ft-cross` to the Flowtime element in the HTML document.
-See [**How to Build the Markup**](#how-to-build-the-markup) section for an example.
+See [**How to Build the Markup**](https://github.com/marcolago/flowtime.js/blob/master/documentation.md#how-to-build-the-markup) section for an example.
 
 **Multiple Controls Navigation**.
 You can navigate through pages via links, keyboard, mouse, gestures or deep-linking.
