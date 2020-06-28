@@ -42,7 +42,7 @@ Keyboard navigation is based on arrow keys with the Shift key as a modifier to j
 
 - **Down or Up Arrows**: navigate to the next or previous page. This is the main navigation action; the entire content is navigable using these keys only. If there are fragments in the page, every input shows or hides a fragment.
 - **Shift + Down or Up Arrows**: navigate to the next or previous page jumping all the fragments.
-- **Left or Right Arrows**: navigate to the previous or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the highest available index (see [Section Navigation Options](#section-navigation-options) for more options).
+- **Left or Right Arrows**: navigate to the previous or next section. By default the destination will be the page at the same index of the starting point (if you are at page 3 in the section 2 you will go to the page 3 in the section 3). If the same index does not exist the destination will be the highest available index (see [Section Navigation Options](https://github.com/marcolago/flowtime.js/blob/master/documentation.md#section-navigation-options) for more options).
 - **Shift + Left or Right Arrows**: navigate to the first page of the previous or next section.
 - **Page Up**: navigates to the first page of the current section.
 - **Page Down**: navigates to the last page of the current section.
