@@ -6,7 +6,7 @@
 
 Read the [Documentation](https://github.com/marcolago/flowtime.js/blob/master/documentation.md) to discover how to use and customize your installation of Flowtime.js.
 
-You can take a look at the [sample presentation](http://marcolago.github.io/flowtime.js/) and to the [many examples](http://marcolago.github.io/flowtime.js/#/section-8/page-1) to learn about the possibilities.
+You can take a look at the [sample presentation](http://marcolago.github.io/flowtime.js/) and to the [examples folder](https://github.com/marcolago/flowtime.js/tree/master/examples) to learn about the possibilities.
 
 **For more information check the [wiki](https://github.com/marcolago/flowtime.js/wiki)**
 - [Browser Support](https://github.com/marcolago/flowtime.js/wiki/Browser-Support)
