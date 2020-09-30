@@ -1,6 +1,6 @@
 ![Flowtime.js](https://github.com/marcolago/flowtime.js/raw/master/assets/img/logo-black.png "Flowtime.js Logo")
 
-## Flowtime.js is a framework for easily building HTML presentations or websites.
+## Flowtime.js is a framework for easily building HTML presentations or An Amazing Website.
 
 ### Documentation and Examples
 
