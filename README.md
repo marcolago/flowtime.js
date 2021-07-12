@@ -2,7 +2,7 @@
 
 ## Flowtime.js is a framework for easily building HTML presentations or An Amazing Website.
 
-### Documentation and Examples
+### Documentation and Examples and much more information
 
 Read the [Documentation](https://github.com/marcolago/flowtime.js/blob/master/documentation.md) to discover how to use and customize your installation of Flowtime.js.
 
