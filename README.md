@@ -74,3 +74,5 @@ Flowtime.js is tested and works on **every modern desktop browser and IE9 and ab
 Where the basic support is not available the framework falls back to the native scrolling with anchor links, but the full page fluid layouts remain intact.
 
 Read the [Documentation](https://github.com/marcolago/flowtime.js/blob/master/documentation.md) to discover how to use and customize your installation of Flowtime.js.
+
+its a amazing project
