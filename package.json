@@ -9,6 +9,6 @@
     "grunt-contrib-uglify": "^4.0.1",
     "grunt-contrib-watch": "^1.1.0",
     "hosted-git-info": ">=3.0.8",
-    "lodash": ">=4.17.21"
+    "lodash": ">=4.18.1"
   }
 }
